@@ -1,13 +1,12 @@
 version: 2.1
-parameters:
-  tag: 3.7.10
 
 orbs:
   python: circleci/python@0.2.1
 
 jobs:
   build-and-test:
-    executor: python/default
+    docker:
+      - image: cimg/python:3.7.10
     steps:
       - checkout
       - python/load-cache
