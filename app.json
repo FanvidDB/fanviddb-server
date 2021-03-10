@@ -1,0 +1,17 @@
+{
+  "name": "FanvidDB",
+  "description": "A database of fanvids suitable for retrieving metadata for personal .",
+  "image": "heroku/python",
+  "repository": "https://github.com/heroku/python-getting-started",
+  "keywords": ["python", "django" ],
+  "addons": [ "heroku-postgresql" ],
+  "env": {
+  },
+  "environments": {
+    "test": {
+      "scripts": {
+        "test": "pytest"
+      }
+    }
+  }
+}
