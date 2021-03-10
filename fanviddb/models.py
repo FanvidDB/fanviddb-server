@@ -29,13 +29,13 @@ class BaseFanvid(BaseModel):
 	unique_identifiers: List[str] = []
 	thumbnail_url: str
 
-	# Internal
+	# Admin-only
 	state: str
-	created_timestamp: datetime.datetime
-	modified_timestamp: datetime.datetime
 
-class CreateFanvid(BaseFanvid):
+class CreateOrUpdateFanvid(BaseFanvid):
 	pass
 
 class Fanvid(BaseFanvid):
 	uuid: uuid.UUID
+	created_timestamp: datetime.datetime
+	modified_timestamp: datetime.datetime

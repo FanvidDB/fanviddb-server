@@ -4,7 +4,7 @@ from typing import List, Optional
 
 from fastapi import FastAPI
 
-from fanviddb.models import CreateFanvid, Fanvid
+from fanviddb.models import CreateOrUpdateFanvid, Fanvid
 
 app = FastAPI()
 
@@ -15,9 +15,13 @@ async def read_root():
 
 
 @app.post("/fanvids", response_model=Fanvid, tags=["Fanvids"])
-async def create_fanvid(fanvid: CreateFanvid):
+async def create_fanvid(fanvid: CreateOrUpdateFanvid, status_code=201):
     fanvid_dict = fanvid.dict()
-    fanvid_dict['uuid'] = uuid.uuid4()
+    fanvid_dict.update({
+        'uuid': uuid.uuid4(),
+        "created_timestamp": datetime.datetime.utcnow(),
+        "modified_timestamp": datetime.datetime.utcnow(),
+    })
     return fanvid_dict
 
 
@@ -46,7 +50,7 @@ async def read_fanvid_list():
     ]
 
 
-@app.get("/fanvid/{fanvid_uuid}", response_model=Fanvid, tags=["Fanvids"])
+@app.get("/fanvids/{fanvid_uuid}", response_model=Fanvid, tags=["Fanvids"])
 async def read_fanvid(fanvid_uuid: uuid.UUID):
     return {
         "uuid": fanvid_uuid,
@@ -67,3 +71,19 @@ async def read_fanvid(fanvid_uuid: uuid.UUID):
         "created_timestamp": datetime.datetime.utcnow(),
         "modified_timestamp": datetime.datetime.utcnow(),
     }
+
+
+@app.put("/fanvids/{fanvid_uuid}", response_model=Fanvid, tags=["Fanvids"])
+async def update_fanvid(fanvid_uuid: uuid.UUID, fanvid: CreateOrUpdateFanvid):
+    fanvid_dict = fanvid.dict()
+    fanvid_dict.update({
+        'uuid': fanvid_uuid,
+        "created_timestamp": datetime.datetime.utcnow(),
+        "modified_timestamp": datetime.datetime.utcnow(),
+    })
+    return fanvid_dict
+
+
+@app.delete("/fanvids/{fanvid_uuid}", tags=["Fanvids"], status_code=204)
+async def delete_fanvid(fanvid_uuid: uuid.UUID):
+    return None
