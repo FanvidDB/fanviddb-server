@@ -7,12 +7,12 @@ from pydantic import BaseModel
 
 class Audio(BaseModel):
 	title: str
-	creator: str
+	creators: List[str]
 
 
 class BaseFanvid(BaseModel):
 	title: str
-	author: str
+	creators: List[str]
 	premiere_date: Optional[datetime.date] = None
 	premiere_event: Optional[str] = None
 	audio: Optional[Audio] = None
