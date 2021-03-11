@@ -5,10 +5,6 @@ from typing import List, Optional
 from pydantic import BaseModel
 
 
-class Fandom(BaseModel):
-	name: str
-
-
 class Audio(BaseModel):
 	title: str
 	creator: str
@@ -22,7 +18,7 @@ class BaseFanvid(BaseModel):
 	audio: Optional[Audio] = None
 	length: datetime.timedelta
 	rating: str
-	fandoms: List[Fandom] = []
+	fandoms: List[str] = []
 	summary: str
 	content_notes: List[str] = []
 	urls: List[str] = []
