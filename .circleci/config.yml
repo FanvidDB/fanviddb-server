@@ -21,6 +21,9 @@ jobs:
       - run:
           command: black . --check
           name: black --check
+      - run:
+          command: isort . --check
+          name: isort --check
 
 workflows:
   main:
