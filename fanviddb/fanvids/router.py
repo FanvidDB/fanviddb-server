@@ -3,8 +3,8 @@ import uuid
 from typing import List
 
 from fastapi import APIRouter
-from .models import CreateOrUpdateFanvid, Fanvid
 
+from .models import CreateOrUpdateFanvid, Fanvid
 
 router = APIRouter()
 

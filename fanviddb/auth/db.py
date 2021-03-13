@@ -6,11 +6,12 @@ from fastapi_users.db import SQLAlchemyBaseUserTable, SQLAlchemyUserDatabase
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
 
 from fanviddb.db import Base, database
+
 from .models import User
 
 
 class UserDB(User, models.BaseUserDB):
-	pass
+    pass
 
 
 class UserTable(Base, SQLAlchemyBaseUserTable):
