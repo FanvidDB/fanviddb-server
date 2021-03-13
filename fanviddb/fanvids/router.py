@@ -4,7 +4,8 @@ from typing import List
 
 from fastapi import APIRouter
 
-from .models import CreateOrUpdateFanvid, Fanvid
+from .models import CreateOrUpdateFanvid
+from .models import Fanvid
 
 router = APIRouter()
 
