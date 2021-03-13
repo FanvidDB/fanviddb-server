@@ -13,7 +13,8 @@ jobs:
         type: string
     steps:
       - checkout
-      - python/install-packages
+      - python/install-packages:
+          pkg-manager: pip
       - run: << parameters.lint-tool >>
 
 workflows:
@@ -23,12 +24,17 @@ workflows:
           test-tool: pytest
           version: 3.7.10
       - lint:
+          name: mypy
           lint-tool: mypy .
       - lint:
+          name: black
           lint-tool: black . --check
       - lint:
+          name: isort
           lint-tool: isort . --check
       - lint:
+          name: flake8
           lint-tool: flake8
       - lint:
+          name: vulture
           lint-tool: vulture .
