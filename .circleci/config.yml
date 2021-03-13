@@ -24,6 +24,9 @@ jobs:
       - run:
           command: isort . --check
           name: isort --check
+      - run:
+          command: flake8
+          name: flake8
 
 workflows:
   main:
