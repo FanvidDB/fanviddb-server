@@ -7,6 +7,7 @@ from alembic import context
 
 from fanviddb import conf
 from fanviddb import db
+from fanviddb.auth import db
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
