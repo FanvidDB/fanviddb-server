@@ -1,6 +1,6 @@
 lint:
-	mypy .
-	flake8
-	black . --check
-	isort . --check
-	vulture .
+	-mypy .
+	-flake8
+	-black . --check
+	-isort . --check
+	-vulture .
