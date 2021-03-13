@@ -1,10 +1,10 @@
 from logging.config import fileConfig
 
-from sqlalchemy import create_engine, pool
+from sqlalchemy import create_engine
 
+import fanviddb.auth.db  # noqa: F401
 from alembic import context
 from fanviddb import conf, db
-from fanviddb.auth import db
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
