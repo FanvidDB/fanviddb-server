@@ -1,0 +1,14 @@
+[tool.isort]
+force_single_line = true
+
+[tool.vulture]
+exclude = [
+	".venv",
+	".git",
+	"__pycache__",
+	".mypy_cache",
+	".pytest_cache",
+	"alembic/versions",
+	"static",
+]
+min_confidence = 100

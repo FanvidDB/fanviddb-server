@@ -10,8 +10,8 @@ from .models import Fanvid
 router = APIRouter()
 
 
-@router.post("/", response_model=Fanvid)
-async def create_fanvid(fanvid: CreateOrUpdateFanvid, status_code=201):
+@router.post("/", response_model=Fanvid, status_code=201)
+async def create_fanvid(fanvid: CreateOrUpdateFanvid):
     fanvid_dict = fanvid.dict()
     fanvid_dict.update(
         {

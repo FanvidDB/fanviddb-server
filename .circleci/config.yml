@@ -27,6 +27,9 @@ jobs:
       - run:
           command: flake8
           name: flake8
+      - run:
+          command: vulture .
+          name: vulture
 
 workflows:
   main:
