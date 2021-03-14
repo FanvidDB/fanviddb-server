@@ -29,7 +29,7 @@ async def read_fanvid_list():
         {
             "uuid": uuid.uuid4(),
             "title": "Title",
-            "author": "Author",
+            "creators": ["Author"],
             "premiere_date": None,
             "premiere_event": None,
             "audio": None,
