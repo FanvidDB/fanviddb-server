@@ -1,5 +1,6 @@
 from fastapi_users.db import SQLAlchemyBaseUserTable
 from fastapi_users.db import SQLAlchemyUserDatabase
+from sqlalchemy import Column, String
 
 from fanviddb.db import Base
 from fanviddb.db import database
@@ -8,7 +9,7 @@ from .models import UserDB
 
 
 class UserTable(Base, SQLAlchemyBaseUserTable):
-    pass
+    username = Column(String(length=40), nullable=False)
 
 
 users = UserTable.__table__
