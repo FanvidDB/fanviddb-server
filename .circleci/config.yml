@@ -40,7 +40,15 @@ jobs:
           name: Wait for db
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
 
-      - run: pytest
+      - run:
+          name: run tests
+          command: |
+            mkdir test-results
+            pytest --junitxml=test-results/report.xml
+      - store_test_results:
+          path: test-results
+      - store_artifacts:
+          path: test-results
 
 workflows:
   main:
