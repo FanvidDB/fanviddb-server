@@ -4,3 +4,7 @@ lint:
 	-black . --check
 	-isort . --check
 	-vulture .
+
+fmt:
+	-black .
+	-isort .
