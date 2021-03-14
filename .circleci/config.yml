@@ -8,14 +8,11 @@ jobs:
     executor:
       name: python/default
       tag: 3.7.10
-    parameters:
-      lint-tool:
-        type: string
     steps:
       - checkout
       - python/install-packages:
           pkg-manager: pip
-      - run: << parameters.lint-tool >>
+      - run: make lint
   test:
     docker:
       - image: cimg/python:3.7.10
@@ -54,18 +51,4 @@ workflows:
   main:
     jobs:
       - test
-      - lint:
-          name: mypy
-          lint-tool: mypy .
-      - lint:
-          name: black
-          lint-tool: black . --check
-      - lint:
-          name: isort
-          lint-tool: isort . --check
-      - lint:
-          name: flake8
-          lint-tool: flake8
-      - lint:
-          name: vulture
-          lint-tool: vulture .
+      - lint
