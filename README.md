@@ -17,6 +17,8 @@ pip install -r requirements.txt
 
 ```
 DATABASE_URL="postgresql://user:password@localhost/dbname"
+AUTH_SECRET_KEY="secret"
+EMAIL_TOKEN_SECRET_KEY="secret"
 ```
 
 4. Run alembic migrations with `alembic upgrade head`
