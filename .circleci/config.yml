@@ -18,7 +18,7 @@ jobs:
       - run: << parameters.lint-tool >>
   test:
     docker:
-      - image: python/3.7.10
+      - image: cimg/python:3.7.10
         environment:
           DATABASE_URL: postgres://fanviddb:fanviddb_test@localhost/circle_test?sslmode=disable
       - image: circleci/postgres:12.6
