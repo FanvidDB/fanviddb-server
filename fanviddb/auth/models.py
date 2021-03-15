@@ -1,3 +1,5 @@
+from typing import Optional
+
 from fastapi_users import models
 
 
@@ -10,7 +12,7 @@ class UserCreate(models.BaseUserCreate):
 
 
 class UserUpdate(User, models.BaseUserUpdate):
-    pass
+    username: Optional[str]
 
 
 class UserDB(User, models.BaseUserDB):
