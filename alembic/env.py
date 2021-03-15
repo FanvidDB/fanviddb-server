@@ -3,6 +3,7 @@ from logging.config import fileConfig
 from sqlalchemy import create_engine
 
 import fanviddb.auth.db  # noqa: F401
+import fanviddb.fanvids.db  # noqa: F401
 from alembic import context
 from fanviddb import conf
 from fanviddb import db
