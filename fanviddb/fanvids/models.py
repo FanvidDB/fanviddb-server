@@ -8,7 +8,8 @@ from pydantic import BaseModel
 
 class Audio(BaseModel):
     title: str
-    creators: List[str]
+    artists_or_sources: List[str] = []
+    language: str
 
 
 class BaseFanvid(BaseModel):

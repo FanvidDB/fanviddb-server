@@ -8,9 +8,10 @@ def test_create_fanvid(fastapi_client):
             "premiere_event": "string",
             "audio": {
                 "title": "string",
-                "creators": [
+                "artists_or_sources": [
                     "string",
                 ],
+                "language": "en-us",
             },
             "length": 0,
             "rating": "string",
@@ -46,9 +47,10 @@ def test_update_fanvid(fastapi_client):
             "premiere_event": "string",
             "audio": {
                 "title": "string",
-                "creators": [
+                "artists_or_sources": [
                     "string",
                 ],
+                "language": "en-us",
             },
             "length": 0,
             "rating": "string",
