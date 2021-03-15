@@ -4,6 +4,9 @@ from typing import List
 
 from fastapi import APIRouter
 
+from fanviddb.db import database
+
+from . import db
 from .models import CreateOrUpdateFanvid
 from .models import Fanvid
 
@@ -13,6 +16,15 @@ router = APIRouter()
 @router.post("", response_model=Fanvid, status_code=201)
 async def create_fanvid(fanvid: CreateOrUpdateFanvid):
     fanvid_dict = fanvid.dict()
+    audio = fanvid_dict.pop("audio")
+    if audio:
+        fanvid_dict.update(
+            {
+                "audio_title": audio["title"],
+                "audio_artists_or_sources": audio["artists_or_sources"],
+                "audio_language": audio["language"],
+            }
+        )
     fanvid_dict.update(
         {
             "uuid": uuid.uuid4(),
@@ -20,6 +32,8 @@ async def create_fanvid(fanvid: CreateOrUpdateFanvid):
             "modified_timestamp": datetime.datetime.utcnow(),
         }
     )
+    query = db.fanvids.insert().values(**fanvid_dict)
+    await database.execute(query)
     return fanvid_dict
 
 

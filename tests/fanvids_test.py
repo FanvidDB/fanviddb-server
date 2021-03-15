@@ -1,4 +1,11 @@
-def test_create_fanvid(fastapi_client):
+from sqlalchemy import func
+from sqlalchemy.sql import select
+
+from fanviddb.db import database
+from fanviddb.fanvids.db import fanvids
+
+
+def test_create_fanvid(fastapi_client, event_loop):
     response = fastapi_client.post(
         "/fanvids",
         json={
@@ -25,6 +32,10 @@ def test_create_fanvid(fastapi_client):
         },
     )
     assert response.status_code == 201
+    response.json()["uuid"]
+    s = select([func.count()]).select_from(fanvids)
+    count = event_loop.run_until_complete(database.execute(s))
+    assert count == 1
 
 
 def test_read_fanvids(fastapi_client):

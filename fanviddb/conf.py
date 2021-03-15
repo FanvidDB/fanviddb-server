@@ -1,10 +1,11 @@
-import os
+import databases
+from starlette.config import Config
 
-from dotenv import load_dotenv
+config = Config(".env")
 
-load_dotenv()
+TESTING = config("TESTING", cast=bool, default=False)
 
-
-AUTH_SECRET_KEY = os.environ["AUTH_SECRET_KEY"]
-DATABASE_URL = os.environ["DATABASE_URL"]
-EMAIL_TOKEN_SECRET_KEY = os.environ["EMAIL_TOKEN_SECRET_KEY"]
+DATABASE_URL = config("DATABASE_URL", cast=databases.DatabaseURL)
+TEST_DATABASE_URL = DATABASE_URL.replace(database="test_" + DATABASE_URL.database)
+AUTH_SECRET_KEY = config("AUTH_SECRET_KEY")
+EMAIL_TOKEN_SECRET_KEY = config("EMAIL_TOKEN_SECRET_KEY")
