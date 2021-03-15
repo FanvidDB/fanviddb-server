@@ -22,7 +22,7 @@ jobs:
           EMAIL_TOKEN_SECRET_KEY: secret
       - image: circleci/postgres:12.6
         environment:
-          POSTGRES_USER: fanviddb_test
+          POSTGRES_USER: fanviddb
           POSTGRES_PASSWORD: fanviddb_test
     steps:
       - checkout
