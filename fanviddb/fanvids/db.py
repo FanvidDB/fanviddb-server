@@ -3,8 +3,8 @@ import uuid
 from sqlalchemy import JSON
 from sqlalchemy import Column
 from sqlalchemy import DateTime
-from sqlalchemy import Interval
 from sqlalchemy import String
+from sqlalchemy.dialects.postgresql import INTERVAL
 from sqlalchemy.dialects.postgresql import UUID
 
 from fanviddb.db import Base
@@ -14,7 +14,7 @@ class FanvidTable(Base):
 
     __tablename__ = "fanvids"
 
-    uuid = Column(UUID(as_uuid=True), default=uuid.uuid4, primary_key=True)
+    uuid = Column(UUID(), default=uuid.uuid4, primary_key=True)
     title = Column(String())
     creators = Column(JSON())
     premiere_date = Column(DateTime(), nullable=True)
@@ -22,7 +22,7 @@ class FanvidTable(Base):
     audio_title = Column(String())
     audio_artists_or_sources = Column(JSON())
     audio_language = Column(String())
-    length = Column(Interval())
+    length = Column(INTERVAL())
     rating = Column(String())
     fandoms = Column(JSON())
     summary = Column(String())

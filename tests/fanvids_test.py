@@ -1,8 +1,11 @@
+from fastapi.encoders import jsonable_encoder
 from sqlalchemy import func
 from sqlalchemy.sql import select
 
 from fanviddb.db import database
 from fanviddb.fanvids.db import fanvids
+
+from .factories import FanvidFactory
 
 
 def test_create_fanvid(fastapi_client, event_loop):
@@ -33,14 +36,24 @@ def test_create_fanvid(fastapi_client, event_loop):
     )
     assert response.status_code == 201
     response.json()["uuid"]
-    s = select([func.count()]).select_from(fanvids)
-    count = event_loop.run_until_complete(database.execute(s))
-    assert count == 1
+    query = select([func.count()]).select_from(fanvids)
+    result = event_loop.run_until_complete(database.fetch_one(query))
+    assert result["count_1"] == 1
 
 
-def test_read_fanvids(fastapi_client):
+def test_list_fanvids(fastapi_client):
+    fanvid = FanvidFactory()
+    expected_response = jsonable_encoder(fanvid)
+    expected_response["audio"] = {
+        "title": expected_response.pop("audio_title"),
+        "artists_or_sources": expected_response.pop("audio_artists_or_sources"),
+        "language": expected_response.pop("audio_language"),
+    }
     response = fastapi_client.get("/fanvids")
     assert response.status_code == 200
+    response_data = response.json()
+    assert len(response_data) == 1
+    assert response_data[0] == expected_response
 
 
 def test_read_fanvid(fastapi_client):
