@@ -3,9 +3,9 @@ import asyncio
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
-from sqlalchemy_utils import create_database
-from sqlalchemy_utils import database_exists
-from sqlalchemy_utils import drop_database
+from sqlalchemy_utils import create_database  # type: ignore
+from sqlalchemy_utils import database_exists  # type: ignore
+from sqlalchemy_utils import drop_database  # type: ignore
 from starlette.config import environ
 
 environ["TESTING"] = "1"
