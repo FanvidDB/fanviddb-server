@@ -1,5 +1,26 @@
 [tool.isort]
 force_single_line = true
+profile = "black"
+skip = [
+	".bzr",
+	".direnv",
+	".eggs",
+	".git",
+	".hg",
+	".mypy_cache",
+	".nox",
+	".pants.d",
+	".svn",
+	".tox",
+	".venv",
+	"_build",
+	"buck-out",
+	"build",
+	"dist",
+	"node_modules",
+	"venv",
+	"alembic/versions",
+]
 
 [tool.vulture]
 exclude = [
@@ -12,3 +33,6 @@ exclude = [
 	"static",
 ]
 min_confidence = 100
+
+[tool.black]
+exclude = "alembic/versions"
