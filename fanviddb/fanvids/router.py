@@ -3,6 +3,7 @@ import uuid
 from typing import List
 
 from fastapi import APIRouter
+from fastapi import HTTPException
 from sqlalchemy.sql import select
 
 from fanviddb.db import database
@@ -55,25 +56,21 @@ async def list_fanvids():
 
 @router.get("/{fanvid_uuid}", response_model=Fanvid)
 async def read_fanvid(fanvid_uuid: uuid.UUID):
-    return {
-        "uuid": fanvid_uuid,
-        "title": "Title",
-        "creators": ["Author"],
-        "premiere_date": None,
-        "premiere_event": None,
-        "audio": None,
-        "length": datetime.timedelta(1),
-        "rating": "Gen",
-        "fandoms": [],
-        "summary": "Summary!",
-        "content_notes": ["Graphic depictions of violence"],
-        "urls": ["https://archiveofourown.org/works/29759784"],
-        "unique_identifiers": [],
-        "thumbnail_url": "https://i.vimeocdn.com/video/1072432518.jpg?mw=1280&mh=720&q=70",
-        "state": "active",
-        "created_timestamp": datetime.datetime.utcnow(),
-        "modified_timestamp": datetime.datetime.utcnow(),
+    query = select([db.fanvids]).where(db.fanvids.c.uuid == fanvid_uuid)
+    result = await database.fetch_one(query)
+
+    if not result:
+        raise HTTPException(status_code=404, detail="Fanvid not found")
+
+    result = dict(result)
+
+    result["audio"] = {
+        "title": result.pop("audio_title"),
+        "artists_or_sources": result.pop("audio_artists_or_sources"),
+        "language": result.pop("audio_language"),
     }
+
+    return result
 
 
 @router.put("/{fanvid_uuid}", response_model=Fanvid)
