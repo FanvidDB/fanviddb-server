@@ -1,44 +1,47 @@
 from fastapi.encoders import jsonable_encoder
-from sqlalchemy import func
 from sqlalchemy.sql import select
 
 from fanviddb.db import database
 from fanviddb.fanvids.db import fanvids
+from fanviddb.fanvids.models import Fanvid
 
 from .factories import FanvidFactory
 
 
 def test_create_fanvid(fastapi_client, event_loop):
+    expected_data = jsonable_encoder(FanvidFactory.build())
+    expected_data.pop("uuid")
+    expected_data["audio"] = {
+        "title": expected_data.pop("audio_title"),
+        "artists_or_sources": expected_data.pop("audio_artists_or_sources"),
+        "language": expected_data.pop("audio_language"),
+    }
     response = fastapi_client.post(
         "/fanvids",
-        json={
-            "title": "string",
-            "creators": ["string"],
-            "premiere_date": "2021-03-14",
-            "premiere_event": "string",
-            "audio": {
-                "title": "string",
-                "artists_or_sources": [
-                    "string",
-                ],
-                "language": "en-us",
-            },
-            "length": 0,
-            "rating": "string",
-            "fandoms": [],
-            "summary": "string",
-            "content_notes": [],
-            "urls": [],
-            "unique_identifiers": [],
-            "thumbnail_url": "string",
-            "state": "string",
-        },
+        json=expected_data,
     )
     assert response.status_code == 201
-    response.json()["uuid"]
-    query = select([func.count()]).select_from(fanvids)
-    result = event_loop.run_until_complete(database.fetch_one(query))
-    assert result["count_1"] == 1
+    response_data = response.json()
+    expected_data.update(
+        {
+            "uuid": response_data["uuid"],
+            "created_timestamp": response_data["created_timestamp"],
+            "modified_timestamp": response_data["modified_timestamp"],
+        }
+    )
+    assert response_data == expected_data
+    query = select([fanvids])
+    result = [
+        dict(row) for row in event_loop.run_until_complete(database.fetch_all(query))
+    ]
+    assert len(result) == 1
+
+    result[0]["audio"] = {
+        "title": result[0].pop("audio_title"),
+        "artists_or_sources": result[0].pop("audio_artists_or_sources"),
+        "language": result[0].pop("audio_language"),
+    }
+    assert jsonable_encoder(Fanvid(**result[0])) == expected_data
 
 
 def test_list_fanvids(fastapi_client):
@@ -83,16 +86,18 @@ def test_update_fanvid(fastapi_client):
         "artists_or_sources": expected_response.pop("audio_artists_or_sources"),
         "language": expected_response.pop("audio_language"),
     }
-    expected_response['title'] = f"{expected_response['title']} and then some"
+    expected_response["title"] = f"{expected_response['title']} and then some"
     response = fastapi_client.patch(
         f"/fanvids/{str(fanvid['uuid'])}",
         json={
-            "title": expected_response['title'],
+            "title": expected_response["title"],
         },
     )
     assert response.status_code == 200
     response_data = response.json()
-    assert response_data.pop('modified_timestamp') > expected_response.pop('modified_timestamp')
+    assert response_data.pop("modified_timestamp") > expected_response.pop(
+        "modified_timestamp"
+    )
     assert response_data == expected_response
 
 

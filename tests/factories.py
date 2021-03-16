@@ -40,3 +40,7 @@ class FanvidFactory(factory.Factory):
         event_loop = asyncio.get_event_loop()
         event_loop.run_until_complete(database.execute(stmt))
         return kwargs
+
+    @classmethod
+    def _build(_, model_class, **kwargs):
+        return kwargs

@@ -36,9 +36,20 @@ async def create_fanvid(fanvid: CreateFanvid):
             "modified_timestamp": datetime.datetime.utcnow(),
         }
     )
-    query = db.fanvids.insert().values(**fanvid_dict)
-    await database.execute(query)
-    return fanvid_dict
+    query = db.fanvids.insert().values(**fanvid_dict).returning(db.fanvids)
+    result = await database.fetch_one(query)
+
+    if not result:
+        raise HTTPException(status_code=500, detail="Error creating fanvid.")
+
+    result = dict(result)
+
+    result["audio"] = {
+        "title": result.pop("audio_title"),
+        "artists_or_sources": result.pop("audio_artists_or_sources"),
+        "language": result.pop("audio_language"),
+    }
+    return result
 
 
 @router.get("", response_model=List[Fanvid])
