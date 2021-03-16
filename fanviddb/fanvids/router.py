@@ -92,8 +92,8 @@ async def read_fanvid(fanvid_uuid: uuid.UUID):
 
 @router.patch("/{fanvid_uuid}", response_model=Fanvid)
 async def update_fanvid(fanvid_uuid: uuid.UUID, fanvid: UpdateFanvid):
-    fanvid_dict = fanvid.dict()
-    audio = fanvid_dict.pop("audio")
+    fanvid_dict = fanvid.dict(exclude_unset=True)
+    audio = fanvid_dict.pop("audio", None)
     if audio:
         fanvid_dict.update(
             {
@@ -110,7 +110,7 @@ async def update_fanvid(fanvid_uuid: uuid.UUID, fanvid: UpdateFanvid):
     query = (
         update(db.fanvids)
         .where(db.fanvids.c.uuid == fanvid_uuid)
-        .values(**{k: v for k, v in fanvid_dict.items() if v})
+        .values(fanvid_dict)
         .returning(db.fanvids)
     )
     result = await database.fetch_one(query)
