@@ -59,6 +59,14 @@ def test_list_fanvids(fastapi_client):
     assert response_data[0] == expected_response
 
 
+def test_list_fanvids__excludes_deleted(fastapi_client):
+    FanvidFactory(state="deleted")
+    response = fastapi_client.get("/fanvids")
+    assert response.status_code == 200
+    response_data = response.json()
+    assert len(response_data) == 0
+
+
 def test_read_fanvid(fastapi_client):
     fanvid = FanvidFactory()
     expected_response = jsonable_encoder(fanvid)

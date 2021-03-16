@@ -54,7 +54,11 @@ async def create_fanvid(fanvid: CreateFanvid):
 
 @router.get("", response_model=List[Fanvid])
 async def list_fanvids():
-    query = select([db.fanvids]).order_by(db.fanvids.c.created_timestamp.desc())
+    query = (
+        select([db.fanvids])
+        .where(db.fanvids.c.state != "deleted")
+        .order_by(db.fanvids.c.created_timestamp.desc())
+    )
     results = [dict(row) for row in await database.fetch_all(query)]
 
     for result in results:
