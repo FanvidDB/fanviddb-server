@@ -31,8 +31,27 @@ class BaseFanvid(BaseModel):
     state: str
 
 
-class CreateOrUpdateFanvid(BaseFanvid):
+class CreateFanvid(BaseFanvid):
     pass
+
+
+class UpdateFanvid(BaseModel):
+    title: Optional[str]
+    creators: Optional[List[str]]
+    premiere_date: Optional[datetime.date] = None
+    premiere_event: Optional[str] = None
+    audio: Optional[Audio] = None
+    length: Optional[datetime.timedelta]
+    rating: Optional[str]
+    fandoms: Optional[List[str]]
+    summary: Optional[str]
+    content_notes: Optional[List[str]]
+    urls: Optional[List[str]]
+    unique_identifiers: Optional[List[str]]
+    thumbnail_url: Optional[str]
+
+    # Admin-only
+    state: Optional[str]
 
 
 class Fanvid(BaseFanvid):
