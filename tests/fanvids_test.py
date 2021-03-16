@@ -71,7 +71,7 @@ def test_read_fanvid(fastapi_client):
 
 
 def test_read_fanvid__404(fastapi_client):
-    response = fastapi_client.get(f"/fanvids/3fa85f64-5717-4562-b3fc-2c963f66afa6")
+    response = fastapi_client.get("/fanvids/3fa85f64-5717-4562-b3fc-2c963f66afa6")
     assert response.status_code == 404
 
 
