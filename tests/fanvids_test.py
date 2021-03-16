@@ -109,8 +109,3 @@ def test_update_fanvid__404(fastapi_client):
         },
     )
     assert response.status_code == 404
-
-
-def test_delete_fanvid(fastapi_client):
-    response = fastapi_client.delete("/fanvids/3fa85f64-5717-4562-b3fc-2c963f66afa6")
-    assert response.status_code == 204

@@ -122,8 +122,3 @@ async def update_fanvid(fanvid_uuid: uuid.UUID, fanvid: UpdateFanvid):
         "language": result.pop("audio_language"),
     }
     return result
-
-
-@router.delete("/{fanvid_uuid}", status_code=204)
-async def delete_fanvid(fanvid_uuid: uuid.UUID):
-    return None
