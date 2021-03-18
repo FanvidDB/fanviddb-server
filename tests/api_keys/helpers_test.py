@@ -2,9 +2,11 @@ import datetime
 
 import pytest
 from sqlalchemy import select
+from starlette.exceptions import HTTPException
 
 from fanviddb.api_keys import db
 from fanviddb.api_keys.helpers import api_key_context
+from fanviddb.api_keys.helpers import check_api_key_header
 from fanviddb.api_keys.helpers import generate
 from fanviddb.api_keys.helpers import verify
 from fanviddb.db import database
@@ -76,3 +78,23 @@ async def test_verify__incorrect(app):
 @pytest.mark.asyncio
 async def test_verify__does_not_exist(app):
     assert not await verify("whatever_suibian")
+
+
+@pytest.mark.asyncio
+async def test_check_api_key_header__valid(app):
+    api_key = await generate()
+    assert await check_api_key_header(api_key)
+
+
+@pytest.mark.asyncio
+async def test_check_api_key_header__unset(app):
+    assert not await check_api_key_header(None)
+
+
+@pytest.mark.asyncio
+async def test_check_api_key_header__invalid(app):
+    api_key = await generate()
+    with pytest.raises(HTTPException) as exc_info:
+        await check_api_key_header(api_key + "hi")
+
+    assert exc_info.value.status_code == 401

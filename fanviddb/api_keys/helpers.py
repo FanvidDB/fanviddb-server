@@ -1,14 +1,20 @@
 import datetime
+from typing import Optional
 
 from asyncpg.exceptions import UniqueViolationError  # type: ignore
+from fastapi import Depends
+from fastapi.security import APIKeyHeader
 from passlib import pwd  # type: ignore
 from passlib.context import CryptContext  # type: ignore
 from sqlalchemy import select
+from starlette.exceptions import HTTPException
+from starlette.status import HTTP_401_UNAUTHORIZED
 
 from fanviddb.db import database
 
 from . import db
 
+X_API_KEY = APIKeyHeader(name="X-API-Key")
 api_key_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
@@ -41,10 +47,21 @@ async def generate() -> str:
     return api_key
 
 
-async def verify(api_key):
+async def verify(api_key: str):
     pk, _ = api_key.split("_")
     query = select([db.api_keys]).where(db.api_keys.c.pk == pk)
     result = await database.fetch_one(query)
     if result is None:
         return False
     return api_key_context.verify(api_key, result["hashed_api_key"])
+
+
+async def check_api_key_header(api_key: Optional[str] = Depends(X_API_KEY)):
+    # If no API key is present, that's fine; however, an invalid or revoked api key
+    # is always an error.
+    if api_key is None:
+        return False
+    is_valid = await verify(api_key)
+    if not is_valid:
+        raise HTTPException(status_code=HTTP_401_UNAUTHORIZED, detail="Invalid api key")
+    return True
