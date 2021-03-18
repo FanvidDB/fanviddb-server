@@ -6,7 +6,7 @@ from fanviddb.db import database
 from fanviddb.fanvids.db import fanvids
 from fanviddb.fanvids.models import Fanvid
 
-from .factories import FanvidFactory
+from ..factories import FanvidFactory
 
 
 @pytest.mark.asyncio
