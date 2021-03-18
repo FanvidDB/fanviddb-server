@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from starlette.routing import Route
 from starlette.staticfiles import StaticFiles
 
+from .api_keys.router import api_key_router
 from .auth.routers import auth_router
 from .auth.routers import users_router
 from .db import database
@@ -26,6 +27,11 @@ app.include_router(
     users_router,
     prefix="/users",
     tags=["Users"],
+)
+app.include_router(
+    api_key_router,
+    prefix="/api_keys",
+    tags=["API Keys"],
 )
 
 
