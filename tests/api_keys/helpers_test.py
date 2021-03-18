@@ -76,14 +76,3 @@ async def test_verify__incorrect(app):
 @pytest.mark.asyncio
 async def test_verify__does_not_exist(app):
     assert not await verify("whatever_suibian")
-
-
-@pytest.mark.asyncio
-async def test_router__create_api_key(fastapi_client):
-    response = await fastapi_client.post("/api_keys")
-    assert response.status_code == 200
-    api_key = response.json()["api_key"]
-    pk, _ = api_key.split("_")
-    query = select([db.api_keys]).where(db.api_keys.c.pk == pk)
-    result = await database.fetch_one(query)
-    assert api_key_context.verify(api_key, result["hashed_api_key"])
