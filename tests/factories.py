@@ -1,4 +1,3 @@
-import asyncio
 import datetime
 import uuid
 from typing import List
@@ -36,10 +35,12 @@ class FanvidFactory(factory.Factory):
 
     @classmethod
     def _create(_, model_class, **kwargs):
-        stmt = model_class.insert().values(**kwargs)
-        event_loop = asyncio.get_event_loop()
-        event_loop.run_until_complete(database.execute(stmt))
-        return kwargs
+        async def create_coro(**kwargs):
+            stmt = model_class.insert().values(**kwargs)
+            await database.execute(stmt)
+            return kwargs
+
+        return create_coro(**kwargs)
 
     @classmethod
     def _build(_, model_class, **kwargs):

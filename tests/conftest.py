@@ -1,7 +1,6 @@
-import asyncio
-
 import pytest
-from fastapi.testclient import TestClient
+from asgi_lifespan import LifespanManager
+from httpx import AsyncClient
 from sqlalchemy import create_engine
 from sqlalchemy_utils import create_database  # type: ignore
 from sqlalchemy_utils import database_exists  # type: ignore
@@ -27,11 +26,7 @@ def create_test_database():
 
 
 @pytest.fixture
-def fastapi_client():
-    with TestClient(app) as client:
-        yield client
-
-
-@pytest.fixture()
-def event_loop(fastapi_client):
-    yield asyncio.get_event_loop()
+async def fastapi_client():
+    async with LifespanManager(app):
+        async with AsyncClient(app=app, base_url="http://test") as client:
+            yield client
