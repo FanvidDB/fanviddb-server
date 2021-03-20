@@ -4,10 +4,12 @@ from typing import List
 
 from fastapi import APIRouter
 from fastapi import Depends
-from fastapi import HTTPException
 from sqlalchemy import update
 from sqlalchemy.sql import select
+from starlette.exceptions import HTTPException
+from starlette.status import HTTP_401_UNAUTHORIZED
 
+from fanviddb.api_keys.helpers import check_api_key_header
 from fanviddb.auth.helpers import fastapi_users
 from fanviddb.auth.models import User
 from fanviddb.db import database
@@ -58,7 +60,15 @@ async def create_fanvid(
 
 
 @router.get("", response_model=List[Fanvid])
-async def list_fanvids():
+async def list_fanvids(
+    api_key: str = Depends(check_api_key_header),
+    user: User = Depends(fastapi_users.current_user(optional=True)),
+):
+    if user is None and not api_key:
+        raise HTTPException(
+            status_code=HTTP_401_UNAUTHORIZED,
+            detail="User or API key authentication required",
+        )
     query = (
         select([db.fanvids])
         .where(db.fanvids.c.state != "deleted")

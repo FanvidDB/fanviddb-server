@@ -81,6 +81,11 @@ async def test_verify__does_not_exist(app):
 
 
 @pytest.mark.asyncio
+async def test_verify__invalid(app):
+    assert not await verify("junkdata")
+
+
+@pytest.mark.asyncio
 async def test_check_api_key_header__valid(app):
     api_key = await generate()
     assert await check_api_key_header(api_key)

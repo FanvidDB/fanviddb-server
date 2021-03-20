@@ -14,7 +14,7 @@ from fanviddb.db import database
 
 from . import db
 
-X_API_KEY = APIKeyHeader(name="X-API-Key")
+X_API_KEY = APIKeyHeader(name="X-API-Key", auto_error=False)
 api_key_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
@@ -48,7 +48,10 @@ async def generate() -> str:
 
 
 async def verify(api_key: str):
-    pk, _ = api_key.split("_")
+    try:
+        pk, _ = api_key.split("_")
+    except ValueError:
+        return False
     query = select([db.api_keys]).where(db.api_keys.c.pk == pk)
     result = await database.fetch_one(query)
     if result is None:
