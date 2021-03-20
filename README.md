@@ -52,3 +52,7 @@ alembic revision --autogenerate -m "brief description"
 ```
 
 Once generated, migrations can be applied with `alembic upgrade head`.
+
+## docs.fanviddb.com
+
+The /docs/ folder is used to [generate](https://docs.github.com/en/github/working-with-github-pages/setting-up-a-github-pages-site-with-jekyll) [docs.fanviddb.com](https://docs.fanviddb.com).
