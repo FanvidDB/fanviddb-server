@@ -3,12 +3,29 @@ import uuid
 from typing import List
 
 import factory  # type: ignore
+from fastapi_users.password import get_password_hash
 
+from fanviddb.auth.db import users
 from fanviddb.db import database
 from fanviddb.fanvids.db import fanvids
 
 
-class FanvidFactory(factory.Factory):
+class BaseFactory(factory.Factory):
+    @classmethod
+    def _create(_, model_class, **kwargs):
+        async def create_coro(**kwargs):
+            stmt = model_class.insert().values(**kwargs)
+            await database.execute(stmt)
+            return kwargs
+
+        return create_coro(**kwargs)
+
+    @classmethod
+    def _build(_, model_class, **kwargs):
+        return kwargs
+
+
+class FanvidFactory(BaseFactory):
     class Meta:
         model = fanvids
 
@@ -33,15 +50,22 @@ class FanvidFactory(factory.Factory):
     created_timestamp = factory.LazyFunction(datetime.datetime.utcnow)
     modified_timestamp = factory.LazyFunction(datetime.datetime.utcnow)
 
+
+class UserFactory(BaseFactory):
+    class Meta:
+        model = users
+
+    id = factory.LazyFunction(uuid.uuid4)
+    username = factory.Sequence(lambda n: f"user{n}")
+    email = factory.Sequence(lambda n: f"user{n}@example.com")
+    is_active = True
+    is_verified = True
+    is_superuser = False
+    password = "password"
+
     @classmethod
     def _create(_, model_class, **kwargs):
-        async def create_coro(**kwargs):
-            stmt = model_class.insert().values(**kwargs)
-            await database.execute(stmt)
-            return kwargs
-
-        return create_coro(**kwargs)
-
-    @classmethod
-    def _build(_, model_class, **kwargs):
-        return kwargs
+        password = kwargs.pop("password")
+        return super()._create(
+            model_class, hashed_password=get_password_hash(password), **kwargs
+        )

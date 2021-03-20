@@ -10,7 +10,7 @@ from ..factories import FanvidFactory
 
 
 @pytest.mark.asyncio
-async def test_create_fanvid(fastapi_client):
+async def test_create_fanvid(logged_in_client):
     expected_data = jsonable_encoder(FanvidFactory.build())
     expected_data.pop("uuid")
     expected_data["audio"] = {
@@ -18,11 +18,11 @@ async def test_create_fanvid(fastapi_client):
         "artists_or_sources": expected_data.pop("audio_artists_or_sources"),
         "language": expected_data.pop("audio_language"),
     }
-    response = await fastapi_client.post(
+    response = await logged_in_client.post(
         "/fanvids",
         json=expected_data,
     )
-    assert response.status_code == 201
+    assert response.status_code == 201, response.json()
     response_data = response.json()
     expected_data.update(
         {
@@ -42,6 +42,22 @@ async def test_create_fanvid(fastapi_client):
         "language": result[0].pop("audio_language"),
     }
     assert jsonable_encoder(Fanvid(**result[0])) == expected_data
+
+
+@pytest.mark.asyncio
+async def test_create_fanvid__logged_out(fastapi_client):
+    expected_data = jsonable_encoder(FanvidFactory.build())
+    expected_data.pop("uuid")
+    expected_data["audio"] = {
+        "title": expected_data.pop("audio_title"),
+        "artists_or_sources": expected_data.pop("audio_artists_or_sources"),
+        "language": expected_data.pop("audio_language"),
+    }
+    response = await fastapi_client.post(
+        "/fanvids",
+        json=expected_data,
+    )
+    assert response.status_code == 401
 
 
 @pytest.mark.asyncio
