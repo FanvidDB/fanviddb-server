@@ -101,6 +101,7 @@ async def read_fanvid(
 async def update_fanvid(
     fanvid_uuid: uuid.UUID,
     fanvid: UpdateFanvid,
+    user: User = Depends(fastapi_users.current_user()),
 ):
     fanvid_dict = fanvid.dict(exclude_unset=True)
     audio = fanvid_dict.pop("audio", None)

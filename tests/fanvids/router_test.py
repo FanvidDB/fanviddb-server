@@ -45,7 +45,7 @@ async def test_create_fanvid(logged_in_client):
 
 
 @pytest.mark.asyncio
-async def test_create_fanvid__logged_out(fastapi_client):
+async def test_create_fanvid__not_logged_in(fastapi_client):
     expected_data = jsonable_encoder(FanvidFactory.build())
     expected_data.pop("uuid")
     expected_data["audio"] = {
@@ -107,7 +107,7 @@ async def test_read_fanvid__404(fastapi_client):
 
 
 @pytest.mark.asyncio
-async def test_update_fanvid(fastapi_client):
+async def test_update_fanvid(logged_in_client):
     fanvid = await FanvidFactory()
     expected_response = jsonable_encoder(fanvid)
     expected_response["audio"] = {
@@ -116,7 +116,7 @@ async def test_update_fanvid(fastapi_client):
         "language": expected_response.pop("audio_language"),
     }
     expected_response["title"] = f"{expected_response['title']} and then some"
-    response = await fastapi_client.patch(
+    response = await logged_in_client.patch(
         f"/fanvids/{str(fanvid['uuid'])}",
         json={
             "title": expected_response["title"],
@@ -131,11 +131,41 @@ async def test_update_fanvid(fastapi_client):
 
 
 @pytest.mark.asyncio
-async def test_update_fanvid__404(fastapi_client):
+async def test_update_fanvid__not_logged_in(fastapi_client):
+    fanvid = await FanvidFactory()
+    expected_response = jsonable_encoder(fanvid)
+    expected_response["audio"] = {
+        "title": expected_response.pop("audio_title"),
+        "artists_or_sources": expected_response.pop("audio_artists_or_sources"),
+        "language": expected_response.pop("audio_language"),
+    }
+    expected_response["title"] = f"{expected_response['title']} and then some"
     response = await fastapi_client.patch(
+        f"/fanvids/{str(fanvid['uuid'])}",
+        json={
+            "title": expected_response["title"],
+        },
+    )
+    assert response.status_code == 401
+
+
+@pytest.mark.asyncio
+async def test_update_fanvid__does_not_exist(logged_in_client):
+    response = await logged_in_client.patch(
         "/fanvids/3fa85f64-5717-4562-b3fc-2c963f66afa6",
         json={
             "title": "string",
         },
     )
     assert response.status_code == 404
+
+
+@pytest.mark.asyncio
+async def test_update_fanvid__does_not_exist__not_logged_in(fastapi_client):
+    response = await fastapi_client.patch(
+        "/fanvids/3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        json={
+            "title": "string",
+        },
+    )
+    assert response.status_code == 401
