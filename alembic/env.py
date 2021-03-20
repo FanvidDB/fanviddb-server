@@ -2,6 +2,7 @@ from logging.config import fileConfig
 
 from sqlalchemy import create_engine
 
+import fanviddb.api_keys.db  # noqa: F401
 import fanviddb.auth.db  # noqa: F401
 import fanviddb.fanvids.db  # noqa: F401
 from alembic import context
