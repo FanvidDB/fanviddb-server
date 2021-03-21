@@ -4,6 +4,9 @@ description: >- # this means to ignore newlines until "baseurl:"
 baseurl: ""
 url: "https://docs.fanviddb.com"
 
+github:
+  repository_url: https://github.com/FanvidDB/fanviddb-server
+
 # Build settings
-theme: jekyll-theme-slate
+theme: jekyll-theme-minimal
 markdown: CommonMark

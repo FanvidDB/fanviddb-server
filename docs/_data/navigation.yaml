@@ -1,0 +1,27 @@
+- title: Using with Plex
+  url: /
+
+- title: Contributing
+
+- title: Fanvid data
+  url: /contributing/fanvid-data.html
+
+- title: Translation
+  url: /contributing/translation.html
+
+- title: Documentation
+  url: /contributing/documentation.html
+
+- title: Coding
+
+- title: Frontend
+  url: /coding/frontend.html
+
+- title: Backend
+  url: /coding/backend.html
+
+- title: Metadata agent
+  url: /coding/metadata-agent.html
+
+- title: Docs site
+  url: /coding/docs-site.html
