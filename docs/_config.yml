@@ -1,3 +1,9 @@
-theme: jekyll-theme-slate
 title: FanvidDB
-description: A central repository for fanvid-related metadata, useful for Plex or any other purpose.
+description: >- # this means to ignore newlines until "baseurl:"
+  A central repository for fanvid-related metadata, useful for Plex or any other purpose.
+baseurl: ""
+url: "https://docs.fanviddb.com"
+
+# Build settings
+theme: jekyll-theme-slate
+markdown: CommonMark

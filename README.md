@@ -56,3 +56,14 @@ Once generated, migrations can be applied with `alembic upgrade head`.
 ## docs.fanviddb.com
 
 The /docs/ folder is used to [generate](https://docs.github.com/en/github/working-with-github-pages/setting-up-a-github-pages-site-with-jekyll) [docs.fanviddb.com](https://docs.fanviddb.com).
+
+### Setup
+
+1. [Install Jekyll](https://jekyllrb.com/docs/installation/) and bundler on your computer. We recommend using rbenv for the installation, but it is not required.
+2. Navigate to the `docs/` folder.
+3. Run `bundle install`
+
+### Running jekyll
+
+1. Navigate to the `docs/` folder
+2. Run `bundle exec jekyll serve`
