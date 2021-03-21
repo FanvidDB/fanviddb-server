@@ -1,12 +1,12 @@
 <!doctype html>
-<html class="no-js" lang="">
+<html lang="en-US">
 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>FanvidDB</title>
-  <meta name="description" content="Database of fanvids">
+  <title>Home | FanvidDB</title>
+  <meta name="description" content="A central repository for fanvid-related metadata, useful for Plex or any other purpose.">
 
   <meta property="og:title" content="FanvidDB">
   <meta property="og:type" content="website">
@@ -19,10 +19,47 @@
 </head>
 
 <body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-md">
+      <a class="navbar-brand" href="https://fanviddb.com">FanvidDB</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="https://docs.fanviddb.com">Using with Plex</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="contributingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Contributing
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="contributingDropdown">
+              <li><a class="dropdown-item" href="https://docs.fanviddb.com/contributing/fanvid-data.html">Fanvid data</a></li>
+              <li><a class="dropdown-item" href="https://docs.fanviddb.com/contributing/translation.html">Translation</a></li>
+              <li><a class="dropdown-item" href="https://docs.fanviddb.com/contributing/documentation.html">Documentation</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="codingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Coding
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="codingDropdown">
+              <li><a class="dropdown-item" href="https://docs.fanviddb.com/coding/frontend.html">Frontend</a></li>
+              <li><a class="dropdown-item" href="https://docs.fanviddb.com/coding/backend.html">Backend</a></li>
+              <li><a class="dropdown-item" href="https://docs.fanviddb.com/coding/metadata-agent.html">Metadata agent</a></li>
+              <li><a class="dropdown-item" href="https://docs.fanviddb.com/coding/docs-site.html">Docs site</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
   <div class="container">
-    <div class="col-8 offset-2">
+    <div class="col-6 offset-3">
       <h1>FanvidDB</h1>
 
+      <p>A central repository for fanvid-related metadata, useful for Plex or any other purpose.</p>
       <p>Hello world! Welcome to FanvidDB. This is a project to create an index of fanvids. One of the primary use cases is to provide integration with <a href="https://plex.tv">Plex</a> so that people's personal fanvid libraries can be consumed as easily as their TV shows or movies.</p>
 
       <ul>

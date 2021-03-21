@@ -2,26 +2,26 @@
   url: /
 
 - title: Contributing
+  children:
+    - title: Fanvid data
+      url: /contributing/fanvid-data.html
 
-- title: Fanvid data
-  url: /contributing/fanvid-data.html
+    - title: Translation
+      url: /contributing/translation.html
 
-- title: Translation
-  url: /contributing/translation.html
-
-- title: Documentation
-  url: /contributing/documentation.html
+    - title: Documentation
+      url: /contributing/documentation.html
 
 - title: Coding
+  children:
+    - title: Frontend
+      url: /coding/frontend.html
 
-- title: Frontend
-  url: /coding/frontend.html
+    - title: Backend
+      url: /coding/backend.html
 
-- title: Backend
-  url: /coding/backend.html
+    - title: Metadata agent
+      url: /coding/metadata-agent.html
 
-- title: Metadata agent
-  url: /coding/metadata-agent.html
-
-- title: Docs site
-  url: /coding/docs-site.html
+    - title: Docs site
+      url: /coding/docs-site.html
