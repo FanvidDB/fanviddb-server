@@ -1,6 +1,8 @@
 ---
 layout: default
-title: Metadata agent
+title: Plex Metadata Agent
 ---
 
-# Metadata agent
+# Plex Metadata Agent
+
+The metadata agent can be found at [FanvidDB/FanvidDB.bundle](https://github.com/FanvidDB/FanvidDB.bundle).
