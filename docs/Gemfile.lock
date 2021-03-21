@@ -260,7 +260,6 @@ PLATFORMS
 
 DEPENDENCIES
   github-pages (~> 213)
-  jekyll-commonmark
 
 BUNDLED WITH
    1.17.2
