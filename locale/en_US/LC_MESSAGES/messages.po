@@ -1,0 +1,12 @@
+msgid "API Keys"
+msgstr ""
+
+msgid "Auth"
+msgstr ""
+
+msgid "Fanvids"
+msgstr ""
+
+msgid "Users"
+msgstr ""
+
