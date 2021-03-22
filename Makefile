@@ -16,3 +16,7 @@ fmt:
 extract:
 	pybabel extract --no-location --sort-output --omit-header --input-dirs=fanviddb --width=120 -o locale/base.pot
 	pybabel update -i locale/base.pot -d locale --omit-header
+
+locale-init:
+	pybabel init -l $(locale) -i locale/base.pot -d locale
+	pybabel update -l $(locale) -i locale/base.pot -d locale --omit-header
