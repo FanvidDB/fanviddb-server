@@ -7,14 +7,14 @@ title: Backend
 
 <div class="alert alert-info" role="alert">
   The instructions on this page assume that you are familiar with GitHub and the command line.
-  If you are not but want to be, check out [First Day On Github](https://lab.github.com/githubtraining/first-day-on-github)!
+  If you are not but want to be, check out <a href="https://lab.github.com/githubtraining/first-day-on-github">First Day On Github</a>!
 </div>
 
 ## Setup (Mac OS)
 
 ### Fork & clone the repository
 
-First, visit [github.com/FanvidDB/fanviddb-server](https://github.com/FanvidDB/fanviddb-server) and click on "Fork" to create a fork of the repository.
+First, visit [github.com/FanvidDB/fanviddb-server](https://github.com/FanvidDB/fanviddb-server) and click on "Fork" to create a fork of the repository. Once you have a fork, you can clone it.
 
 ```bash
 git clone git@github.com:your-username/fanviddb-server.git
