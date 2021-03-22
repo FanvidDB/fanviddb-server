@@ -1,5 +1,6 @@
 import datetime
 import uuid
+from gettext import gettext as _
 from typing import List
 
 from fastapi import APIRouter
@@ -47,7 +48,7 @@ async def create_fanvid(
     result = await database.fetch_one(query)
 
     if not result:
-        raise HTTPException(status_code=500, detail="Error creating fanvid.")
+        raise HTTPException(status_code=500, detail=_("Error creating fanvid."))
 
     result = dict(result)
 
@@ -67,7 +68,7 @@ async def list_fanvids(
     if user is None and not api_key:
         raise HTTPException(
             status_code=HTTP_401_UNAUTHORIZED,
-            detail="User or API key authentication required",
+            detail=_("User or API key authentication required"),
         )
     query = (
         select([db.fanvids])
@@ -94,7 +95,7 @@ async def read_fanvid(
     result = await database.fetch_one(query)
 
     if not result:
-        raise HTTPException(status_code=404, detail="Fanvid not found")
+        raise HTTPException(status_code=404, detail=_("Fanvid not found"))
 
     result = dict(result)
 
@@ -137,7 +138,7 @@ async def update_fanvid(
     result = await database.fetch_one(query)
 
     if not result:
-        raise HTTPException(status_code=404, detail="Fanvid not found")
+        raise HTTPException(status_code=404, detail=_("Fanvid not found"))
 
     result = dict(result)
 

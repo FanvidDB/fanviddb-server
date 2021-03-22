@@ -1,3 +1,4 @@
+from gettext import gettext as _
 from typing import Any
 from typing import Dict
 
@@ -11,24 +12,32 @@ from .helpers import fastapi_users
 from .models import UserDB
 
 
-def on_after_register(user: UserDB, _: Request):
-    print(f"User {user.id} has registered.")
+def on_after_register(user: UserDB, __: Request):
+    print(_("User {user_id} has registered.").format(user_id=user.id))
 
 
-def on_after_forgot_password(user: UserDB, token: str, _: Request):
-    print(f"User {user.id} has forgot their password. Reset token: {token}")
+def on_after_forgot_password(user: UserDB, token: str, __: Request):
+    print(
+        _("User {user_id} has forgot their password. Reset token: {token}").format(
+            user_id=user.id, token=token
+        )
+    )
 
 
-def on_after_reset_password(user: UserDB, _: Request):
-    print(f"User {user.id} has reset their password.")
+def on_after_reset_password(user: UserDB, __: Request):
+    print(_("User {user_id} has reset their password.").format(user_id=user.id))
 
 
-def on_after_verification_request(user: UserDB, token: str, _: Request):
-    print(f"Verification requested for user {user.id}. Verification token: {token}")
+def on_after_verification_request(user: UserDB, token: str, __: Request):
+    print(
+        _(
+            "Verification requested for user {user_id}. Verification token: {token}"
+        ).format(user_id=user.id, token=token)
+    )
 
 
-def on_after_verification(user: UserDB, _: Request):
-    print(f"User {user.id} has verified their email.")
+def on_after_verification(user: UserDB, __: Request):
+    print(_("User {user_id} has verified their email.").format(user_id=user.id))
 
 
 auth_router = APIRouter()
@@ -56,9 +65,11 @@ auth_router.include_router(
 )
 
 
-def on_after_update(user: UserDB, updated_user_data: Dict[str, Any], _: Request):
+def on_after_update(user: UserDB, updated_user_data: Dict[str, Any], __: Request):
     print(
-        f"User {user.id} has been updated with the following data: {updated_user_data}"
+        _(
+            "User {user_id} has been updated with the following data: {updated_user_data}"
+        ).format(user_id=user.id, updated_user_data=updated_user_data)
     )
 
 

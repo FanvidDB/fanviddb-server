@@ -1,5 +1,3 @@
-from gettext import gettext as _
-
 from fastapi import FastAPI
 from starlette.routing import Route
 from starlette.staticfiles import StaticFiles
@@ -18,22 +16,22 @@ app = FastAPI(
 app.include_router(
     fanvid_router,
     prefix="/fanvids",
-    tags=[_("Fanvids")],
+    tags=["Fanvids"],
 )
 app.include_router(
     auth_router,
     prefix="/auth",
-    tags=[_("Auth")],
+    tags=["Auth"],
 )
 app.include_router(
     users_router,
     prefix="/users",
-    tags=[_("Users")],
+    tags=["Users"],
 )
 app.include_router(
     api_key_router,
     prefix="/api_keys",
-    tags=[_("API Keys")],
+    tags=["API Keys"],
 )
 
 

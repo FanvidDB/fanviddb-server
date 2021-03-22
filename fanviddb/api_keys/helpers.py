@@ -1,4 +1,5 @@
 import datetime
+from gettext import gettext as _
 from typing import Optional
 
 from asyncpg.exceptions import UniqueViolationError  # type: ignore
@@ -42,7 +43,7 @@ async def generate() -> str:
             await transaction.commit()
         attempts += 1
         if attempts > 10:
-            raise ValueError("Too many collisions")
+            raise ValueError(_("Too many collisions"))
 
     return api_key
 
@@ -66,5 +67,7 @@ async def check_api_key_header(api_key: Optional[str] = Depends(X_API_KEY)):
         return False
     is_valid = await verify(api_key)
     if not is_valid:
-        raise HTTPException(status_code=HTTP_401_UNAUTHORIZED, detail="Invalid api key")
+        raise HTTPException(
+            status_code=HTTP_401_UNAUTHORIZED, detail=_("Invalid api key")
+        )
     return True

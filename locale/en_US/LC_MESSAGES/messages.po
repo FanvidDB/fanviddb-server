@@ -1,12 +1,35 @@
-msgid "API Keys"
+msgid "Error creating fanvid."
 msgstr ""
 
-msgid "Auth"
+msgid "Fanvid not found"
 msgstr ""
 
-msgid "Fanvids"
+msgid "Invalid api key"
 msgstr ""
 
-msgid "Users"
+msgid "Too many collisions"
+msgstr ""
+
+msgid "User or API key authentication required"
+msgstr ""
+
+msgid ""
+"User {user_id} has been updated with the following data: "
+"{updated_user_data}"
+msgstr ""
+
+msgid "User {user_id} has forgot their password. Reset token: {token}"
+msgstr ""
+
+msgid "User {user_id} has registered."
+msgstr ""
+
+msgid "User {user_id} has reset their password."
+msgstr ""
+
+msgid "User {user_id} has verified their email."
+msgstr ""
+
+msgid "Verification requested for user {user_id}. Verification token: {token}"
 msgstr ""
 
