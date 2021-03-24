@@ -6,6 +6,7 @@ from fastapi import APIRouter
 from fastapi import Request
 
 from fanviddb import conf
+from fanviddb.email import send_email
 
 from .helpers import cookie_authentication
 from .helpers import fastapi_users
@@ -13,31 +14,56 @@ from .models import UserDB
 
 
 def on_after_register(user: UserDB, __: Request):
-    print(_("User {user_id} has registered.").format(user_id=user.id))
+    send_email(
+        from_email=conf.DEFAULT_FROM_EMAIL,
+        to_emails=[user.email],
+        subject=_("Registration confirmed"),
+        content=_("You've registered, {username}!").format(username=user.username),
+    )
 
 
 def on_after_forgot_password(user: UserDB, token: str, __: Request):
-    print(
-        _("User {user_id} has forgot their password. Reset token: {token}").format(
-            user_id=user.id, token=token
-        )
+    send_email(
+        from_email=conf.DEFAULT_FROM_EMAIL,
+        to_emails=[user.email],
+        subject=_("Reset password request"),
+        content=_("You requested a password reset. Reset token: {token}").format(
+            token=token
+        ),
     )
 
 
 def on_after_reset_password(user: UserDB, __: Request):
-    print(_("User {user_id} has reset their password.").format(user_id=user.id))
+    send_email(
+        from_email=conf.DEFAULT_FROM_EMAIL,
+        to_emails=[user.email],
+        subject=_("Password reset complete"),
+        content=_("Password reset for {username} complete.").format(
+            username=user.username
+        ),
+    )
 
 
 def on_after_verification_request(user: UserDB, token: str, __: Request):
-    print(
-        _(
-            "Verification requested for user {user_id}. Verification token: {token}"
-        ).format(user_id=user.id, token=token)
+    send_email(
+        from_email=conf.DEFAULT_FROM_EMAIL,
+        to_emails=[user.email],
+        subject=_("Please verify your account"),
+        content=_(
+            "Verification requested for {username}. Verification token: {token}"
+        ).format(username=user.username, token=token),
     )
 
 
 def on_after_verification(user: UserDB, __: Request):
-    print(_("User {user_id} has verified their email.").format(user_id=user.id))
+    send_email(
+        from_email=conf.DEFAULT_FROM_EMAIL,
+        to_emails=[user.email],
+        subject=_("Account verified"),
+        content=_("User {username} has verified their email.").format(
+            username=user.username
+        ),
+    )
 
 
 auth_router = APIRouter()
