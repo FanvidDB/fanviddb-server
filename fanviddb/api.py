@@ -3,17 +3,31 @@ from starlette.routing import Mount
 from starlette.routing import Route
 from starlette.staticfiles import StaticFiles
 
+from . import conf
 from .api_keys.router import api_key_router
 from .auth.routers import auth_router
 from .auth.routers import users_router
 from .db import database
 from .fanvids.router import router as fanvid_router
 
+routes = []
+if not conf.TESTING:
+    routes = [
+        Route(
+            "/",
+            endpoint=StaticFiles(directory="frontend/build/", html=True),
+            name="homepage",
+        ),
+        Mount(
+            "/static",
+            app=StaticFiles(directory="frontend/build/static/", html=True),
+            name="static",
+        ),
+    ]
+
+
 app = FastAPI(
-    routes=[
-        Route("/", endpoint=StaticFiles(directory="frontend/build/", html=True), name="homepage"),
-        Mount("/static", app=StaticFiles(directory="frontend/build/static/", html=True), name="static"),
-    ],
+    routes=routes,
 )
 
 app.include_router(
