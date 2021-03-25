@@ -45,7 +45,7 @@ async def logged_in_client(app):
         password = "swordfish"
         user = await UserFactory(password=password)
         response = await client.post(
-            "/auth/login",
+            "/api/auth/login",
             data={
                 "username": user["username"],
                 "password": password,

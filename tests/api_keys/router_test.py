@@ -8,7 +8,7 @@ from fanviddb.db import database
 
 @pytest.mark.asyncio
 async def test_create_api_key(fastapi_client):
-    response = await fastapi_client.post("/api_keys")
+    response = await fastapi_client.post("/api/api_keys")
     assert response.status_code == 200
     api_key = response.json()["api_key"]
     pk, _ = api_key.split("_")
