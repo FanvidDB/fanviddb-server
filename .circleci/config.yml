@@ -76,3 +76,4 @@ workflows:
       - backend-test
       - backend-lint
       - frontend-test
+      - frontend-lint
