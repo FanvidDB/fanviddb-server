@@ -10,24 +10,20 @@ from .auth.routers import users_router
 from .db import database
 from .fanvids.router import router as fanvid_router
 
-routes = []
-if not conf.TESTING:
-    routes = [
+
+app = FastAPI(
+    routes=[
         Route(
             "/",
-            endpoint=StaticFiles(directory="frontend/build/", html=True),
+            endpoint=StaticFiles(directory="frontend/build/", html=True, check_dir=False),
             name="homepage",
         ),
         Mount(
             "/static",
-            app=StaticFiles(directory="frontend/build/static/", html=True),
+            app=StaticFiles(directory="frontend/build/static/", html=True, check_dir=False),
             name="static",
         ),
-    ]
-
-
-app = FastAPI(
-    routes=routes,
+    ],
 )
 
 app.include_router(
