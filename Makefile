@@ -1,7 +1,7 @@
 lint:
 	status=0;\
-make backend-lint || status=1;\
-make frontend-lint || status=1;\
+! command -v mypy || make backend-lint || status=1;\
+! command -v yarn || make frontend-lint || status=1;\
 exit $$status
 
 backend-lint:
