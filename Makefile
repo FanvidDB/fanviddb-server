@@ -16,11 +16,13 @@ exit $$status
 frontend-lint:
 	status=0;\
 yarn lint || status=1;\
+yarn prettier --check . || status=1;\
 exit $$status
 
 fmt:
-	-black .
-	-isort .
+	-command -v black && black .
+	-command -v isort && isort .
+	-command -v yarn && yarn prettier --write .
 
 
 # See https://github.com/python-babel/babel/issues/296 - setup.cfg doesn't work.

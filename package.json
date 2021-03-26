@@ -21,7 +21,9 @@
       "eslint:recommended",
       "plugin:react/recommended"
     ],
-    "plugins": ["jest"]
+    "plugins": [
+      "jest"
+    ]
   },
   "browserslist": {
     "production": [
@@ -113,6 +115,7 @@
     "dotenv": "8.2.0",
     "dotenv-expand": "5.1.0",
     "eslint": "^7.11.0",
+    "eslint-config-prettier": "^8.1.0",
     "eslint-config-react-app": "^6.0.0",
     "eslint-plugin-flowtype": "^5.2.0",
     "eslint-plugin-import": "^2.22.1",
@@ -141,6 +144,7 @@
     "postcss-normalize": "8.0.1",
     "postcss-preset-env": "6.7.0",
     "postcss-safe-parser": "5.0.2",
+    "prettier": "^2.2.1",
     "prompts": "2.4.0",
     "react": "^17.0.2",
     "react-app-polyfill": "^2.0.0",

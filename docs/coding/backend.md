@@ -40,6 +40,7 @@ EOF
 This will create a `.env` file with the basic configuration needed by the app.
 
 ### Database configuration
+
 1. Install [Postgres.app](https://postgresapp.com/)
 2. Open Postgres.app and double-click on the `postgres` database
 3. Run `CREATE DATABASE fanviddb;` in the terminal that opens to create a database called `fanviddb`.

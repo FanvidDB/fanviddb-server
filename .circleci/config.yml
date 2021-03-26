@@ -52,7 +52,7 @@ jobs:
   frontend-lint:
     executor:
       name: node/default
-      tag: '15.11'
+      tag: "15.11"
     steps:
       - checkout
       - node/install-packages:
@@ -62,7 +62,7 @@ jobs:
   frontend-test:
     executor:
       name: node/default
-      tag: '15.11'
+      tag: "15.11"
     steps:
       - checkout
       - node/install-packages:
