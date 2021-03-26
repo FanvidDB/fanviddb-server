@@ -5,6 +5,8 @@ title: Backend
 
 # Backend
 
+The backend uses [FastAPI](fastapi.tiangolo.com/), an async [Python](https://www.python.org/) API framework, and uses [SQLAlchemy](https://www.sqlalchemy.org/) for database interactions.
+
 <div class="alert alert-info" role="alert">
   The instructions on this page assume that you are familiar with GitHub and the command line.
   If you are not but want to be, check out <a href="https://lab.github.com/githubtraining/first-day-on-github">First Day On Github</a>!
@@ -14,7 +16,7 @@ title: Backend
 
 ### Fork & clone the repository
 
-First, visit [github.com/FanvidDB/fanviddb-server](https://github.com/FanvidDB/fanviddb-server) and click on "Fork" to create a fork of the repository. Once you have a fork, you can clone it.
+First, create a fork of [github.com/FanvidDB/fanviddb-server](https://github.com/FanvidDB/fanviddb-server) that you can clone.
 
 ```bash
 git clone git@github.com:your-username/fanviddb-server.git
@@ -50,6 +52,8 @@ uvicorn fanviddb.api:app --reload
 ```
 
 This will automatically reload the server when your code changes.
+
+You can run the backend on its own without the frontend, and interact with the Swagger UI at <http://127.0.0.1:8000/docs/>. If you want to build the frontend as well, you can either [build it once or automatically reload when javascript changes](/coding/frontend.html), whichever you prefer.
 
 ## Marking strings for translation
 
