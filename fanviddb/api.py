@@ -3,7 +3,6 @@ from starlette.routing import Mount
 from starlette.routing import Route
 from starlette.staticfiles import StaticFiles
 
-from . import conf
 from .api_keys.router import api_key_router
 from .auth.routers import auth_router
 from .auth.routers import users_router
