@@ -11,16 +11,31 @@ from .db import database
 from .fanvids.router import router as fanvid_router
 
 
+class HelpfulStaticFiles(StaticFiles):
+    async def check_config(self) -> None:
+        try:
+            await super().check_config()
+        except RuntimeError as exc:
+            raise RuntimeError(
+                "Static files do not exist; you may need to run `yarn build` to generate them.\n"
+                "See https://docs.fanviddb.com/coding/frontend.html for details."
+            ) from exc
+
+
 app = FastAPI(
     routes=[
         Route(
             "/",
-            endpoint=StaticFiles(directory="frontend/build/", html=True, check_dir=False),
+            endpoint=HelpfulStaticFiles(
+                directory="frontend/build/", html=True, check_dir=False
+            ),
             name="homepage",
         ),
         Mount(
             "/static",
-            app=StaticFiles(directory="frontend/build/static/", html=True, check_dir=False),
+            app=HelpfulStaticFiles(
+                directory="frontend/build/static/", html=True, check_dir=False
+            ),
             name="static",
         ),
     ],
