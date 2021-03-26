@@ -1,10 +1,21 @@
 lint:
 	status=0;\
+make backend-lint || status=1;\
+make frontend-lint || status=1;\
+exit $$status
+
+backend-lint:
+	status=0;\
 mypy . || status=1;\
 flake8 . || status=1;\
 black . --check || status=1;\
 isort . --check || status=1;\
 vulture . || status=1;\
+exit $$status
+
+frontend-lint:
+	status=0;\
+yarn lint || status=1;\
 exit $$status
 
 fmt:

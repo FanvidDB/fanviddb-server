@@ -13,7 +13,7 @@ jobs:
       - checkout
       - python/install-packages:
           pkg-manager: pip
-      - run: make lint
+      - run: make backend-lint
   backend-test:
     docker:
       - image: cimg/python:3.7.10
@@ -49,6 +49,16 @@ jobs:
           path: test-results
       - store_artifacts:
           path: test-results
+  frontend-lint:
+    executor:
+      name: node/default
+      tag: '15.11'
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+      - run:
+          command: make frontend-lint
   frontend-test:
     executor:
       name: node/default
