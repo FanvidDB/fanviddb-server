@@ -78,13 +78,21 @@ Once you have finished marking your strings, run the following command to extrac
 make extract
 ```
 
+## Running tests
+
+Tests use [the pytest framework](https://docs.pytest.org/) and can be run with the following command:
+
+```bash
+pytest
+```
+
 ## Before you push new code
 
 If you make changes to the backend code, make sure to run the following commands prior to creating a pull request:
 
 ```bash
 pytest    # Runs python tests
-make fmt  # Auto-enforces some code style
+make fmt  # Auto-enforces code style
 make lint # Checks code style
 ```
 
