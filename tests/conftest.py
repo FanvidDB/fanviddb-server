@@ -47,7 +47,7 @@ async def logged_in_client(app):
         response = await client.post(
             "/api/auth/login",
             data={
-                "username": user["username"],
+                "username": user["email"],
                 "password": password,
             },
         )
