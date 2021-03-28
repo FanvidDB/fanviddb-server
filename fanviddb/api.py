@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+from fastapi import Request
+from fastapi.responses import JSONResponse
 from starlette.routing import Mount
 from starlette.routing import Route
 from starlette.staticfiles import StaticFiles
@@ -7,6 +9,7 @@ from .api_keys.router import api_key_router
 from .auth.routers import auth_router
 from .auth.routers import users_router
 from .db import database
+from .email import EmailSendFailed
 from .fanvids.router import router as fanvid_router
 
 
@@ -70,3 +73,14 @@ async def startup():
 @app.on_event("shutdown")
 async def shutdown():
     await database.disconnect()
+
+
+@app.exception_handler(EmailSendFailed)
+async def email_send_failed_handler(__: Request, exc: EmailSendFailed):
+    return JSONResponse(
+        status_code=503,
+        headers={"retry-after": "300"},
+        content={
+            "error": "Email send failed; please retry in a few minutes",
+        },
+    )
