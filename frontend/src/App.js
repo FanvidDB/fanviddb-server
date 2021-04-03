@@ -1,9 +1,9 @@
 import React from "react";
 import { Layout, Row, Col } from "antd";
 import "./App.less";
-import PageHeader from "./components/PageHeader";
 import Text from "./components/Text";
 import LoginForm from "./auth/LoginForm";
+import { Localized } from "@fluent/react";
 
 const { Content } = Layout;
 
@@ -12,7 +12,9 @@ const App = () => (
     <Content>
       <Row>
         <Col span={12} offset={6}>
-          <PageHeader>FanvidDB</PageHeader>
+          <h1>
+            <Localized id="hello-world">FanvidDB</Localized>
+          </h1>
           <Text>
             Welcome! FanvidDB is a central repository for fanvid-related
             metadata, in particular for integration with{" "}
