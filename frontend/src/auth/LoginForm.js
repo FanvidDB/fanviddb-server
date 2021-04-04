@@ -25,7 +25,7 @@ class LoginForm extends React.Component {
           rules={[
             {
               required: true,
-              message: <Localized id="login-form-email-error-required" />,
+              message: <Localized id="login-form-password-error-required" />,
             },
           ]}
         >
