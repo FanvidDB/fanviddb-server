@@ -2,13 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import BundleLoader from "./fluent/BundleLoader";
 
 ReactDOM.render(
   <React.StrictMode>
-    <BundleLoader>
-      <App />
-    </BundleLoader>
+    <App />
   </React.StrictMode>,
   document.getElementById("root")
 );

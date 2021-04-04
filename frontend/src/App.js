@@ -1,37 +1,79 @@
 import React from "react";
-import { Layout, Row, Col } from "antd";
+import { ConfigProvider as AntdConfigProvider, Layout, Row, Col } from "antd";
 import "./App.less";
-import LoginForm from "./auth/LoginForm";
-import { Localized } from "@fluent/react";
+import HomePage from "./auth/HomePage";
+import FluentLocalization from "./fluent/FluentLocalization";
+import LocaleSelector from "./components/LocaleSelector";
+import { negotiateLanguages } from "@fluent/langneg";
+import moment from "moment";
 
 const { Content } = Layout;
+const DEFAULT_LOCALE = "en-US";
+const AVAILABLE_LOCALES = ["en-US", "zh-CN"];
 
-const App = () => (
-  <Layout>
-    <Content>
-      <Row>
-        <Col span={12} offset={6}>
-          <h1>
-            <Localized id="homepage-title">FanvidDB</Localized>
-          </h1>
-          <Localized
-            id="homepage-intro"
-            elems={{
-              plexLink: <a href="https://plex.tv" />,
-            }}
-          >
-            <p>{"<plexLink>Hello</plexLink> world"}</p>
-          </Localized>
+class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      antdLocale: null,
+      fluentLocales: null,
+    };
+    this.setLocale(null);
+    this.onSelectLocale = this.onSelectLocale.bind(this);
+  }
 
-          <LoginForm />
+  onSelectLocale(e) {
+    this.setLocale(e.target.value);
+  }
 
-          <p>
-            <a href="/redoc">Redoc</a> – <a href="/docs">Swagger UI</a>
-          </p>
-        </Col>
-      </Row>
-    </Content>
-  </Layout>
-);
+  setLocale(locale) {
+    if (locale === null) {
+      locale = DEFAULT_LOCALE;
+    }
+
+    const fluentLocales = negotiateLanguages(
+      [locale].concat(navigator.languages),
+      AVAILABLE_LOCALES,
+      {
+        defaultLocale: "en-US",
+      }
+    );
+
+    this.setState({
+      selectedLocale: locale,
+      antdLocale: locale.replace("-", ""),
+      fluentLocales,
+    });
+    if (locale == "en-US") {
+      moment.locale("en");
+    } else {
+      moment.locale("zh-cn");
+    }
+  }
+
+  render() {
+    return (
+      <AntdConfigProvider locale={this.state.antdLocale}>
+        <FluentLocalization locales={this.state.fluentLocales}>
+          <Layout>
+            <Content>
+              <Row>
+                <Col span={6}>
+                  <LocaleSelector
+                    locale={this.state.selectedLocale}
+                    onChange={this.onSelectLocale}
+                  />
+                </Col>
+                <Col span={12}>
+                  <HomePage />
+                </Col>
+              </Row>
+            </Content>
+          </Layout>
+        </FluentLocalization>
+      </AntdConfigProvider>
+    );
+  }
+}
 
 export default App;
