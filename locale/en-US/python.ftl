@@ -12,3 +12,7 @@ email-verification-content = Verification requested for {username}. Verification
 
 email-after-verification-subject = Account verified
 email-after-verification-content = User {username} has verified their email.
+
+fanvid-create-error = Error creating fanvid.
+fanvid-user-or-api-key-required = User or API key authentication required
+fanvid-not-found = Fanvid not found
