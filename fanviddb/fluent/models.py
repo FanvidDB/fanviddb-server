@@ -1,7 +1,5 @@
 from enum import Enum
 
-from pydantic import BaseModel
-
 
 class Locale(str, Enum):
     en_US = "en-US"

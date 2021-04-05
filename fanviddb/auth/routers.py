@@ -1,7 +1,3 @@
-from gettext import gettext as _
-from typing import Any
-from typing import Dict
-
 from fastapi import APIRouter
 from fastapi import Request
 

@@ -1,9 +1,9 @@
 from typing import List
 
-from fluent.runtime import FluentLocalization
-from fluent.runtime import FluentResourceLoader
-from starlette.requests import Request
 from fastapi import Query
+from fluent.runtime import FluentLocalization  # type: ignore
+from fluent.runtime import FluentResourceLoader  # type: ignore
+from starlette.requests import Request
 
 from .models import DEFAULT_LOCALE
 from .models import Locale

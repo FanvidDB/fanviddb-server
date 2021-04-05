@@ -4,7 +4,7 @@ from typing import List
 
 from fastapi import APIRouter
 from fastapi import Depends
-from fluent.runtime import FluentLocalization
+from fluent.runtime import FluentLocalization  # type: ignore
 from sqlalchemy import update
 from sqlalchemy.sql import select
 from starlette.exceptions import HTTPException
