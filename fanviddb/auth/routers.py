@@ -7,61 +7,73 @@ from fastapi import Request
 
 from fanviddb import conf
 from fanviddb.email import send_email
+from fanviddb.fluent.utils import get_fluent
+from fanviddb.fluent.utils import get_request_locales
 
 from .helpers import cookie_authentication
 from .helpers import fastapi_users
 from .models import UserDB
 
 
-def on_after_register(user: UserDB, __: Request):
+def on_after_register(user: UserDB, request: Request):
+    locales = get_request_locales(request)
+    fluent = get_fluent(locales)
     send_email(
         from_email=conf.DEFAULT_FROM_EMAIL,
         to_emails=[user.email],
-        subject=_("Registration confirmed"),
-        content=_("You've registered, {username}!").format(username=user.username),
-    )
-
-
-def on_after_forgot_password(user: UserDB, token: str, __: Request):
-    send_email(
-        from_email=conf.DEFAULT_FROM_EMAIL,
-        to_emails=[user.email],
-        subject=_("Reset password request"),
-        content=_("You requested a password reset. Reset token: {token}").format(
-            token=token
+        subject=fluent.format_value("email-confirm-registration-subject"),
+        content=fluent.format_value(
+            "email-confirm-registration-content", {"username": user.username}
         ),
     )
 
 
-def on_after_reset_password(user: UserDB, __: Request):
+def on_after_forgot_password(user: UserDB, token: str, request: Request):
+    locales = get_request_locales(request)
+    fluent = get_fluent(locales)
     send_email(
         from_email=conf.DEFAULT_FROM_EMAIL,
         to_emails=[user.email],
-        subject=_("Password reset complete"),
-        content=_("Password reset for {username} complete.").format(
-            username=user.username
+        subject=fluent.format_value("email-forgot-password-subject"),
+        content=fluent.format_value("email-forgot-password-content", {"token": token}),
+    )
+
+
+def on_after_reset_password(user: UserDB, request: Request):
+    locales = get_request_locales(request)
+    fluent = get_fluent(locales)
+    send_email(
+        from_email=conf.DEFAULT_FROM_EMAIL,
+        to_emails=[user.email],
+        subject=fluent.format_value("email-after-reset-password-subject"),
+        content=fluent.format_value(
+            "email-after-reset-password-content", {"username": user.username}
         ),
     )
 
 
-def on_after_verification_request(user: UserDB, token: str, __: Request):
+def on_after_verification_request(user: UserDB, token: str, request: Request):
+    locales = get_request_locales(request)
+    fluent = get_fluent(locales)
     send_email(
         from_email=conf.DEFAULT_FROM_EMAIL,
         to_emails=[user.email],
-        subject=_("Please verify your account"),
-        content=_(
-            "Verification requested for {username}. Verification token: {token}"
-        ).format(username=user.username, token=token),
+        subject=fluent.format_value("email-verification-subject"),
+        content=fluent.format_value(
+            "email-verification-content", {"username": user.username, "token": token}
+        ),
     )
 
 
-def on_after_verification(user: UserDB, __: Request):
+def on_after_verification(user: UserDB, request: Request):
+    locales = get_request_locales(request)
+    fluent = get_fluent(locales)
     send_email(
         from_email=conf.DEFAULT_FROM_EMAIL,
         to_emails=[user.email],
-        subject=_("Account verified"),
-        content=_("User {username} has verified their email.").format(
-            username=user.username
+        subject=fluent.format_value("email-after-verification-subject"),
+        content=fluent.format_value(
+            "email-after-verification-content", {"username": user.username}
         ),
     )
 
@@ -90,16 +102,6 @@ auth_router.include_router(
     ),
 )
 
-
-def on_after_update(user: UserDB, updated_user_data: Dict[str, Any], __: Request):
-    print(
-        _(
-            "User {user_id} has been updated with the following data: {updated_user_data}"
-        ).format(user_id=user.id, updated_user_data=updated_user_data)
-    )
-
-
 users_router = fastapi_users.get_users_router(
     requires_verification=True,
-    after_update=on_after_update,
 )

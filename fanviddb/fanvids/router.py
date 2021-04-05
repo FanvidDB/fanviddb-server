@@ -14,6 +14,8 @@ from fanviddb.api_keys.helpers import check_api_key_header
 from fanviddb.auth.helpers import fastapi_users
 from fanviddb.auth.models import User
 from fanviddb.db import database
+from fanviddb.fluent.models import DEFAULT_LOCALE
+from fanviddb.fluent.models import Locale
 
 from . import db
 from .models import CreateFanvid
@@ -25,7 +27,9 @@ router = APIRouter()
 
 @router.post("", response_model=Fanvid, status_code=201)
 async def create_fanvid(
-    fanvid: CreateFanvid, user: User = Depends(fastapi_users.current_user())
+    fanvid: CreateFanvid,
+    user: User = Depends(fastapi_users.current_user()),
+    locales: List[Locale] = [DEFAULT_LOCALE],
 ):
     fanvid_dict = fanvid.dict()
     audio = fanvid_dict.pop("audio")
@@ -64,6 +68,7 @@ async def create_fanvid(
 async def list_fanvids(
     api_key: str = Depends(check_api_key_header),
     user: User = Depends(fastapi_users.current_user(optional=True)),
+    locales: List[Locale] = [DEFAULT_LOCALE],
 ):
     if user is None and not api_key:
         raise HTTPException(
@@ -90,6 +95,7 @@ async def list_fanvids(
 @router.get("/{fanvid_uuid}", response_model=Fanvid)
 async def read_fanvid(
     fanvid_uuid: uuid.UUID,
+    locales: List[Locale] = [DEFAULT_LOCALE],
 ):
     query = select([db.fanvids]).where(db.fanvids.c.uuid == fanvid_uuid)
     result = await database.fetch_one(query)
@@ -113,6 +119,7 @@ async def update_fanvid(
     fanvid_uuid: uuid.UUID,
     fanvid: UpdateFanvid,
     user: User = Depends(fastapi_users.current_user()),
+    locales: List[Locale] = [DEFAULT_LOCALE],
 ):
     fanvid_dict = fanvid.dict(exclude_unset=True)
     audio = fanvid_dict.pop("audio", None)
