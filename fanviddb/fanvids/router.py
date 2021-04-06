@@ -14,7 +14,7 @@ from fanviddb.api_keys.helpers import check_api_key_header
 from fanviddb.auth.helpers import fastapi_users
 from fanviddb.auth.models import User
 from fanviddb.db import database
-from fanviddb.fluent.utils import fluent_dependency
+from fanviddb.i18n.utils import fluent_dependency
 
 from . import db
 from .models import CreateFanvid

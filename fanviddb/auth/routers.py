@@ -3,8 +3,8 @@ from fastapi import Request
 
 from fanviddb import conf
 from fanviddb.email import send_email
-from fanviddb.fluent.utils import get_fluent
-from fanviddb.fluent.utils import get_request_locales
+from fanviddb.i18n.utils import get_fluent
+from fanviddb.i18n.utils import get_request_locales
 
 from .helpers import cookie_authentication
 from .helpers import fastapi_users
