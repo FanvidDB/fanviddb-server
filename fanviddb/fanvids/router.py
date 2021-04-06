@@ -1,10 +1,10 @@
 import datetime
 import uuid
-from gettext import gettext as _
 from typing import List
 
 from fastapi import APIRouter
 from fastapi import Depends
+from fluent.runtime import FluentLocalization  # type: ignore
 from sqlalchemy import update
 from sqlalchemy.sql import select
 from starlette.exceptions import HTTPException
@@ -14,6 +14,7 @@ from fanviddb.api_keys.helpers import check_api_key_header
 from fanviddb.auth.helpers import fastapi_users
 from fanviddb.auth.models import User
 from fanviddb.db import database
+from fanviddb.fluent.utils import fluent_dependency
 
 from . import db
 from .models import CreateFanvid
@@ -25,7 +26,9 @@ router = APIRouter()
 
 @router.post("", response_model=Fanvid, status_code=201)
 async def create_fanvid(
-    fanvid: CreateFanvid, user: User = Depends(fastapi_users.current_user())
+    fanvid: CreateFanvid,
+    user: User = Depends(fastapi_users.current_user()),
+    fluent: FluentLocalization = Depends(fluent_dependency),
 ):
     fanvid_dict = fanvid.dict()
     audio = fanvid_dict.pop("audio")
@@ -48,7 +51,9 @@ async def create_fanvid(
     result = await database.fetch_one(query)
 
     if not result:
-        raise HTTPException(status_code=500, detail=_("Error creating fanvid."))
+        raise HTTPException(
+            status_code=500, detail=fluent.format_value("fanvid-create-error")
+        )
 
     result = dict(result)
 
@@ -64,11 +69,12 @@ async def create_fanvid(
 async def list_fanvids(
     api_key: str = Depends(check_api_key_header),
     user: User = Depends(fastapi_users.current_user(optional=True)),
+    fluent: FluentLocalization = Depends(fluent_dependency),
 ):
     if user is None and not api_key:
         raise HTTPException(
             status_code=HTTP_401_UNAUTHORIZED,
-            detail=_("User or API key authentication required"),
+            detail=fluent.format_value("fanvid-user-or-api-key-required"),
         )
     query = (
         select([db.fanvids])
@@ -90,12 +96,15 @@ async def list_fanvids(
 @router.get("/{fanvid_uuid}", response_model=Fanvid)
 async def read_fanvid(
     fanvid_uuid: uuid.UUID,
+    fluent: FluentLocalization = Depends(fluent_dependency),
 ):
     query = select([db.fanvids]).where(db.fanvids.c.uuid == fanvid_uuid)
     result = await database.fetch_one(query)
 
     if not result:
-        raise HTTPException(status_code=404, detail=_("Fanvid not found"))
+        raise HTTPException(
+            status_code=404, detail=fluent.format_value("fanvid-not-found")
+        )
 
     result = dict(result)
 
@@ -113,6 +122,7 @@ async def update_fanvid(
     fanvid_uuid: uuid.UUID,
     fanvid: UpdateFanvid,
     user: User = Depends(fastapi_users.current_user()),
+    fluent: FluentLocalization = Depends(fluent_dependency),
 ):
     fanvid_dict = fanvid.dict(exclude_unset=True)
     audio = fanvid_dict.pop("audio", None)
@@ -138,7 +148,9 @@ async def update_fanvid(
     result = await database.fetch_one(query)
 
     if not result:
-        raise HTTPException(status_code=404, detail=_("Fanvid not found"))
+        raise HTTPException(
+            status_code=404, detail=fluent.format_value("fanvid-not-found")
+        )
 
     result = dict(result)
 

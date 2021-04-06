@@ -34,6 +34,11 @@ app = FastAPI(
             name="homepage",
         ),
         Mount(
+            "/static/locale",
+            app=StaticFiles(directory="locale"),
+            name="locale",
+        ),
+        Mount(
             "/static",
             app=HelpfulStaticFiles(
                 directory="frontend/build/static/", html=True, check_dir=False
