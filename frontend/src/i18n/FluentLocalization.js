@@ -1,5 +1,4 @@
 import React from "react";
-import "intl-pluralrules";
 import { FluentBundle, FluentResource } from "@fluent/bundle";
 import { LocalizationProvider, ReactLocalization } from "@fluent/react";
 import PropTypes from "prop-types";

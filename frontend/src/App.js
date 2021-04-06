@@ -1,53 +1,30 @@
 import React from "react";
 import { ConfigProvider as AntdConfigProvider, Layout, Row, Col } from "antd";
 import "./App.less";
+import "intl-pluralrules";
 import HomePage from "./auth/HomePage";
-import FluentLocalization from "./fluent/FluentLocalization";
+import FluentLocalization from "./i18n/FluentLocalization";
+import { getLocales, DEFAULT_LOCALE } from "./i18n/utils";
 import LocaleSelector from "./components/LocaleSelector";
-import { negotiateLanguages } from "@fluent/langneg";
 import moment from "moment";
 
 const { Content } = Layout;
-const DEFAULT_LOCALE = "en-US";
-const AVAILABLE_LOCALES = ["en-US", "zh-CN"];
 
 class App extends React.Component {
   constructor() {
     super();
-    this.state = {
-      antdLocale: null,
-      fluentLocales: null,
-    };
-    this.setLocale(null);
+    this.state = getLocales(DEFAULT_LOCALE);
+    moment.locale(this.state.momentLocale);
     this.onSelectLocale = this.onSelectLocale.bind(this);
   }
 
   onSelectLocale(e) {
-    this.setLocale(e.target.value);
+    this.setState(getLocales(e.target.value));
   }
 
-  setLocale(locale) {
-    if (locale === null) {
-      locale = DEFAULT_LOCALE;
-    }
-
-    const fluentLocales = negotiateLanguages(
-      [locale].concat(navigator.languages),
-      AVAILABLE_LOCALES,
-      {
-        defaultLocale: "en-US",
-      }
-    );
-
-    this.setState({
-      selectedLocale: locale,
-      antdLocale: locale.replace("-", ""),
-      fluentLocales,
-    });
-    if (locale == "en-US") {
-      moment.locale("en");
-    } else {
-      moment.locale("zh-cn");
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.momentLocale != prevState.momentLocale) {
+      moment.locale(this.state.momentLocale);
     }
   }
 
