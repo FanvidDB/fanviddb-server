@@ -36,7 +36,8 @@ If you are doing significant work on the frontend, run:
 yarn start
 ```
 
-This will spin up a web server at <http://localhost:3000> that automatically proxies API requests to the backend server, and automatically restarts when there are changes to your Javascript.
+This will spin up a web server at <http://localhost:3000> that automatically restarts when there are changes to your Javascript.
+If you are also running a [backend server](/coding/backend.html), it will route API requests to that server.
 
 ## Running tests
 
