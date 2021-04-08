@@ -16,10 +16,10 @@ class LocaleSelector extends React.Component {
     return (
       <div>
         <Radio.Group value={this.props.locale} onChange={this.props.onChange}>
-          <Radio.Button key="en" value="en-US">
+          <Radio.Button key="en-US" value="en-US">
             English
           </Radio.Button>
-          <Radio.Button key="cn" value="zh-CN">
+          <Radio.Button key="zh-CN" value="zh-CN">
             中文
           </Radio.Button>
         </Radio.Group>

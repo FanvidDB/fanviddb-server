@@ -34,7 +34,7 @@ class App extends React.Component {
         <FluentLocalization locales={this.state.fluentLocales}>
           <Layout>
             <Content>
-              <Row>
+              <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
                 <Col span={6}>
                   <LocaleSelector
                     locale={this.state.selectedLocale}
