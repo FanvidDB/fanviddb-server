@@ -9,7 +9,12 @@ title: Translation
 
 We use [Fluent](https://projectfluent.org/) to handle translations, because we believe it provides the best experience for non-technical translators of the currently-available options.
 
-- links to fluent syntax and translator best practices docs
+If you want to know more details, check out:
+
+- [Introduction to Fluent Syntax](https://mozilla-l10n.github.io/localizer-documentation/tools/fluent/basic_syntax.html): Basic syntax guide
+- [Fluent Syntax Guide](https://projectfluent.org/fluent/guide/): Comprehensive guide to Fluent
+- [Guidelines for Fluent Reviewers](https://firefox-source-docs.mozilla.org/l10n/fluent/review.html): Mozilla Foundation's Fluent style guide / best practices
+- [Software Internationalization](https://unicode-org.github.io/icu/userguide/icu/i18n.html): In-depth discussion of the fundamental challenges of software internationalization
 
 ## Quick changes in-browser
 
