@@ -26,16 +26,37 @@ If you want to improve existing translations or add new translations for a langu
 
 ### Improving existing translations
 
-1. Search `python.ftl` and `fluent.ftl` for the old translation
+1. Search `python.ftl` and `react.ftl` for the old translation
 2. [Click on the "Edit" button](https://docs.github.com/en/github/managing-files-in-a-repository/editing-files-in-another-users-repository)
 3. Update the translation.
 4. Create a Pull Request.
 
 ### Adding new translations
 
-1. If there's a translation missing, you will see a fallback in some other language. Go to the locale directory for the fallback language and search `python.ftl` and `fluent.ftl` for the fallback translation.
+1. If there's a translation missing, you will see a fallback in some other language. Go to the locale directory for the fallback language and search `python.ftl` and `react.ftl` for the fallback translation.
 2. Note the [message id](https://projectfluent.org/fluent/guide/hello.html) to the left of the translation. Also note where in the file it is / what other translations are around it.
-3. Open up the same file (`python.ftl` or `fluent.ftl`) in the locale directory you want to add a translation to.
+3. Open up the same file (`python.ftl` or `react.ftl`) in the locale directory you want to add a translation to.
 4. [Click on the "Edit" button](https://docs.github.com/en/github/managing-files-in-a-repository/editing-files-in-another-users-repository)
 5. In a similar location, add the message id and your translation.
 6. Create a Pull Request.
+
+## Adding new languages
+
+### In the browser
+
+1. Visit <https://github.com/FanvidDB/fanviddb-server/tree/main/locale> and click "Add file > Create new file"
+2. In the file name field, type the name of your locale, a forward slash, and either `python.ftl` or `react.ftl` (depending on which you want to translate first).
+   - For example: `en-US/python.ftl`
+   - "Locales" are generally an [ISO 639-1 language code](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) connected to an [ISO-3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Current_codes) with a hyphen) to represent a variant of a language as spoken in a specific region. For example:
+     - `en-US`: English as spoken in the US, vs `en-UK` for the UK
+     - `de-AT`: German as spoken in Austria, vs `de-DE` for Germany
+     - `zh-CN`: Mandarin as spoken in China, vs `zh-TW` for Taiwanese
+3. [Create a Pull Request](https://docs.github.com/en/github/managing-files-in-a-repository/editing-files-in-another-users-repository) with your changes.
+   - Either you or the pull request reviewer will also need to add support for the new locale in the user interface so that people can actually start using it!
+
+### On your computer
+
+You can also edit translations and add support for new languages on your computer.
+This might be easier if you're going to edit translations frequently.
+You will need to be familiar with Github and the command line.
+If you are not but you want to be, check out [First Day On Github](https://lab.github.com/githubtraining/first-day-on-github)!
