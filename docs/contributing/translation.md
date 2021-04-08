@@ -9,7 +9,7 @@ title: Translation
 
 We use [Fluent](https://projectfluent.org/) to handle translations, because we believe it provides the best experience for non-technical translators of the currently-available options.
 
-If you want to know more details, check out:
+If you want to know more (potentially unnecessary) details, check out:
 
 - [Introduction to Fluent Syntax](https://mozilla-l10n.github.io/localizer-documentation/tools/fluent/basic_syntax.html): Basic syntax guide
 - [Fluent Syntax Guide](https://projectfluent.org/fluent/guide/): Comprehensive guide to Fluent
