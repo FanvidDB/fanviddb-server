@@ -3,8 +3,16 @@ import { Button, Form, Input } from "antd";
 import { Localized } from "@fluent/react";
 
 const RegisterForm = () => {
+  const onFinish = (values: any) => {
+    console.log(values);
+  };
   return (
-    <Form labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} colon={false}>
+    <Form
+      labelCol={{ span: 4 }}
+      wrapperCol={{ span: 20 }}
+      colon={false}
+      onFinish={onFinish}
+    >
       <Form.Item
         label={<Localized id="register-form-username-label" />}
         name="username"
