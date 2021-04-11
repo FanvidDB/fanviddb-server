@@ -5,7 +5,7 @@ import "intl-pluralrules";
 import HomePage from "./auth/HomePage";
 import FluentLocalization from "./i18n/FluentLocalization";
 import { getLocales, DEFAULT_LOCALE } from "./i18n/utils";
-import LocaleSelector from "./components/LocaleSelector";
+import LocaleSelector from "./i18n/LocaleSelector";
 import moment from "moment";
 
 const { Content } = Layout;
