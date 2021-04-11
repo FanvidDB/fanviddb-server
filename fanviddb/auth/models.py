@@ -4,7 +4,7 @@ from fastapi_users import models
 
 
 class User(models.BaseUser):
-    pass
+    username: Optional[str]
 
 
 class UserCreate(models.BaseUserCreate):
@@ -12,7 +12,7 @@ class UserCreate(models.BaseUserCreate):
 
 
 class UserUpdate(User, models.BaseUserUpdate):
-    username: Optional[str]
+    pass
 
 
 class UserDB(User, models.BaseUserDB):
