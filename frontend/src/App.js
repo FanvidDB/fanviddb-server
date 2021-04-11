@@ -8,11 +8,7 @@ import FluentLocalization from "./i18n/FluentLocalization";
 import { getLocales, DEFAULT_LOCALE } from "./i18n/utils";
 import LocaleSelector from "./i18n/LocaleSelector";
 import moment from "moment";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 const { Content } = Layout;
 
