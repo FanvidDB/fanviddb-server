@@ -20,7 +20,7 @@ const App = () => {
 
   useEffect(() => {
     moment.locale(locales.momentLocale);
-  });
+  }, [locales.momentLocale]);
 
   return (
     <AntdConfigProvider locale={locales.antdLocale}>
