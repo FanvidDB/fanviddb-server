@@ -2,7 +2,7 @@ import React from "react";
 import LoginForm from "./LoginForm";
 import { Localized } from "@fluent/react";
 
-const HomePage = () => (
+const LoginPage = () => (
   <div>
     <h1>
       <Localized id="homepage-title">FanvidDB</Localized>
@@ -24,4 +24,4 @@ const HomePage = () => (
   </div>
 );
 
-export default HomePage;
+export default LoginPage;

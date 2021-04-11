@@ -2,11 +2,16 @@ import React from "react";
 import { ConfigProvider as AntdConfigProvider, Layout, Row, Col } from "antd";
 import "./App.less";
 import "intl-pluralrules";
-import HomePage from "./auth/HomePage";
+import LoginPage from "./auth/LoginPage";
 import FluentLocalization from "./i18n/FluentLocalization";
 import { getLocales, DEFAULT_LOCALE } from "./i18n/utils";
 import LocaleSelector from "./i18n/LocaleSelector";
 import moment from "moment";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
 
 const { Content } = Layout;
 
@@ -32,21 +37,27 @@ class App extends React.Component {
     return (
       <AntdConfigProvider locale={this.state.antdLocale}>
         <FluentLocalization locales={this.state.fluentLocales}>
-          <Layout>
-            <Content>
-              <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
-                <Col span={6}>
-                  <LocaleSelector
-                    locale={this.state.selectedLocale}
-                    onChange={this.onSelectLocale}
-                  />
-                </Col>
-                <Col span={12}>
-                  <HomePage />
-                </Col>
-              </Row>
-            </Content>
-          </Layout>
+          <Router>
+            <Layout>
+              <Content>
+                <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
+                  <Col span={6}>
+                    <LocaleSelector
+                      locale={this.state.selectedLocale}
+                      onChange={this.onSelectLocale}
+                    />
+                  </Col>
+                  <Col span={12}>
+                    <Switch>
+                      <Route path="/">
+                        <LoginPage />
+                      </Route>
+                    </Switch>
+                  </Col>
+                </Row>
+              </Content>
+            </Layout>
+          </Router>
         </FluentLocalization>
       </AntdConfigProvider>
     );
