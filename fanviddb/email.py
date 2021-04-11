@@ -12,7 +12,9 @@ class EmailSendFailed(Exception):
 
 
 def send_email(from_email: str, to_emails: List[str], subject: str, content: str):
-    if conf.SENDGRID_API_KEY:
+    if conf.TESTING:
+        send_dummy_email(from_email, to_emails, subject, content)
+    elif conf.SENDGRID_API_KEY:
         send_sendgrid_email(from_email, to_emails, subject, content)
     else:
         send_dummy_email(from_email, to_emails, subject, content)
