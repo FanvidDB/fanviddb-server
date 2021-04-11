@@ -1,19 +1,30 @@
 import React from "react";
-import {Link} from "react-router-dom";
 import { Button, Form, Input } from "antd";
 import { Localized } from "@fluent/react";
 
-class LoginForm extends React.Component {
+class RegisterForm extends React.Component {
   render() {
     return (
       <Form labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} colon={false}>
         <Form.Item
-          label={<Localized id="login-form-email-label" />}
+          label={<Localized id="register-form-username-label" />}
+          name="username"
+          rules={[
+            {
+              required: true,
+              message: <Localized id="register-form-username-error-required" />,
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          label={<Localized id="register-form-email-label" />}
           name="email"
           rules={[
             {
               required: true,
-              message: <Localized id="login-form-email-error-required" />,
+              message: <Localized id="register-form-email-error-required" />,
             },
           ]}
         >
@@ -21,12 +32,12 @@ class LoginForm extends React.Component {
         </Form.Item>
 
         <Form.Item
-          label={<Localized id="login-form-password-label" />}
+          label={<Localized id="register-form-password-label" />}
           name="password"
           rules={[
             {
               required: true,
-              message: <Localized id="login-form-password-error-required" />,
+              message: <Localized id="register-form-password-error-required" />,
             },
           ]}
         >
@@ -35,18 +46,12 @@ class LoginForm extends React.Component {
 
         <Form.Item wrapperCol={{ offset: 4, span: 20 }}>
           <Button type="primary" htmlType="submit">
-            <Localized id="login-form-login-button" />
+            <Localized id="register-form-register-button" />
           </Button>
-          <Button type="link" href="/docs">
-            <Localized id="login-form-forgot-password-link" />
-          </Button>
-          <Link to="/register" className="ant-btn ant-btn-link">
-            <Localized id="login-form-register-link" />
-          </Link>
         </Form.Item>
       </Form>
     );
   }
 }
 
-export default LoginForm;
+export default RegisterForm;

@@ -14,3 +14,10 @@ login-form-password-error-required = 请输入密码
 login-form-login-button = 登录
 login-form-forgot-password-link = 忘记密码?
 login-form-register-link = 注册
+
+register-page-title = 注册
+register-form-email-label = 邮箱
+register-form-email-error-required = 请输入邮箱
+register-form-password-label = 密码
+register-form-password-error-required = 请输入密码
+register-form-register-button = 注册

@@ -14,3 +14,12 @@ login-form-password-error-required = Please enter your password.
 login-form-login-button = Login
 login-form-forgot-password-link = Forgot my password
 login-form-register-link = Register
+
+register-page-title = Register
+register-form-username-label = Username
+register-form-username-error-required = Please enter a username.
+register-form-email-label = Email
+register-form-email-error-required = Please enter an email.
+register-form-password-label = Password
+register-form-password-error-required = Please enter a password.
+register-form-register-button = Register

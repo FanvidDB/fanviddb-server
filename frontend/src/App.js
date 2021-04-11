@@ -3,6 +3,7 @@ import { ConfigProvider as AntdConfigProvider, Layout, Row, Col } from "antd";
 import "./App.less";
 import "intl-pluralrules";
 import LoginPage from "./auth/LoginPage";
+import RegisterPage from "./auth/RegisterPage";
 import FluentLocalization from "./i18n/FluentLocalization";
 import { getLocales, DEFAULT_LOCALE } from "./i18n/utils";
 import LocaleSelector from "./i18n/LocaleSelector";
@@ -49,6 +50,9 @@ class App extends React.Component {
                   </Col>
                   <Col span={12}>
                     <Switch>
+                      <Route path="/register">
+                        <RegisterPage />
+                      </Route>
                       <Route path="/">
                         <LoginPage />
                       </Route>
