@@ -10,7 +10,7 @@ from .models import UserDB
 
 
 class UserTable(Base, SQLAlchemyBaseUserTable):
-    username = Column(String(length=40), nullable=False)
+    username = Column(String(length=40), nullable=False, unique=True)
 
 
 users = UserTable.__table__
