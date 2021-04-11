@@ -3,8 +3,33 @@ import { Button, Form, Input } from "antd";
 import { Localized } from "@fluent/react";
 
 const RegisterForm = () => {
+  const [form] = Form.useForm();
+
   const onFinish = (values: any) => {
-    console.log(values);
+    fetch("/api/auth/register", {
+      method: "POST",
+      body: JSON.stringify(values),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status == 400) {
+            form.setFields([
+              {
+                name: "email",
+                errors: [
+                  <Localized
+                    key="email-error"
+                    id="register-form-email-error-already-exists"
+                  />,
+                ],
+              },
+            ]);
+          }
+        }
+        return response.json();
+      })
+      .then((data) => console.log("Success:", data))
+      .catch((error) => console.error("Error:", error));
   };
   return (
     <Form
@@ -12,6 +37,7 @@ const RegisterForm = () => {
       wrapperCol={{ span: 20 }}
       colon={false}
       onFinish={onFinish}
+      form={form}
     >
       <Form.Item
         label={<Localized id="register-form-username-label" />}
