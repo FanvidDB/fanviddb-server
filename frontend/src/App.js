@@ -13,7 +13,10 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 const { Content } = Layout;
 
 const App = () => {
-  const [locales, setLocales] = useState(getLocales(DEFAULT_LOCALE));
+  const [locales, setLocales] = useState(() => {
+    const initialLocales = getLocales(DEFAULT_LOCALE);
+    return initialLocales;
+  });
 
   useEffect(() => {
     moment.locale(locales.momentLocale);
