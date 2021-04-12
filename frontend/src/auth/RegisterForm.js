@@ -98,20 +98,18 @@ const RegisterForm = () => {
         <Input />
       </Form.Item>
 
-      <Form.Item label={<Localized id="register-form-password-label" />}>
+      <Form.Item
+        label={<Localized id="register-form-password-label" />}
+        rules={[
+          {
+            required: true,
+            message: <Localized id="register-form-password-error-required" />,
+          },
+        ]}
+        name="password"
+      >
         <div>
-          <Form.Item
-            noStyle
-            name="password"
-            rules={[
-              {
-                required: true,
-                message: (
-                  <Localized id="register-form-password-error-required" />
-                ),
-              },
-            ]}
-          >
+          <Form.Item noStyle name="password">
             <Input.Password suffix={"hi"} />
           </Form.Item>
           <Form.Item noStyle name="password" valuePropName="password">
