@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Form, Input } from "antd";
 import { Localized } from "@fluent/react";
-import LoadablePasswordStrengthInput from "./LoadablePasswordStrengthInput";
+import LoadablePasswordStrengthBar from "./LoadablePasswordStrengthBar";
 
 const RegisterForm = () => {
   const [form] = Form.useForm();
@@ -98,17 +98,26 @@ const RegisterForm = () => {
         <Input />
       </Form.Item>
 
-      <Form.Item
-        label={<Localized id="register-form-password-label" />}
-        name="password"
-        rules={[
-          {
-            required: true,
-            message: <Localized id="register-form-password-error-required" />,
-          },
-        ]}
-      >
-        <LoadablePasswordStrengthInput />
+      <Form.Item label={<Localized id="register-form-password-label" />}>
+        <div>
+          <Form.Item
+            noStyle
+            name="password"
+            rules={[
+              {
+                required: true,
+                message: (
+                  <Localized id="register-form-password-error-required" />
+                ),
+              },
+            ]}
+          >
+            <Input.Password suffix={"hi"} />
+          </Form.Item>
+          <Form.Item noStyle name="password" valuePropName="password">
+            <LoadablePasswordStrengthBar />
+          </Form.Item>
+        </div>
       </Form.Item>
 
       <Form.Item wrapperCol={{ offset: 4, span: 20 }}>
