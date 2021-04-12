@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Form, Input } from "antd";
 import { Localized } from "@fluent/react";
+import LoadablePasswordStrengthInput from "./LoadablePasswordStrengthInput";
 
 const RegisterForm = () => {
   const [form] = Form.useForm();
@@ -107,7 +108,7 @@ const RegisterForm = () => {
           },
         ]}
       >
-        <Input.Password />
+        <LoadablePasswordStrengthInput />
       </Form.Item>
 
       <Form.Item wrapperCol={{ offset: 4, span: 20 }}>
