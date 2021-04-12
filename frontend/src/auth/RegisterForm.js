@@ -11,8 +11,31 @@ const RegisterForm = () => {
       body: JSON.stringify(values),
     })
       .then((response) => {
-        if (!response.ok) {
-          if (response.status == 400) {
+        return new Promise((resolve) =>
+          response.json().then((json) =>
+            resolve({
+              status: response.status,
+              ok: response.ok,
+              json,
+            })
+          )
+        );
+      })
+      .then(({ status, ok, json }) => {
+        if (status == 400) {
+          if (json.detail == "REGISTER_USERNAME_ALREADY_EXISTS") {
+            form.setFields([
+              {
+                name: "username",
+                errors: [
+                  <Localized
+                    key="username-error"
+                    id="register-form-username-error-already-exists"
+                  />,
+                ],
+              },
+            ]);
+          } else {
             form.setFields([
               {
                 name: "email",
@@ -25,10 +48,20 @@ const RegisterForm = () => {
               },
             ]);
           }
+        } else if (!ok) {
+          form.setFields([
+            {
+              name: "username",
+              errors: [
+                <Localized
+                  key="email-error"
+                  id="register-form-username-error-unknown"
+                />,
+              ],
+            },
+          ]);
         }
-        return response.json();
       })
-      .then((data) => console.log("Success:", data))
       .catch((error) => console.error("Error:", error));
   };
   return (
