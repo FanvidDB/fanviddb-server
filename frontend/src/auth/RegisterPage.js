@@ -1,5 +1,5 @@
 import React from "react";
-import RegisterForm from "./RegisterForm";
+import LoadableRegisterForm from "./LoadableRegisterForm";
 import { Localized } from "@fluent/react";
 
 const RegisterPage = () => (
@@ -8,7 +8,7 @@ const RegisterPage = () => (
       <Localized id="register-page-title" />
     </h1>
 
-    <RegisterForm />
+    <LoadableRegisterForm />
   </div>
 );
 

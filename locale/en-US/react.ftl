@@ -25,4 +25,5 @@ register-form-email-error-required = Please enter an email.
 register-form-email-error-already-exists = User already exists with that email.
 register-form-password-label = Password
 register-form-password-error-required = Please enter a password.
+register-form-password-error-stronger-password = Please choose a stronger password.
 register-form-register-button = Register

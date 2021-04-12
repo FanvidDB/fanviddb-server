@@ -1,7 +1,8 @@
 import React from "react";
 import { Button, Form, Input } from "antd";
 import { Localized } from "@fluent/react";
-import LoadablePasswordStrengthBar from "./LoadablePasswordStrengthBar";
+import PasswordStrengthBar from "./PasswordStrengthBar";
+import zxcvbn from "zxcvbn";
 
 const RegisterForm = () => {
   const [form] = Form.useForm();
@@ -105,6 +106,32 @@ const RegisterForm = () => {
             required: true,
             message: <Localized id="register-form-password-error-required" />,
           },
+          {
+            validateTrigger: "onSubmit",
+            validator: (_, password) => {
+              // Limit to 100 characters for performance reasons.
+              const passwordStrength = zxcvbn(
+                (password || "").substring(0, 100)
+              );
+              if (passwordStrength.score >= 4) {
+                return Promise.resolve();
+              }
+              let errors = [];
+              const { warning, suggestions } = passwordStrength.feedback;
+              if (warning) {
+                errors.push(warning);
+              }
+              if (suggestions) {
+                errors = errors.concat(suggestions);
+              }
+              if (errors.length == 0) {
+                errors.push(
+                  <Localized id="register-form-password-error-stronger-password" />
+                );
+              }
+              return Promise.reject(errors);
+            },
+          },
         ]}
         name="password"
       >
@@ -113,7 +140,7 @@ const RegisterForm = () => {
             <Input.Password suffix={"hi"} />
           </Form.Item>
           <Form.Item noStyle name="password" valuePropName="password">
-            <LoadablePasswordStrengthBar />
+            <PasswordStrengthBar />
           </Form.Item>
         </div>
       </Form.Item>
