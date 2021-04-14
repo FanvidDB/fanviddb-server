@@ -1,6 +1,7 @@
 import pytest
 from fastapi.encoders import jsonable_encoder
 from fastapi_users.password import pwd_context
+from passlib import pwd  # type: ignore
 from sqlalchemy.sql import select
 
 from fanviddb.auth.db import users
@@ -14,7 +15,7 @@ async def test_register(fastapi_client):
     post_data = {
         "email": "hello@example.com",
         "username": "hello",
-        "password": "swordfish",
+        "password": pwd.genword(entropy="secure", charset="ascii_50"),
     }
     response = await fastapi_client.post(
         "/api/auth/register",
@@ -50,7 +51,7 @@ async def test_register__duplicate_email(fastapi_client):
     post_data = {
         "email": "wwx@fanviddb.com",
         "username": "suibian",
-        "password": "swordfish",
+        "password": pwd.genword(entropy="secure", charset="ascii_50"),
     }
     response = await fastapi_client.post(
         "/api/auth/register",
@@ -71,7 +72,7 @@ async def test_register__duplicate_username(fastapi_client):
     post_data = {
         "email": "suibian@fanviddb.com",
         "username": "wwx",
-        "password": "swordfish",
+        "password": pwd.genword(entropy="secure", charset="ascii_50"),
     }
     response = await fastapi_client.post(
         "/api/auth/register",
@@ -81,3 +82,23 @@ async def test_register__duplicate_username(fastapi_client):
     response_data = response.json()
     expected_data = {"detail": "REGISTER_USERNAME_ALREADY_EXISTS"}
     assert response_data == expected_data
+
+
+@pytest.mark.asyncio
+async def test_register__weak_password(fastapi_client):
+    await UserFactory(
+        username="wwx",
+        email="whatever@fanviddb.com",
+    )
+    post_data = {
+        "email": "suibian@fanviddb.com",
+        "username": "wwx",
+        "password": "swordfish",
+    }
+    response = await fastapi_client.post(
+        "/api/auth/register",
+        json=post_data,
+    )
+    assert response.status_code == 422, response.json()
+    response_data = response.json()
+    assert response_data["detail"][0]["loc"] == ["body", "password"]
