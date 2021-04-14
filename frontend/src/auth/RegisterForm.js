@@ -1,13 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
 import { Button, Form, Input } from "antd";
 import { Localized } from "@fluent/react";
 import PasswordStrengthBar from "./PasswordStrengthBar";
 import zxcvbn from "zxcvbn";
+import _ from "lodash";
 
 const RegisterForm = () => {
   const [form] = Form.useForm();
+  const [submitState, setSubmitState] = useState();
+  if (submitState == "success") {
+    return (
+      <Redirect
+        to={{
+          pathname: "/",
+        }}
+      />
+    );
+  }
 
   const onFinish = (values: any) => {
+    setSubmitState("submitting");
     fetch("/api/auth/register", {
       method: "POST",
       body: JSON.stringify(values),
@@ -24,47 +37,50 @@ const RegisterForm = () => {
         );
       })
       .then(({ status, ok, json }) => {
+        setSubmitState(undefined);
+        let errors = {};
         if (status == 400) {
           if (json.detail == "REGISTER_USERNAME_ALREADY_EXISTS") {
-            form.setFields([
-              {
-                name: "username",
-                errors: [
-                  <Localized
-                    key="username-error"
-                    id="register-form-username-error-already-exists"
-                  />,
-                ],
-              },
-            ]);
+            errors.username = [
+              <Localized
+                key="username-error"
+                id="register-form-username-error-already-exists"
+              />,
+            ];
           } else {
+            errors.email = [
+              <Localized
+                key="email-error"
+                id="register-form-email-error-already-exists"
+              />,
+            ];
+          }
+        } else if (!ok) {
+          errors.username = [
+            <Localized
+              key="email-error"
+              id="register-form-username-error-unknown"
+            />,
+          ];
+        }
+
+        if (_.isEmpty(errors)) {
+          setSubmitState("success");
+        } else {
+          for (const name in errors) {
             form.setFields([
               {
-                name: "email",
-                errors: [
-                  <Localized
-                    key="email-error"
-                    id="register-form-email-error-already-exists"
-                  />,
-                ],
+                name: name,
+                errors: errors[name],
               },
             ]);
           }
-        } else if (!ok) {
-          form.setFields([
-            {
-              name: "username",
-              errors: [
-                <Localized
-                  key="email-error"
-                  id="register-form-username-error-unknown"
-                />,
-              ],
-            },
-          ]);
         }
       })
-      .catch((error) => console.error("Error:", error));
+      .catch((error) => {
+        setSubmitState(undefined);
+        console.error("Error:", error);
+      });
   };
   return (
     <Form
@@ -145,7 +161,10 @@ const RegisterForm = () => {
         </div>
       </Form.Item>
 
-      <Form.Item wrapperCol={{ offset: 4, span: 20 }}>
+      <Form.Item
+        wrapperCol={{ offset: 4, span: 20 }}
+        loading={submitState == "submitting"}
+      >
         <Button type="primary" htmlType="submit">
           <Localized id="register-form-register-button" />
         </Button>
