@@ -27,3 +27,11 @@ register-form-password-label = Password
 register-form-password-error-required = Please enter a password.
 register-form-password-error-stronger-password = Please choose a stronger password.
 register-form-register-button = Register
+
+verify-email-page-title = Verify email
+verify-email-form-success = We have sent an email to { $email } with a verification link.
+    Please click the link to verify your email and then log in.
+verify-email-form-send-button = Send verification email
+verify-email-form-email-label = Email
+verify-email-form-email-error-required = Please enter your email
+verify-email-form-email-error-unknown = Unknown error; please try again in a few minutes.
