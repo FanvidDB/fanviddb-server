@@ -1,23 +1,14 @@
 import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
 import { Button, Form, Input } from "antd";
 import { Localized } from "@fluent/react";
 import PasswordStrengthBar from "./PasswordStrengthBar";
 import zxcvbn from "zxcvbn";
 import _ from "lodash";
+import PropTypes from "prop-types";
 
-const RegisterForm = () => {
+const RegisterForm = ({ onRegister }) => {
   const [form] = Form.useForm();
   const [submitState, setSubmitState] = useState();
-  if (submitState == "success") {
-    return (
-      <Redirect
-        to={{
-          pathname: "/",
-        }}
-      />
-    );
-  }
 
   const onFinish = (values: any) => {
     setSubmitState("submitting");
@@ -37,7 +28,6 @@ const RegisterForm = () => {
         );
       })
       .then(({ status, ok, json }) => {
-        setSubmitState(undefined);
         let errors = {};
         if (status == 400) {
           if (json.detail == "REGISTER_USERNAME_ALREADY_EXISTS") {
@@ -65,8 +55,9 @@ const RegisterForm = () => {
         }
 
         if (_.isEmpty(errors)) {
-          setSubmitState("success");
+          onRegister(json);
         } else {
+          setSubmitState();
           for (const name in errors) {
             form.setFields([
               {
@@ -171,6 +162,10 @@ const RegisterForm = () => {
       </Form.Item>
     </Form>
   );
+};
+
+RegisterForm.propTypes = {
+  onRegister: PropTypes.func,
 };
 
 export default RegisterForm;
