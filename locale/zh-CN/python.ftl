@@ -1,6 +1,3 @@
-email-after-registration-subject = 注册 confirmed
-email-after-registration-content = You've registered, {username}!
-
 email-forgot-password-subject = Reset 密码 request
 email-forgot-password-content = You requested a password reset. Reset token: {token}
 

@@ -11,19 +11,6 @@ from .helpers import fastapi_users
 from .models import UserDB
 
 
-def on_after_register(user: UserDB, request: Request):
-    locales = get_request_locales(request)
-    fluent = get_fluent(locales)
-    send_email(
-        from_email=conf.DEFAULT_FROM_EMAIL,
-        to_emails=[user.email],
-        subject=fluent.format_value("email-confirm-registration-subject"),
-        content=fluent.format_value(
-            "email-confirm-registration-content", {"username": user.username}
-        ),
-    )
-
-
 def on_after_forgot_password(user: UserDB, token: str, request: Request):
     locales = get_request_locales(request)
     fluent = get_fluent(locales)
@@ -79,7 +66,7 @@ auth_router.include_router(
     fastapi_users.get_auth_router(cookie_authentication, requires_verification=True),
 )
 auth_router.include_router(
-    fastapi_users.get_register_router(on_after_register),
+    fastapi_users.get_register_router(),
 )
 auth_router.include_router(
     fastapi_users.get_reset_password_router(

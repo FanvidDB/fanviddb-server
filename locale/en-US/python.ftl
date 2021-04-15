@@ -1,6 +1,3 @@
-email-after-registration-subject = Registration confirmed
-email-after-registration-content = You've registered, {username}!
-
 email-forgot-password-subject = Reset password request
 email-forgot-password-content = You requested a password reset. Reset token: {token}
 
