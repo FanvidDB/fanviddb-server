@@ -37,5 +37,12 @@ send-verification-email-form-email-error-required = Please enter your email
 send-verification-email-form-email-error-unknown = Unknown error; please try again in a few minutes.
 
 verify-email-page-title = Verify email
-verify-email-success = Your email address is verified. You can now <a>log in</a>.
+# Expected to have a <loginLink>login link</loginLink>.
+verify-email-success = Your email address is verified. You can now <loginLink>log in</loginLink>.
 verify-email-error-unknown = Unknown error; please try again in a few minutes.
+# Expected to have a link to <sendVerificationEmailLink>request a new token</sendVerificationEmailLink>
+verify-email-error-token-expired = Verification token expired; please <sendVerificationEmailLink>request a new token</sendVerificationEmailLink>.
+# Expected to have a link to <sendVerificationEmailLink>request a new token</sendVerificationEmailLink>
+verify-email-error-bad-token = Invalid token; please <sendVerificationEmailLink>request a new one</sendVerificationEmailLink>.
+# Expected to have a <loginLink>login link</loginLink>.
+verify-email-error-already-verified = You are already verified. You can now <loginLink>log in</loginLink>.

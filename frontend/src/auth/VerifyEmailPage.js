@@ -11,14 +11,63 @@ const VerifyEmailPage = () => {
   const [errors, setErrors] = useState();
 
   useEffect(() => {
-    callApi("/api/auth/verify", "POST", { token: token }).then(({ ok }) => {
-      if (ok) {
-        setIsLoading(false);
-      } else {
-        setErrors([<Localized key="0" id="verify-email-error-unknown" />]);
+    callApi("/api/auth/verify", "POST", { token: token }).then(
+      ({ status, ok, json }) => {
+        let errors = [];
+        if (status == 400) {
+          // Errors from fastapi-users
+          // https://frankie567.github.io/fastapi-users/usage/routes/#post-verify
+          if (json.detail == "VERIFY_USER_TOKEN_EXPIRED") {
+            errors.push(
+              <Localized
+                key="token-expired"
+                id="verify-email-error-token-expired"
+                elems={{
+                  sendVerificationEmailLink: (
+                    <Link to="/verify-email/send"></Link>
+                  ),
+                }}
+              >
+                <span></span>
+              </Localized>
+            );
+          } else if (json.detail == "VERIFY_USER_BAD_TOKEN") {
+            errors.push(
+              <Localized
+                key="bad-token"
+                id="verify-email-error-bad-token"
+                elems={{
+                  sendVerificationEmailLink: (
+                    <Link to="/verify-email/send"></Link>
+                  ),
+                }}
+              >
+                <span></span>
+              </Localized>
+            );
+          } else if (json.detail == "VERIFY_USER_ALREADY_VERIFIED") {
+            errors.push(
+              <Localized
+                key="already-verified"
+                id="verify-email-error-already-verified"
+                elems={{ loginLink: <Link to="/"></Link> }}
+              >
+                <span></span>
+              </Localized>
+            );
+          }
+        }
+
+        if (!_.isEmpty(errors)) {
+          setErrors(errors);
+        } else if (!ok) {
+          setErrors([
+            <Localized key="unknown" id="verify-email-error-unknown" />,
+          ]);
+        }
         setIsLoading(false);
       }
-    });
+    );
   }, []);
 
   return (
@@ -32,8 +81,10 @@ const VerifyEmailPage = () => {
         <p>
           <Localized
             id="verify-email-success"
-            elems={{ a: <Link to="/"></Link> }}
-          />
+            elems={{ loginLink: <Link to="/"></Link> }}
+          >
+            <span></span>
+          </Localized>
         </p>
       ) : (
         <div>{errors}</div>
