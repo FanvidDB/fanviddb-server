@@ -3,7 +3,11 @@ import { Button, Form, Input } from "antd";
 import { Localized } from "@fluent/react";
 import PropTypes from "prop-types";
 
-const VerifyEmailForm = ({ initialEmail, onInitialSubmit, onSubmit }) => {
+const SendVerificationEmailForm = ({
+  initialEmail,
+  onInitialSubmit,
+  onSubmit,
+}) => {
   const [form] = Form.useForm();
   const [submitState, setSubmitState] = useState("loading");
 
@@ -36,7 +40,7 @@ const VerifyEmailForm = ({ initialEmail, onInitialSubmit, onSubmit }) => {
                 errors: [
                   <Localized
                     key="email-error"
-                    id="verify-email-form-email-error-unknown"
+                    id="send-verification-email-form-email-error-unknown"
                   />,
                 ],
               },
@@ -51,7 +55,7 @@ const VerifyEmailForm = ({ initialEmail, onInitialSubmit, onSubmit }) => {
               errors: [
                 <Localized
                   key="email-error"
-                  id="verify-email-form-email-error-unknown"
+                  id="send-verification-email-form-email-error-unknown"
                 />,
               ],
             },
@@ -80,13 +84,15 @@ const VerifyEmailForm = ({ initialEmail, onInitialSubmit, onSubmit }) => {
       }}
     >
       <Form.Item
-        label={<Localized id="verify-email-form-email-label" />}
+        label={<Localized id="send-verification-email-form-email-label" />}
         name="email"
         type="email"
         rules={[
           {
             required: true,
-            message: <Localized id="verify-email-form-email-error-required" />,
+            message: (
+              <Localized id="send-verification-email-form-email-error-required" />
+            ),
           },
         ]}
       >
@@ -99,17 +105,17 @@ const VerifyEmailForm = ({ initialEmail, onInitialSubmit, onSubmit }) => {
           htmlType="submit"
           loading={submitState == "submitting"}
         >
-          <Localized id="verify-email-form-send-button" />
+          <Localized id="send-verification-email-form-send-button" />
         </Button>
       </Form.Item>
     </Form>
   );
 };
 
-VerifyEmailForm.propTypes = {
+SendVerificationEmailForm.propTypes = {
   initialEmail: PropTypes.string,
   onInitialSubmit: PropTypes.func,
   onSubmit: PropTypes.func,
 };
 
-export default VerifyEmailForm;
+export default SendVerificationEmailForm;

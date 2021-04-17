@@ -4,7 +4,7 @@ import "./App.less";
 import "intl-pluralrules";
 import LoginPage from "./auth/LoginPage";
 import RegisterPage from "./auth/RegisterPage";
-import VerifyEmailPage from "./auth/VerifyEmailPage";
+import SendVerificationEmailPage from "./auth/SendVerificationEmailPage";
 import FluentLocalization from "./i18n/FluentLocalization";
 import { getLocales, DEFAULT_LOCALE } from "./i18n/utils";
 import LocaleSelector from "./i18n/LocaleSelector";
@@ -41,8 +41,8 @@ const App = () => {
                     <Route path="/register">
                       <RegisterPage />
                     </Route>
-                    <Route path="/verify">
-                      <VerifyEmailPage />
+                    <Route path="/verify-email/send">
+                      <SendVerificationEmailPage />
                     </Route>
                     <Route path="/">
                       <LoginPage />

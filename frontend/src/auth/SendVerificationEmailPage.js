@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { Alert } from "antd";
 import { Localized } from "@fluent/react";
 import { useHistory, useLocation } from "react-router-dom";
-import VerifyEmailForm from "./VerifyEmailForm";
+import SendVerificationEmailForm from "./SendVerificationEmailForm";
 
-const VerifyEmailPage = () => {
+const SendVerificationEmailPage = () => {
   const location = useLocation();
   const history = useHistory();
   const [submittedEmail, setSubmittedEmail] = useState();
@@ -19,7 +19,7 @@ const VerifyEmailPage = () => {
   return (
     <div>
       <h1>
-        <Localized id="verify-email-page-title" />
+        <Localized id="send-verification-email-page-title" />
       </h1>
 
       {submittedEmail && (
@@ -29,13 +29,13 @@ const VerifyEmailPage = () => {
           style={{ marginBottom: "24px" }}
           message={
             <Localized
-              id="verify-email-form-success"
+              id="send-verification-email-form-success"
               vars={{ email: submittedEmail }}
             />
           }
         />
       )}
-      <VerifyEmailForm
+      <SendVerificationEmailForm
         initialEmail={location.state.sendToEmail}
         onInitialSubmit={onInitialSubmit}
         onSubmit={onSubmit}
@@ -44,4 +44,4 @@ const VerifyEmailPage = () => {
   );
 };
 
-export default VerifyEmailPage;
+export default SendVerificationEmailPage;
