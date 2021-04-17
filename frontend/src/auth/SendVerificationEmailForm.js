@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Form, Input } from "antd";
 import { Localized } from "@fluent/react";
 import PropTypes from "prop-types";
+import { callApi } from "../api";
 
 const SendVerificationEmailForm = ({
   initialEmail,
@@ -13,42 +14,12 @@ const SendVerificationEmailForm = ({
 
   const onFinish = ({ email }) => {
     setSubmitState("submitting");
-    fetch("/api/auth/request-verify-token", {
-      method: "POST",
-      body: JSON.stringify({ email: email }),
-    })
-      .then((response) => {
-        return new Promise((resolve) =>
-          response.json().then((json) =>
-            resolve({
-              status: response.status,
-              ok: response.ok,
-              json,
-            })
-          )
-        );
-      })
-      .then(
-        ({ ok }) => {
-          if (ok) {
-            onSubmit(email);
-            setSubmitState();
-          } else {
-            form.setFields([
-              {
-                name: "email",
-                errors: [
-                  <Localized
-                    key="email-error"
-                    id="send-verification-email-form-email-error-unknown"
-                  />,
-                ],
-              },
-            ]);
-            setSubmitState();
-          }
-        },
-        () => {
+    callApi("/api/auth/request-verify-token", "POST", { email }).then(
+      ({ ok }) => {
+        if (ok) {
+          onSubmit(email);
+          setSubmitState();
+        } else {
           form.setFields([
             {
               name: "email",
@@ -62,7 +33,22 @@ const SendVerificationEmailForm = ({
           ]);
           setSubmitState();
         }
-      );
+      },
+      () => {
+        form.setFields([
+          {
+            name: "email",
+            errors: [
+              <Localized
+                key="email-error"
+                id="send-verification-email-form-email-error-unknown"
+              />,
+            ],
+          },
+        ]);
+        setSubmitState();
+      }
+    );
   };
 
   useEffect(() => {

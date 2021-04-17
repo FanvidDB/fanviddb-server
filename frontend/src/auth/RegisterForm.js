@@ -5,6 +5,7 @@ import PasswordStrengthBar from "./PasswordStrengthBar";
 import zxcvbn from "zxcvbn";
 import _ from "lodash";
 import PropTypes from "prop-types";
+import { callApi } from "../api";
 
 const RegisterForm = ({ onRegister }) => {
   const [form] = Form.useForm();
@@ -12,21 +13,7 @@ const RegisterForm = ({ onRegister }) => {
 
   const onFinish = (values: any) => {
     setSubmitState("submitting");
-    fetch("/api/auth/register", {
-      method: "POST",
-      body: JSON.stringify(values),
-    })
-      .then((response) => {
-        return new Promise((resolve) =>
-          response.json().then((json) =>
-            resolve({
-              status: response.status,
-              ok: response.ok,
-              json,
-            })
-          )
-        );
-      })
+    callApi("/api/auth/register", "POST", values)
       .then(({ status, ok, json }) => {
         let errors = {};
         if (status == 400) {
