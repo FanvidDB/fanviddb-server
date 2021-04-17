@@ -35,3 +35,7 @@ send-verification-email-form-send-button = Send verification email
 send-verification-email-form-email-label = Email
 send-verification-email-form-email-error-required = Please enter your email
 send-verification-email-form-email-error-unknown = Unknown error; please try again in a few minutes.
+
+verify-email-page-title = Verify email
+verify-email-success = Your email address is verified. You can now <a>log in</a>.
+verify-email-error-unknown = Unknown error; please try again in a few minutes.

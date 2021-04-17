@@ -5,6 +5,7 @@ import "intl-pluralrules";
 import LoginPage from "./auth/LoginPage";
 import RegisterPage from "./auth/RegisterPage";
 import SendVerificationEmailPage from "./auth/SendVerificationEmailPage";
+import VerifyEmailPage from "./auth/VerifyEmailPage";
 import FluentLocalization from "./i18n/FluentLocalization";
 import { getLocales, DEFAULT_LOCALE } from "./i18n/utils";
 import LocaleSelector from "./i18n/LocaleSelector";
@@ -43,6 +44,9 @@ const App = () => {
                     </Route>
                     <Route path="/verify-email/send">
                       <SendVerificationEmailPage />
+                    </Route>
+                    <Route path="/verify-email/:token">
+                      <VerifyEmailPage />
                     </Route>
                     <Route path="/">
                       <LoginPage />
