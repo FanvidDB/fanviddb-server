@@ -7,14 +7,16 @@ const LoginPage = () => (
     <h1>
       <Localized id="homepage-title">FanvidDB</Localized>
     </h1>
-    <Localized
-      id="homepage-intro"
-      elems={{
-        plexLink: <a href="https://plex.tv" />,
-      }}
-    >
-      <p>{"<plexLink>Hello</plexLink> world"}</p>
-    </Localized>
+    <p>
+      <Localized
+        id="homepage-intro"
+        elems={{
+          plexLink: <a href="https://plex.tv" />,
+        }}
+      >
+        <span></span>
+      </Localized>
+    </p>
 
     <LoginForm />
 

@@ -9,11 +9,16 @@ homepage-intro =
 
 login-form-email-label = Email
 login-form-email-error-required = Please enter your email.
+# Expected to have a link to <sendVerificationEmailLink>request a new token</sendVerificationEmailLink>
+login-form-email-error-not-verified = Email not verified; please click the link in your
+    verification email or <sendVerificationEmailLink>request a new one</sendVerificationEmailLink>.
 login-form-password-label = Password
 login-form-password-error-required = Please enter your password.
 login-form-login-button = Login
 login-form-forgot-password-link = Forgot my password
 login-form-register-link = Register
+login-form-error-invalid-credentials = Invalid email or password.
+login-form-error-unknown = Unknown error; please try again in a few minutes.
 
 register-page-title = Register
 register-form-username-label = Username
@@ -40,9 +45,9 @@ verify-email-page-title = Verify email
 # Expected to have a <loginLink>login link</loginLink>.
 verify-email-success = Your email address is verified. You can now <loginLink>log in</loginLink>.
 verify-email-error-unknown = Unknown error; please try again in a few minutes.
-# Expected to have a link to <sendVerificationEmailLink>request a new token</sendVerificationEmailLink>
-verify-email-error-token-expired = Verification token expired; please <sendVerificationEmailLink>request a new token</sendVerificationEmailLink>.
-# Expected to have a link to <sendVerificationEmailLink>request a new token</sendVerificationEmailLink>
-verify-email-error-bad-token = Invalid token; please <sendVerificationEmailLink>request a new one</sendVerificationEmailLink>.
+# Expected to have a link to <sendVerificationEmailLink>request a new email</sendVerificationEmailLink>
+verify-email-error-token-expired = Verification link expired; please <sendVerificationEmailLink>request a new one</sendVerificationEmailLink>.
+# Expected to have a link to <sendVerificationEmailLink>request a new email</sendVerificationEmailLink>
+verify-email-error-bad-token = Invalid link; please <sendVerificationEmailLink>request a new one</sendVerificationEmailLink>.
 # Expected to have a <loginLink>login link</loginLink>.
 verify-email-error-already-verified = You are already verified. You can now <loginLink>log in</loginLink>.
