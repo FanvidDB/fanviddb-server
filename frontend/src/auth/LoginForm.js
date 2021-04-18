@@ -4,8 +4,9 @@ import { Button, Form, Input } from "antd";
 import { Localized } from "@fluent/react";
 import _ from "lodash";
 import { callApi } from "../api";
+import PropTypes from "prop-types";
 
-const LoginForm = () => {
+const LoginForm = ({ onLogin }) => {
   const [form] = Form.useForm();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -54,8 +55,7 @@ const LoginForm = () => {
       }
       setIsSubmitting(false);
       if (_.isEmpty(errors)) {
-        // Success!
-        console.log("logged in!");
+        onLogin();
       } else {
         for (const name in errors) {
           form.setFields([
@@ -115,6 +115,10 @@ const LoginForm = () => {
       </Form.Item>
     </Form>
   );
+};
+
+LoginForm.propTypes = {
+  onLogin: PropTypes.func.isRequired,
 };
 
 export default LoginForm;
