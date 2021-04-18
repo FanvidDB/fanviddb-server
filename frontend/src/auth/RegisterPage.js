@@ -7,9 +7,7 @@ const RegisterPage = () => {
   const history = useHistory();
 
   const onRegister = ({ email }) => {
-    history.push("/verify-email/send", {
-      sendToEmail: email,
-    });
+    history.push(`/verify-email/send?email=${encodeURIComponent(email)}`);
   };
 
   return (

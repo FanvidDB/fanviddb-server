@@ -12,6 +12,8 @@ const SendVerificationEmailPage = () => {
     setSubmittedEmail(email);
   };
 
+  const searchParams = new URLSearchParams(location.search);
+
   return (
     <div>
       <h1>
@@ -32,7 +34,7 @@ const SendVerificationEmailPage = () => {
         />
       )}
       <SendVerificationEmailForm
-        initialEmail={location.state && location.state.sendToEmail}
+        initialEmail={searchParams.get("email")}
         onSubmit={onSubmit}
       />
     </div>

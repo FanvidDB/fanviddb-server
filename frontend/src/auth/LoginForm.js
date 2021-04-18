@@ -35,7 +35,7 @@ const LoginForm = () => {
                   <Link
                     to={{
                       pathname: "/verify-email/send",
-                      state: { sendToEmail: email },
+                      search: `?email=${encodeURIComponent(email)}`,
                     }}
                   />
                 ),
