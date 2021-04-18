@@ -1,17 +1,13 @@
 import React, { useState } from "react";
 import { Alert } from "antd";
 import { Localized } from "@fluent/react";
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import SendVerificationEmailForm from "./SendVerificationEmailForm";
 
 const SendVerificationEmailPage = () => {
   const location = useLocation();
-  const history = useHistory();
   const [submittedEmail, setSubmittedEmail] = useState();
 
-  const onInitialSubmit = () => {
-    history.replace({ ...location, state: {} });
-  };
   const onSubmit = (email) => {
     setSubmittedEmail(email);
   };
@@ -36,8 +32,7 @@ const SendVerificationEmailPage = () => {
         />
       )}
       <SendVerificationEmailForm
-        initialEmail={location.state.sendToEmail}
-        onInitialSubmit={onInitialSubmit}
+        initialEmail={location.state && location.state.sendToEmail}
         onSubmit={onSubmit}
       />
     </div>

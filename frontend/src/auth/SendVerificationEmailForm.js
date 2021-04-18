@@ -1,24 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Button, Form, Input } from "antd";
 import { Localized } from "@fluent/react";
 import PropTypes from "prop-types";
 import { callApi } from "../api";
 
-const SendVerificationEmailForm = ({
-  initialEmail,
-  onInitialSubmit,
-  onSubmit,
-}) => {
+const SendVerificationEmailForm = ({ initialEmail, onSubmit }) => {
   const [form] = Form.useForm();
-  const [submitState, setSubmitState] = useState("loading");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onFinish = ({ email }) => {
-    setSubmitState("submitting");
+    setIsSubmitting(true);
     callApi("/api/auth/request-verify-token", "POST", { email }).then(
       ({ ok }) => {
         if (ok) {
           onSubmit(email);
-          setSubmitState();
+          setIsSubmitting(false);
         } else {
           form.setFields([
             {
@@ -31,7 +27,7 @@ const SendVerificationEmailForm = ({
               ],
             },
           ]);
-          setSubmitState();
+          setIsSubmitting(false);
         }
       },
       () => {
@@ -46,17 +42,10 @@ const SendVerificationEmailForm = ({
             ],
           },
         ]);
-        setSubmitState();
+        setIsSubmitting(false);
       }
     );
   };
-
-  useEffect(() => {
-    if (initialEmail) {
-      form.submit();
-      onInitialSubmit();
-    }
-  }, []);
 
   return (
     <Form
@@ -86,11 +75,7 @@ const SendVerificationEmailForm = ({
       </Form.Item>
 
       <Form.Item wrapperCol={{ offset: 4, span: 20 }}>
-        <Button
-          type="primary"
-          htmlType="submit"
-          loading={submitState == "submitting"}
-        >
+        <Button type="primary" htmlType="submit" loading={isSubmitting}>
           <Localized id="send-verification-email-form-send-button" />
         </Button>
       </Form.Item>
@@ -100,7 +85,6 @@ const SendVerificationEmailForm = ({
 
 SendVerificationEmailForm.propTypes = {
   initialEmail: PropTypes.string,
-  onInitialSubmit: PropTypes.func,
   onSubmit: PropTypes.func,
 };
 
