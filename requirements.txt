@@ -84,3 +84,4 @@ watchgod==0.7
 websockets==8.1
 wrapt==1.12.1
 zipp==3.4.1
+zxcvbn==4.4.28
