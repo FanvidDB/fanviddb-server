@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { Skeleton, Button } from "antd";
+import { Localized } from "@fluent/react";
 import LoginPage from "../auth/LoginPage";
 import AuthContext from "../auth/authContext";
 
@@ -13,8 +14,11 @@ const HomePage = () => {
   }
   return (
     <div>
-      <p>Hello {user.username}</p>
-      <Button onClick={logout}>Log out</Button>
+      <p>Placeholder for fanvid list page</p>
+      <p>{user.username}</p>
+      <Button onClick={logout}>
+        <Localized id="logout-button" />
+      </Button>
     </div>
   );
 };

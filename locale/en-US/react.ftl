@@ -14,11 +14,12 @@ login-form-email-error-not-verified = Email not verified; please click the link 
     verification email or <sendVerificationEmailLink>request a new one</sendVerificationEmailLink>.
 login-form-password-label = Password
 login-form-password-error-required = Please enter your password.
-login-form-login-button = Login
+login-form-login-button = Log in
 login-form-forgot-password-link = Forgot my password
 login-form-register-link = Register
 login-form-error-invalid-credentials = Invalid email or password.
 login-form-error-unknown = Unknown error; please try again in a few minutes.
+logout-button = Log out
 
 register-page-title = Register
 register-form-username-label = Username
