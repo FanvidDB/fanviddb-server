@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi import Request
 from fastapi.responses import JSONResponse
-from starlette.routing import Mount
-from starlette.routing import Route
+from starlette.applications import Starlette
+from starlette.responses import FileResponse
 from starlette.staticfiles import StaticFiles
 
 from .api_keys.router import api_key_router
@@ -24,63 +24,81 @@ class HelpfulStaticFiles(StaticFiles):
             ) from exc
 
 
-app = FastAPI(
-    routes=[
-        Route(
-            "/",
-            endpoint=HelpfulStaticFiles(
-                directory="frontend/build/", html=True, check_dir=False
-            ),
-            name="homepage",
-        ),
-        Mount(
-            "/static/locale",
-            app=StaticFiles(directory="locale"),
-            name="locale",
-        ),
-        Mount(
-            "/static",
-            app=HelpfulStaticFiles(
-                directory="frontend/build/static/", html=True, check_dir=False
-            ),
-            name="static",
-        ),
-    ],
-)
+main_app = Starlette()
 
-app.include_router(
+api = FastAPI(docs_url=None)
+
+api.include_router(
     fanvid_router,
-    prefix="/api/fanvids",
+    prefix="/fanvids",
     tags=["Fanvids"],
 )
-app.include_router(
+api.include_router(
     auth_router,
-    prefix="/api/auth",
+    prefix="/auth",
     tags=["Auth"],
 )
-app.include_router(
+api.include_router(
     users_router,
-    prefix="/api/users",
+    prefix="/users",
     tags=["Users"],
 )
-app.include_router(
+api.include_router(
     api_key_router,
-    prefix="/api/api_keys",
+    prefix="/api_keys",
     tags=["API Keys"],
 )
 
 
-@app.on_event("startup")
+frontend = Starlette()
+
+
+@frontend.middleware("http")
+async def default_response(request, call_next):
+    response = await call_next(request)
+    if response.status_code == 404:
+        return FileResponse("frontend/build/index.html")
+    return response
+
+
+frontend.mount(
+    "/", HelpfulStaticFiles(directory="frontend/build/", html=True, check_dir=False)
+)
+main_app.mount(
+    "/static/locale",
+    app=StaticFiles(directory="locale"),
+    name="locale",
+)
+main_app.mount(
+    "/static",
+    app=HelpfulStaticFiles(
+        directory="frontend/build/static/", html=True, check_dir=False
+    ),
+    name="static",
+)
+main_app.mount(
+    "/api",
+    api,
+    name="api",
+)
+main_app.mount(
+    "/",
+    frontend,
+    name="frontend",
+)
+
+
+@main_app.on_event("startup")
 async def startup():
     await database.connect()
 
 
-@app.on_event("shutdown")
+@main_app.on_event("shutdown")
 async def shutdown():
     await database.disconnect()
 
 
-@app.exception_handler(EmailSendFailed)
+@api.exception_handler(EmailSendFailed)
 async def email_send_failed_handler(__: Request, exc: EmailSendFailed):
     return JSONResponse(
         status_code=503,

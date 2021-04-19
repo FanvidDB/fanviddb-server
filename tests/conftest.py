@@ -11,7 +11,7 @@ environ["TESTING"] = "1"
 
 from fanviddb import conf  # noqa: E402
 from fanviddb import db  # noqa: E402
-from fanviddb.api import app as fanviddb_app  # noqa: E402
+from fanviddb.app import main_app as fanviddb_app  # noqa: E402
 
 from .factories import UserFactory  # noqa: E402
 

@@ -27,7 +27,7 @@ const LoginPage = () => {
       <LoginForm onLogin={onLogin} />
 
       <p>
-        <a href="/redoc">Redoc</a> – <a href="/docs">Swagger UI</a>
+        <a href="/api/redoc">Redoc</a>
       </p>
     </div>
   );

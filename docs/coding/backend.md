@@ -49,7 +49,7 @@ This will create a `.env` file with the basic configuration needed by the app.
 ## Running the server
 
 ```
-uvicorn fanviddb.api:app --reload
+uvicorn fanviddb.app:main_app --reload
 ```
 
 This will automatically reload the server when your code changes.
