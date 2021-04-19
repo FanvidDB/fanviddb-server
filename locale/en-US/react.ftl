@@ -2,18 +2,20 @@
 -plex = Plex
 
 top-navbar-website-name = { -fanviddb }
-top-navbar-using-with-plex = Using with { -plex }
-top-navbar-contributing = Contributing
-top-navbar-contributing-fanvid-data = Fanvid data
-top-navbar-contributing-translation = Translation
-top-navbar-contributing-documentation = Documentation
-top-navbar-coding = Coding
-top-navbar-coding-frontend = Frontend
-top-navbar-coding-backend = Backend
-top-navbar-coding-metadata-agent = { -plex } Metadata Agent
-top-navbar-coding-docs-site = Docs site
-top-navbar-about = About
-top-navbar-report-issue = Report a website issue
+
+bottom-nav-general = { -fanviddb }
+bottom-nav-general-using-with-plex = Using with { -plex }
+bottom-nav-general-about = About
+bottom-nav-general-report-issue = Report a website issue
+bottom-nav-contributing = Contributing
+bottom-nav-contributing-fanvid-data = Fanvid data
+bottom-nav-contributing-translation = Translation
+bottom-nav-contributing-documentation = Documentation
+bottom-nav-coding = Coding
+bottom-nav-coding-frontend = Frontend
+bottom-nav-coding-backend = Backend
+bottom-nav-coding-metadata-agent = { -plex } Metadata Agent
+bottom-nav-coding-docs-site = Docs site
 
 homepage-title = { -fanviddb }
 homepage-intro =

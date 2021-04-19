@@ -13,8 +13,9 @@ import moment from "moment";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { AuthProvider } from "./auth/authContext";
 import TopNavbar from "./layout/TopNavbar";
+import BottomNav from "./layout/BottomNav";
 
-const { Content, Header } = Layout;
+const { Content, Header, Footer } = Layout;
 
 const App = () => {
   const [locales, setLocales] = useState(() => {
@@ -61,6 +62,9 @@ const App = () => {
                   </Col>
                 </Row>
               </Content>
+              <Footer>
+                <BottomNav />
+              </Footer>
             </Layout>
           </Router>
         </AuthProvider>
