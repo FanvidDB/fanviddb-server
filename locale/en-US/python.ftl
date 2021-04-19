@@ -10,8 +10,8 @@ email-verification-content = Verification requested for { $username } on fanvidd
 
     https://fanviddb.com/verify-email/{ $token }
 
-email-after-verification-subject = Account verified
-email-after-verification-content = User { $username } has verified their email.
+email-after-verification-subject = FanvidDB account verified
+email-after-verification-content = Your email address has been verified for { $username }.
 
 fanvid-create-error = Error creating fanvid.
 fanvid-user-or-api-key-required = User or API key authentication required
