@@ -12,6 +12,7 @@ import LocaleSelector from "./i18n/LocaleSelector";
 import moment from "moment";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { AuthProvider } from "./auth/authContext";
+import Header from "./layout/Header";
 
 const { Content } = Layout;
 
@@ -31,6 +32,7 @@ const App = () => {
         <AuthProvider>
           <Router>
             <Layout>
+              <Header />
               <Content>
                 <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
                   <Col span={6}>
