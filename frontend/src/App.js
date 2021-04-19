@@ -12,9 +12,9 @@ import LocaleSelector from "./i18n/LocaleSelector";
 import moment from "moment";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { AuthProvider } from "./auth/authContext";
-import Header from "./layout/Header";
+import TopNavbar from "./layout/TopNavbar";
 
-const { Content } = Layout;
+const { Content, Header } = Layout;
 
 const App = () => {
   const [locales, setLocales] = useState(() => {
@@ -32,7 +32,9 @@ const App = () => {
         <AuthProvider>
           <Router>
             <Layout>
-              <Header />
+              <Header>
+                <TopNavbar />
+              </Header>
               <Content>
                 <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
                   <Col span={6}>
