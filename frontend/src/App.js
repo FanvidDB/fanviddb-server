@@ -6,7 +6,7 @@ import HomePage from "./pages/HomePage";
 import RegisterPage from "./auth/RegisterPage";
 import SendVerificationEmailPage from "./auth/SendVerificationEmailPage";
 import VerifyEmailPage from "./auth/VerifyEmailPage";
-import FluentLocalization from "./i18n/FluentLocalization";
+import LocalizationProvider from "./i18n/LocalizationProvider";
 import { getLocales, DEFAULT_LOCALE } from "./i18n/utils";
 import LocaleSelector from "./i18n/LocaleSelector";
 import moment from "moment";
@@ -28,7 +28,7 @@ const App = () => {
 
   return (
     <AntdConfigProvider locale={locales.antdLocale}>
-      <FluentLocalization locales={locales.fluentLocales}>
+      <LocalizationProvider locales={locales.fluentLocales}>
         <AuthProvider>
           <Router>
             <Layout>
@@ -62,7 +62,7 @@ const App = () => {
             </Layout>
           </Router>
         </AuthProvider>
-      </FluentLocalization>
+      </LocalizationProvider>
     </AntdConfigProvider>
   );
 };
