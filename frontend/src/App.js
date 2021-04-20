@@ -1,5 +1,5 @@
 import React from "react";
-import { Layout, Row, Col } from "antd";
+import { Layout } from "antd";
 import "./App.less";
 import "intl-pluralrules";
 import HomePage from "./pages/HomePage";
@@ -12,7 +12,7 @@ import { AuthProvider } from "./auth/authContext";
 import TopNavbar from "./layout/TopNavbar";
 import BottomNav from "./layout/BottomNav";
 
-const { Content, Header, Footer } = Layout;
+const { Content, Header, Footer, Sider } = Layout;
 
 const App = () => {
   return (
@@ -23,27 +23,27 @@ const App = () => {
             <Header>
               <TopNavbar />
             </Header>
-            <Content>
-              <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
-                <Col span={6}></Col>
-                <Col span={12}>
-                  <Switch>
-                    <Route path="/register">
-                      <RegisterPage />
-                    </Route>
-                    <Route path="/verify-email/send">
-                      <SendVerificationEmailPage />
-                    </Route>
-                    <Route path="/verify-email/:token">
-                      <VerifyEmailPage />
-                    </Route>
-                    <Route path="/">
-                      <HomePage />
-                    </Route>
-                  </Switch>
-                </Col>
-              </Row>
-            </Content>
+            <Layout>
+              <Sider width={200} style={{ padding: "24px" }}>
+                {/* Currently empty */}
+              </Sider>
+              <Content style={{ padding: "24px", minHeight: "280px" }}>
+                <Switch>
+                  <Route path="/register">
+                    <RegisterPage />
+                  </Route>
+                  <Route path="/verify-email/send">
+                    <SendVerificationEmailPage />
+                  </Route>
+                  <Route path="/verify-email/:token">
+                    <VerifyEmailPage />
+                  </Route>
+                  <Route path="/">
+                    <HomePage />
+                  </Route>
+                </Switch>
+              </Content>
+            </Layout>
             <Footer>
               <BottomNav />
             </Footer>
