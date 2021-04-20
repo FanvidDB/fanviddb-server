@@ -8,7 +8,12 @@ const { Item } = Menu;
 
 const TopNavbar = () => (
   <div>
-    <Menu theme="dark" mode="horizontal" selectable={false} style={{float: "left"}}>
+    <Menu
+      theme="dark"
+      mode="horizontal"
+      selectable={false}
+      style={{ float: "left" }}
+    >
       <Item key="home">
         <Link to="/">
           <Localized id="top-navbar-website-name" />

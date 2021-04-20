@@ -5,7 +5,7 @@ import { LocaleContext } from "./LocalizationProvider";
 const LocaleSelector = () => {
   const { locale, setLocale } = useContext(LocaleContext);
   return (
-    <div style={{float: "left"}}>
+    <div style={{ float: "left" }}>
       <Radio.Group value={locale} onChange={(e) => setLocale(e.target.value)}>
         <Radio.Button key="en-US" value="en-US">
           English
