@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { FluentBundle, FluentResource } from "@fluent/bundle";
+import { ConfigProvider as AntdConfigProvider } from "antd";
 import {
   LocalizationProvider as FluentProvider,
   ReactLocalization,
 } from "@fluent/react";
 import PropTypes from "prop-types";
+import { getLocales, DEFAULT_LOCALE } from "./utils";
+import moment from "moment";
+
+export const LocaleContext = React.createContext();
 
 // Load locales from files.
 async function getMessages(locale) {
@@ -13,10 +18,14 @@ async function getMessages(locale) {
   return await response.text();
 }
 
-const LocalizationProvider = ({ locales, children }) => {
+const LocalizationProvider = ({ children }) => {
+  const [locale, setLocale] = useState(DEFAULT_LOCALE);
   const [bundles, setBundles] = useState({});
+  const [antdLocale, setAntdLocale] = useState(DEFAULT_LOCALE.replace("-", ""));
+  const [fluentLocales, setFluentLocales] = useState([DEFAULT_LOCALE]);
 
   useEffect(() => {
+    console.log(locale);
     const loadBundle = (locale) => {
       if (!bundles[locale]) {
         setBundles((bundles) => ({ ...bundles, [locale]: true }));
@@ -28,20 +37,28 @@ const LocalizationProvider = ({ locales, children }) => {
       }
     };
 
-    for (const locale of locales) {
+    const locales = getLocales(locale);
+
+    for (const locale of locales.fluentLocales) {
       loadBundle(locale);
     }
-  }, [locales]);
 
-  const fluentBundles = !locales
-    ? []
-    : locales
-        .map((locale) => bundles[locale])
-        .filter((bundle) => bundle && bundle !== true);
+    moment.locale(locales.momentLocale);
+    setAntdLocale(locales.antdLocale);
+    setFluentLocales(locales.fluentLocales);
+  }, [locale]);
+
+  const fluentBundles = fluentLocales
+    .map((locale) => bundles[locale])
+    .filter((bundle) => bundle && bundle !== true);
   return (
-    <FluentProvider l10n={new ReactLocalization(fluentBundles)}>
-      {children}
-    </FluentProvider>
+    <LocaleContext.Provider value={{ locale, setLocale }}>
+      <AntdConfigProvider locale={antdLocale}>
+        <FluentProvider l10n={new ReactLocalization(fluentBundles)}>
+          {children}
+        </FluentProvider>
+      </AntdConfigProvider>
+    </LocaleContext.Provider>
   );
 };
 

@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Radio } from "antd";
-import PropTypes from "prop-types";
+import { LocaleContext } from "./LocalizationProvider";
 
-const LocaleSelector = (props) => {
+const LocaleSelector = () => {
+  const { locale, setLocale } = useContext(LocaleContext);
   return (
-    <div>
-      <Radio.Group value={props.locale} onChange={props.onChange}>
+    <div style={{float: "left"}}>
+      <Radio.Group value={locale} onChange={(e) => setLocale(e.target.value)}>
         <Radio.Button key="en-US" value="en-US">
           English
         </Radio.Button>
@@ -15,11 +16,6 @@ const LocaleSelector = (props) => {
       </Radio.Group>
     </div>
   );
-};
-
-LocaleSelector.propTypes = {
-  onChange: PropTypes.func.isRequired,
-  locale: PropTypes.string,
 };
 
 export default LocaleSelector;

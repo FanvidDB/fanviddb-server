@@ -9,30 +9,32 @@ const { Title } = Typography;
 const BottomNav = () => {
   return (
     <Space align="start">
-    <div>
-      <Title level={5}><Localized id="bottom-nav-general" /></Title>
-      <Menu selectable={false} mode="inline">
-        <Item key="using-with-plex">
-          <a href="https://docs.fanviddb.com">
-            <Localized id="bottom-nav-general-using-with-plex" />
-          </a>
-        </Item>
-        <Item key="about">
-          <a href="https://docs.fanviddb.com/about">
-            <Localized id="bottom-nav-general-about" />
-          </a>
-        </Item>
-        <Item key="report-issue">
-          <a
-            href="https://github.com/FanvidDB/fanviddb-server/issues/new"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <GithubOutlined />
-            <Localized id="bottom-nav-general-report-issue" />
-          </a>
-        </Item>
-      </Menu>
+      <div>
+        <Title level={5}>
+          <Localized id="bottom-nav-general" />
+        </Title>
+        <Menu selectable={false} mode="inline">
+          <Item key="using-with-plex">
+            <a href="https://docs.fanviddb.com">
+              <Localized id="bottom-nav-general-using-with-plex" />
+            </a>
+          </Item>
+          <Item key="about">
+            <a href="https://docs.fanviddb.com/about">
+              <Localized id="bottom-nav-general-about" />
+            </a>
+          </Item>
+          <Item key="report-issue">
+            <a
+              href="https://github.com/FanvidDB/fanviddb-server/issues/new"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <GithubOutlined />
+              <Localized id="bottom-nav-general-report-issue" />
+            </a>
+          </Item>
+        </Menu>
       </div>
       <div>
         <Title level={5}>
