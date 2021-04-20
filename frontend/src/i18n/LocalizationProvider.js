@@ -6,8 +6,9 @@ import {
   ReactLocalization,
 } from "@fluent/react";
 import PropTypes from "prop-types";
-import { getLocales, DEFAULT_LOCALE } from "./utils";
+import { DEFAULT_LOCALE, AVAILABLE_LOCALES } from "./config";
 import moment from "moment";
+import { negotiateLanguages } from "@fluent/langneg";
 
 export const LocaleContext = React.createContext();
 
@@ -21,34 +22,37 @@ async function getMessages(locale) {
 const LocalizationProvider = ({ children }) => {
   const [locale, setLocale] = useState(DEFAULT_LOCALE);
   const [bundles, setBundles] = useState({});
-  const [antdLocale, setAntdLocale] = useState(DEFAULT_LOCALE.replace("-", ""));
-  const [fluentLocales, setFluentLocales] = useState([DEFAULT_LOCALE]);
+  const [currentLocales, setCurrentLocales] = useState([DEFAULT_LOCALE]);
 
   useEffect(() => {
-    console.log(locale);
-    const loadBundle = (locale) => {
-      if (!bundles[locale]) {
-        setBundles((bundles) => ({ ...bundles, [locale]: true }));
-        getMessages(locale).then((ftl) => {
-          const bundle = new FluentBundle(locale);
-          bundle.addResource(new FluentResource(ftl));
-          setBundles((bundles) => ({ ...bundles, [locale]: bundle }));
-        });
-      }
-    };
-
-    const locales = getLocales(locale);
-
-    for (const locale of locales.fluentLocales) {
-      loadBundle(locale);
+    let locales = navigator.languages;
+    if (locale !== null) {
+      locales = [locale].concat(locales);
     }
-
-    moment.locale(locales.momentLocale);
-    setAntdLocale(locales.antdLocale);
-    setFluentLocales(locales.fluentLocales);
+    locales = negotiateLanguages(locales, AVAILABLE_LOCALES, {
+      defaultLocale: DEFAULT_LOCALE,
+    });
+    const momentLocale = locale == "en-US" ? "en" : "zh-cn";
+    moment.locale(momentLocale);
+    setCurrentLocales(locales);
   }, [locale]);
 
-  const fluentBundles = fluentLocales
+  useEffect(() => {
+    for (const currentLocale of currentLocales) {
+      if (!bundles[currentLocale]) {
+        setBundles((bundles) => ({ ...bundles, [currentLocale]: true }));
+        getMessages(currentLocale).then((ftl) => {
+          const bundle = new FluentBundle(currentLocale);
+          bundle.addResource(new FluentResource(ftl));
+          setBundles((bundles) => ({ ...bundles, [currentLocale]: bundle }));
+        });
+      }
+    }
+  }, [currentLocales, bundles]);
+
+  const antdLocale = locale.replace("-", "");
+
+  const fluentBundles = currentLocales
     .map((locale) => bundles[locale])
     .filter((bundle) => bundle && bundle !== true);
   return (
