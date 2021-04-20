@@ -1,20 +1,20 @@
 import React, { useContext } from "react";
-import { Radio } from "antd";
+import { Select } from "antd";
 import { LocaleContext } from "./LocalizationProvider";
+
+const { Option } = Select;
 
 const LocaleSelector = () => {
   const { locale, setLocale } = useContext(LocaleContext);
   return (
-    <div style={{ float: "left" }}>
-      <Radio.Group value={locale} onChange={(e) => setLocale(e.target.value)}>
-        <Radio.Button key="en-US" value="en-US">
-          English
-        </Radio.Button>
-        <Radio.Button key="zh-CN" value="zh-CN">
-          中文
-        </Radio.Button>
-      </Radio.Group>
-    </div>
+    <Select
+      style={{ width: 100 }}
+      defaultValue={locale}
+      onChange={(value) => setLocale(value)}
+    >
+      <Option value="en-US">English</Option>
+      <Option value="zh-CN">中文</Option>
+    </Select>
   );
 };
 
