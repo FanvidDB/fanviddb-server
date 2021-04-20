@@ -16,6 +16,7 @@ bottom-nav-coding-frontend = Frontend
 bottom-nav-coding-backend = Backend
 bottom-nav-coding-metadata-agent = { -plex } Metadata Agent
 bottom-nav-coding-docs-site = Docs site
+bottom-nav-coding-api = API
 
 homepage-title = { -fanviddb }
 homepage-intro =

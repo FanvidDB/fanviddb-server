@@ -83,6 +83,11 @@ const BottomNav = () => {
               <Localized id="bottom-nav-coding-docs-site" />
             </a>
           </Item>
+          <Item>
+            <a href="/api/redoc">
+              <Localized id="bottom-nav-coding-api" />
+            </a>
+          </Item>
         </Menu>
       </div>
     </Space>

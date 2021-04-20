@@ -25,10 +25,6 @@ const LoginPage = () => {
       </p>
 
       <LoginForm onLogin={onLogin} />
-
-      <p>
-        <a href="/api/redoc">Redoc</a>
-      </p>
     </div>
   );
 };
