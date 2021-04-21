@@ -54,7 +54,7 @@ uvicorn fanviddb.app:main_app --reload
 
 This will automatically reload the server when your code changes.
 
-You can run the backend on its own without the frontend, and interact with the Swagger UI at <http://127.0.0.1:8000/docs/>. If you want to build the frontend as well, you can either [build it once or automatically reload when javascript changes](/coding/frontend.html), whichever you prefer.
+You can run the backend on its own without the frontend, and interact with the API directly. (API docs are available at <http://127.0.0.1:8000/api/redoc>.) If you want to build the frontend as well, you can either [build it once or automatically reload when javascript changes](/coding/frontend.html), whichever you prefer.
 
 ## Running tests
 
