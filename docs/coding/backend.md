@@ -44,7 +44,7 @@ This will create a `.env` file with the basic configuration needed by the app.
 1. Install [Postgres.app](https://postgresapp.com/)
 2. Open Postgres.app and double-click on the `postgres` database
 3. Run `CREATE DATABASE fanviddb;` in the terminal that opens to create a database called `fanviddb`.
-4. Run `alembic upgrade head` to create the database tables that the application needs.
+4. In the terminal where you cloned the repository, run `alembic upgrade head` to create the database tables that the application needs.
 
 ## Running the server
 
