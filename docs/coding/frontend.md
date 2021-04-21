@@ -25,6 +25,7 @@ First, create a fork of [github.com/FanvidDB/fanviddb-server](https://github.com
 If all you want it to build the frontend once and then interact primarily with the backend, run:
 
 ```bash
+yarn install
 yarn build
 ```
 
@@ -33,6 +34,7 @@ yarn build
 If you are doing significant work on the frontend, run:
 
 ```bash
+yarn install
 yarn start
 ```
 
