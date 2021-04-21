@@ -18,8 +18,5 @@ const backendProxy = createProxyMiddleware({
 });
 
 module.exports = function (app) {
-  app.use(
-    ["/docs", "/redoc", "/api", "/openapi.json", "/static/locale"],
-    backendProxy
-  );
+  app.use(["/redoc", "/api", "/openapi.json", "/static/locale"], backendProxy);
 };
