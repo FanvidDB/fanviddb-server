@@ -11,6 +11,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { AuthProvider } from "./auth/authContext";
 import TopNavbar from "./layout/TopNavbar";
 import BottomNav from "./layout/BottomNav";
+import FanvidEditPage from "./fanvids/FanvidEditPage";
 
 const { Content, Header, Footer, Sider } = Layout;
 
@@ -37,6 +38,12 @@ const App = () => {
                   </Route>
                   <Route path="/verify-email/:token">
                     <VerifyEmailPage />
+                  </Route>
+                  <Route path="/fanvid/create">
+                    <FanvidEditPage />
+                  </Route>
+                  <Route path="/fanvid/edit/:uuid">
+                    <FanvidEditPage />
                   </Route>
                   <Route path="/">
                     <HomePage />

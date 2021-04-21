@@ -70,3 +70,26 @@ verify-email-error-token-expired = Verification link expired; please <sendVerifi
 verify-email-error-bad-token = Invalid link; please <sendVerificationEmailLink>request a new one</sendVerificationEmailLink>.
 # Expected to have a <loginLink>login link</loginLink>.
 verify-email-error-already-verified = You are already verified. You can now <loginLink>log in</loginLink>.
+
+fanvid-page-create-title = Create Fanvid
+fanvid-form-error-unknown = Unknown error occurred, please try again in a few minutes
+fanvid-form-save-button = Save
+fanvid-form-title-label = Title
+fanvid-form-title-error-required = Title is required
+fanvid-form-creators-label = Creators
+fanvid-form-creators-error-required = At least one creator is required
+fanvid-form-premiere-date-label = Premiere date
+fanvid-form-premiere-event-label = Premiere event
+fanvid-form-audio-label = Audio
+fanvid-form-length-label = Length
+fanvid-form-length-error-required = Length is required
+fanvid-form-rating-label = Rating
+fanvid-form-rating-error-required = Rating is required
+fanvid-form-fandoms-label = Fandoms
+fanvid-form-fandoms-error-required = At least one fandom is required
+fanvid-form-summary-label = Summary
+fanvid-form-summary-error-required = Summary is required
+fanvid-form-content-notes-label = Content notes
+fanvid-form-urls-label = Canonical URLs
+fanvid-form-unique-identifiers-label = Unique identifiers
+fanvid-form-thumbnail-url-label = Thumbnail URL
