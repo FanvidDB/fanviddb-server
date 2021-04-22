@@ -6,6 +6,7 @@ top-navbar-website-name = { -fanviddb }
 error-500 = Sorry, something went wrong. Please try again in a few minutes.
 error-404 = The page could not be found.
 
+
 bottom-nav-general = { -fanviddb }
 bottom-nav-general-using-with-plex = Using with { -plex }
 bottom-nav-general-about = About
@@ -83,7 +84,9 @@ fanvid-form-creators-label = Creators
 fanvid-form-creators-error-required = At least one creator is required
 fanvid-form-premiere-date-label = Premiere date
 fanvid-form-premiere-event-label = Premiere event
-fanvid-form-audio-label = Audio
+fanvid-form-audio-title-label = Audio Title
+fanvid-form-audio-artists-or-sources-label = Audio Artists or Sources
+fanvid-form-audio-language-label = Audio Language
 fanvid-form-length-label = Length
 fanvid-form-length-error-required = Length is required
 fanvid-form-rating-label = Rating

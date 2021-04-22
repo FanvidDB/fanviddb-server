@@ -5,18 +5,23 @@ import { useParams, useHistory } from "react-router-dom";
 import { callApi } from "../api";
 import FanvidEditForm from "./FanvidEditForm";
 
+const DEFAULT_FANVID = {
+  urls: [""],
+  unique_identifiers: [""],
+};
+
 const FanvidEditPage = () => {
   const { uuid } = useParams();
   const history = useHistory();
   const [isLoading, setIsLoading] = useState(true);
   const [is404, setIs404] = useState(false);
   const [is500, setIs500] = useState(false);
-  const [fanvid, setFanvid] = useState({});
+  const [fanvid, setFanvid] = useState(DEFAULT_FANVID);
 
   useEffect(() => {
     if (!uuid) {
       setIsLoading(false);
-      setFanvid({});
+      setFanvid(DEFAULT_FANVID);
     } else {
       callApi("/api/fanvids/" + uuid, "GET").then(({ status, ok, json }) => {
         if (status == 404) {

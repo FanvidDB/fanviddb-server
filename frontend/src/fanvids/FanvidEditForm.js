@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { Button, Form, Input, InputNumber, DatePicker } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  DatePicker,
+  Select,
+  Checkbox,
+} from "antd";
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { Localized } from "@fluent/react";
 import { callApi } from "../api";
 import _ from "lodash";
@@ -39,7 +48,12 @@ const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
     });
   };
   return (
-    <Form layout="vertical" onFinish={onFinish} form={form}>
+    <Form
+      layout="vertical"
+      onFinish={onFinish}
+      form={form}
+      initialValues={fanvid}
+    >
       <Form.Item
         label={<Localized id="fanvid-form-title-label" />}
         name="title"
@@ -62,11 +76,23 @@ const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
           },
         ]}
       >
+        <Select mode="tags" tokenSeparators={[",", " "]} />
+      </Form.Item>
+      <Form.Item
+        label={<Localized id="fanvid-form-audio-title-label" />}
+        name={["audio", "title"]}
+      >
         <Input />
       </Form.Item>
       <Form.Item
-        label={<Localized id="fanvid-form-audio-label" />}
-        name="audio"
+        label={<Localized id="fanvid-form-audio-artists-or-sources-label" />}
+        name={["audio", "artists_or_sources"]}
+      >
+        <Select mode="tags" tokenSeparators={[",", " "]} />
+      </Form.Item>
+      <Form.Item
+        label={<Localized id="fanvid-form-audio-language-label" />}
+        name={["audio", "language"]}
       >
         <Input />
       </Form.Item>
@@ -104,7 +130,7 @@ const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
           },
         ]}
       >
-        <Input />
+        <Select mode="tags" tokenSeparators={[",", " "]} />
       </Form.Item>
       <Form.Item
         label={<Localized id="fanvid-form-summary-label" />}
@@ -116,23 +142,74 @@ const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
           },
         ]}
       >
-        <Input />
+        <Input.TextArea rows={4} autoSize />
       </Form.Item>
       <Form.Item
         label={<Localized id="fanvid-form-content-notes-label" />}
         name="content_notes"
       >
-        <Input />
+        <Checkbox.Group
+          options={[
+            { label: "Graphic Depictions of Violence", value: "violence" },
+          ]}
+        />
       </Form.Item>
-      <Form.Item label={<Localized id="fanvid-form-urls-label" />} name="urls">
-        <Input />
-      </Form.Item>
-      <Form.Item
-        label={<Localized id="fanvid-form-unique-identifiers-label" />}
-        name="unique_identifiers"
-      >
-        <Input />
-      </Form.Item>
+      <Form.List name="urls">
+        {(fields, { add, remove }, { errors }) => (
+          <>
+            {fields.map((field, index) => (
+              <Form.Item
+                required={false}
+                label={index == 0 && <Localized id="fanvid-form-urls-label" />}
+                key={field.key}
+              >
+                <Form.Item {...field} key={field.key} noStyle>
+                  <Input style={{ width: "60%" }} />
+                </Form.Item>
+                {fields.length > 1 && (
+                  <MinusCircleOutlined onClick={() => remove(field.name)} />
+                )}
+              </Form.Item>
+            ))}
+            <Form.Item>
+              <Button onClick={() => add()} icon={<PlusOutlined />}>
+                Add
+              </Button>
+              <Form.ErrorList errors={errors} />
+            </Form.Item>
+          </>
+        )}
+      </Form.List>
+      <Form.List name="unique_identifiers">
+        {(fields, { add, remove }, { errors }) => (
+          <>
+            {fields.map((field, index) => (
+              <Form.Item
+                required={false}
+                label={
+                  index == 0 && (
+                    <Localized id="fanvid-form-unique-identifiers-label" />
+                  )
+                }
+                key={field.key}
+              >
+                <Form.Item {...field} key={field.key} noStyle>
+                  <Input style={{ width: "60%" }} />
+                </Form.Item>
+                {fields.length > 1 && (
+                  <MinusCircleOutlined onClick={() => remove(field.name)} />
+                )}
+              </Form.Item>
+            ))}
+            <Form.Item>
+              <Button onClick={() => add()} icon={<PlusOutlined />}>
+                Add
+              </Button>
+              <Form.ErrorList errors={errors} />
+            </Form.Item>
+          </>
+        )}
+      </Form.List>
       <Form.Item
         label={<Localized id="fanvid-form-thumbnail-url-label" />}
         name="thumbnail_url"
