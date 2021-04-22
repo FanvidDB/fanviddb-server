@@ -9,6 +9,7 @@ import VerifyEmailPage from "./auth/VerifyEmailPage";
 import LocalizationProvider from "./i18n/LocalizationProvider";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { AuthProvider } from "./auth/authContext";
+import RequireAuth from "./auth/RequireAuth";
 import TopNavbar from "./layout/TopNavbar";
 import BottomNav from "./layout/BottomNav";
 import FanvidEditPage from "./fanvids/FanvidEditPage";
@@ -40,10 +41,14 @@ const App = () => {
                     <VerifyEmailPage />
                   </Route>
                   <Route path="/fanvid/create">
-                    <FanvidEditPage />
+                    <RequireAuth>
+                      <FanvidEditPage />
+                    </RequireAuth>
                   </Route>
                   <Route path="/fanvid/edit/:uuid">
-                    <FanvidEditPage />
+                    <RequireAuth>
+                      <FanvidEditPage />
+                    </RequireAuth>
                   </Route>
                   <Route path="/">
                     <HomePage />
