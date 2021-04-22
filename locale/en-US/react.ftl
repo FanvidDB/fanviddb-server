@@ -3,6 +3,9 @@
 
 top-navbar-website-name = { -fanviddb }
 
+error-500 = Sorry, something went wrong. Please try again in a few minutes.
+error-404 = The page could not be found.
+
 bottom-nav-general = { -fanviddb }
 bottom-nav-general-using-with-plex = Using with { -plex }
 bottom-nav-general-about = About

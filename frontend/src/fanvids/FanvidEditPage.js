@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Skeleton } from "antd";
+import { Skeleton, Result, Button } from "antd";
 import { Localized } from "@fluent/react";
 import { useParams, useHistory } from "react-router-dom";
 import { callApi } from "../api";
@@ -44,16 +44,28 @@ const FanvidEditPage = () => {
   }
 
   if (is404) {
-    // placeholder
-    return <p>404 not found</p>;
+    return (
+      <Result
+        title={<Localized id="error-404" />}
+        extra={
+          <Button type="primary" href="/">
+            Return Home
+          </Button>
+        }
+      />
+    );
   }
 
   if (is500) {
-    // placeholder
     return (
-      <p>
-        <Localized id="fanvid-form-error-unknown" />
-      </p>
+      <Result
+        title={<Localized id="error-500" />}
+        extra={
+          <Button type="primary" href="/">
+            Return Home
+          </Button>
+        }
+      />
     );
   }
 
