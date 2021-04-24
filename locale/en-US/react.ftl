@@ -7,6 +7,31 @@ error-500 = Sorry, something went wrong. Please try again in a few minutes.
 error-404 = The page could not be found.
 
 
+content-notes-graphic-violence = Graphic Depictions Of Violence
+content-notes-major-character-death = Major Character Death
+content-notes-no-warnings-apply = No Warnings Apply
+content-notes-rape-or-non-con = Rape/Non-Con
+content-notes-underage = Underage
+content-notes-physical-triggers = Physical Triggers
+content-notes-animal-harm = Animal Harm
+content-notes-auditory-triggers = Auditory Triggers
+content-notes-blackface-or-brownface-or-redface = Blackface/Brownface/Redface
+content-notes-significant-blood-or-gore = Blood/Gore
+content-notes-depictions-of-police = Depictions of Police
+content-notes-holocaust-or-nazi-imagery = Holocaust and/or Nazi Imagery
+content-notes-incest = Incest
+content-notes-queerphobia = Queerphobia
+content-notes-racism = Racism
+content-notes-self-harm = Self-harm
+content-notes-suicide = Suicide
+content-notes-transphobia = Transphobia
+
+rating-gen = Gen
+rating-teen = Teen
+rating-mature = Mature
+rating-explicit = Explicit
+
+
 bottom-nav-general = { -fanviddb }
 bottom-nav-general-using-with-plex = Using with { -plex }
 bottom-nav-general-about = About

@@ -7,6 +7,7 @@ import {
   DatePicker,
   Select,
   Checkbox,
+  Radio,
 } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { Localized } from "@fluent/react";
@@ -118,7 +119,15 @@ const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
           },
         ]}
       >
-        <Input />
+        <Radio.Group
+          options={[
+            { value: "gen", label: <Localized id="rating-gen" /> },
+            { value: "teen", label: <Localized id="rating-teen" /> },
+            { value: "mature", label: <Localized id="rating-mature" /> },
+            { value: "explicit", label: <Localized id="rating-explicit" /> },
+          ]}
+          optionType="button"
+        />
       </Form.Item>
       <Form.Item
         label={<Localized id="fanvid-form-fandoms-label" />}
@@ -150,7 +159,74 @@ const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
       >
         <Checkbox.Group
           options={[
-            { label: "Graphic Depictions of Violence", value: "violence" },
+            {
+              value: "graphic-violence",
+              label: <Localized id="content-notes-graphic-violence" />,
+            },
+            {
+              value: "major-character-death",
+              label: <Localized id="content-notes-major-character-death" />,
+            },
+            {
+              value: "no-warnings-apply",
+              label: <Localized id="content-notes-no-warnings-apply" />,
+            },
+            {
+              value: "rape-or-non-con",
+              label: <Localized id="content-notes-rape-or-non-con" />,
+            },
+            {
+              value: "underage",
+              label: <Localized id="content-notes-underage" />,
+            },
+            {
+              value: "physical-triggers",
+              label: <Localized id="content-notes-physical-triggers" />,
+            },
+            {
+              value: "animal-harm",
+              label: <Localized id="content-notes-animal-harm" />,
+            },
+            {
+              value: "auditory-triggers",
+              label: <Localized id="content-notes-auditory-triggers" />,
+            },
+            {
+              value: "blackface-or-brownface-or-redface",
+              label: (
+                <Localized id="content-notes-blackface-or-brownface-or-redface" />
+              ),
+            },
+            {
+              value: "significant-blood-or-gore",
+              label: <Localized id="content-notes-significant-blood-or-gore" />,
+            },
+            {
+              value: "depictions-of-police",
+              label: <Localized id="content-notes-depictions-of-police" />,
+            },
+            {
+              value: "holocaust-or-nazi-imagery",
+              label: <Localized id="content-notes-holocaust-or-nazi-imagery" />,
+            },
+            { value: "incest", label: <Localized id="content-notes-incest" /> },
+            {
+              value: "queerphobia",
+              label: <Localized id="content-notes-queerphobia" />,
+            },
+            { value: "racism", label: <Localized id="content-notes-racism" /> },
+            {
+              value: "self-harm",
+              label: <Localized id="content-notes-self-harm" />,
+            },
+            {
+              value: "suicide",
+              label: <Localized id="content-notes-suicide" />,
+            },
+            {
+              value: "transphobia",
+              label: <Localized id="content-notes-transphobia" />,
+            },
           ]}
         />
       </Form.Item>
