@@ -1,10 +1,18 @@
 import datetime
 import uuid
+from enum import Enum
 from typing import List
 from typing import Optional
 
 from pydantic import BaseModel
 from pydantic import HttpUrl
+
+
+class RatingEnum(str, Enum):
+    gen = "gen"
+    teen = "teen"
+    mature = "mature"
+    explicit = "explicit"
 
 
 class Audio(BaseModel):
@@ -20,7 +28,7 @@ class BaseFanvid(BaseModel):
     premiere_event: Optional[str] = None
     audio: Optional[Audio] = None
     length: Optional[datetime.timedelta]
-    rating: Optional[str]
+    rating: Optional[RatingEnum]
     fandoms: Optional[List[str]]
     summary: Optional[str]
     content_notes: Optional[List[str]]
@@ -39,7 +47,7 @@ class CreateFanvid(BaseFanvid):
     premiere_event: Optional[str] = None
     audio: Optional[Audio] = None
     length: datetime.timedelta
-    rating: str
+    rating: RatingEnum
     fandoms: List[str] = []
     summary: str
     content_notes: List[str] = []

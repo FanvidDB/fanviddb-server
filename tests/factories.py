@@ -38,7 +38,7 @@ class FanvidFactory(BaseFactory):
     audio_artists_or_sources = ["Starship Iris"]
     audio_language = "en-us"
     length = datetime.timedelta(minutes=3, seconds=15)
-    rating = "Gen"
+    rating = "gen"
     fandoms = ["The Locked Tomb Series"]
     summary = "This is a summary of the fanvid."
     content_notes: List[str] = []
