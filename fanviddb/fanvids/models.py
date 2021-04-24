@@ -15,6 +15,27 @@ class RatingEnum(str, Enum):
     explicit = "explicit"
 
 
+class ContentNotesEnum(str, Enum):
+    graphic_violence = "graphic-violence"
+    major_character_death = "major-character-death"
+    no_warnings_apply = "no-warnings-apply"
+    rape_or_non_con = "rape-or-non-con"
+    underage = "underage"
+    physical_triggers = "physical-triggers"
+    animal_harm = "animal-harm"
+    auditory_triggers = "auditory-triggers"
+    blackface_or_brownface_or_redface = "blackface-or-brownface-or-redface"
+    significant_blood_or_gore = "significant-blood-or-gore"
+    depictions_of_police = "depictions-of-police"
+    holocaust_or_nazi_imagery = "holocaust-or-nazi-imagery"
+    incest = "incest"
+    queerphobia = "queerphobia"
+    racism = "racism"
+    self_harm = "self-harm"
+    suicide = "suicide"
+    transphobia = "transphobia"
+
+
 class Audio(BaseModel):
     title: str
     artists_or_sources: List[str] = []
@@ -31,7 +52,7 @@ class BaseFanvid(BaseModel):
     rating: Optional[RatingEnum]
     fandoms: Optional[List[str]]
     summary: Optional[str]
-    content_notes: Optional[List[str]]
+    content_notes: Optional[List[ContentNotesEnum]]
     urls: Optional[List[HttpUrl]]
     unique_identifiers: Optional[List[str]]
     thumbnail_url: Optional[HttpUrl]
@@ -50,7 +71,7 @@ class CreateFanvid(BaseFanvid):
     rating: RatingEnum
     fandoms: List[str] = []
     summary: str
-    content_notes: List[str] = []
+    content_notes: List[ContentNotesEnum] = []
     urls: List[HttpUrl] = []
     unique_identifiers: List[str] = []
     thumbnail_url: HttpUrl
