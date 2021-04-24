@@ -4,6 +4,7 @@ from typing import List
 from typing import Optional
 
 from pydantic import BaseModel
+from pydantic import HttpUrl
 
 
 class Audio(BaseModel):
@@ -23,9 +24,9 @@ class BaseFanvid(BaseModel):
     fandoms: Optional[List[str]]
     summary: Optional[str]
     content_notes: Optional[List[str]]
-    urls: Optional[List[str]]
+    urls: Optional[List[HttpUrl]]
     unique_identifiers: Optional[List[str]]
-    thumbnail_url: Optional[str]
+    thumbnail_url: Optional[HttpUrl]
 
     # Admin-only
     state: Optional[str]
@@ -42,9 +43,9 @@ class CreateFanvid(BaseFanvid):
     fandoms: List[str] = []
     summary: str
     content_notes: List[str] = []
-    urls: List[str] = []
+    urls: List[HttpUrl] = []
     unique_identifiers: List[str] = []
-    thumbnail_url: str
+    thumbnail_url: HttpUrl
 
 
 class UpdateFanvid(BaseFanvid):
