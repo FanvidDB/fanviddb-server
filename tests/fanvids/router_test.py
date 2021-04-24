@@ -14,6 +14,7 @@ from ..factories import FanvidFactory
 async def test_create_fanvid(logged_in_client):
     expected_data = jsonable_encoder(FanvidFactory.build())
     expected_data.pop("uuid")
+    expected_data.pop("state")
     expected_data["audio"] = {
         "title": expected_data.pop("audio_title"),
         "artists_or_sources": expected_data.pop("audio_artists_or_sources"),
@@ -30,6 +31,7 @@ async def test_create_fanvid(logged_in_client):
             "uuid": response_data["uuid"],
             "created_timestamp": response_data["created_timestamp"],
             "modified_timestamp": response_data["modified_timestamp"],
+            "state": None,
         }
     )
     assert response_data == expected_data
