@@ -235,6 +235,7 @@ const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
         name="urls"
         label={<Localized id="fanvid-form-urls-label" />}
         defaultValue=""
+        inputComponent={<Input type="url" />}
       />
       <FormList
         name="unique_identifiers"
@@ -246,7 +247,7 @@ const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
         label={<Localized id="fanvid-form-thumbnail-url-label" />}
         name="thumbnail_url"
       >
-        <Input />
+        <Input type="url" />
       </Form.Item>
       <Form.Item
         label={<Localized id="fanvid-form-premiere-date-label" />}

@@ -7,7 +7,7 @@ const { List, Item, ErrorList } = Form;
 
 const FormList = ({ label, name, defaultValue, inputComponent, ...props }) => {
   if (!inputComponent) {
-    inputComponent = <Input style={{ width: "200%" }} />;
+    inputComponent = <Input />;
   }
   return (
     <>
