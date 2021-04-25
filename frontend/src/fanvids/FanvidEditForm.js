@@ -9,9 +9,9 @@ import {
   Checkbox,
   Radio,
 } from "antd";
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { Localized } from "@fluent/react";
 import { callApi } from "../api";
+import FormList from "../forms/FormList";
 import _ from "lodash";
 import PropTypes from "prop-types";
 
@@ -230,62 +230,11 @@ const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
           ]}
         />
       </Form.Item>
-      <Form.List name="urls">
-        {(fields, { add, remove }, { errors }) => (
-          <>
-            {fields.map((field, index) => (
-              <Form.Item
-                required={false}
-                label={index == 0 && <Localized id="fanvid-form-urls-label" />}
-                key={field.key}
-              >
-                <Form.Item {...field} key={field.key} noStyle>
-                  <Input style={{ width: "60%" }} />
-                </Form.Item>
-                {fields.length > 1 && (
-                  <MinusCircleOutlined onClick={() => remove(field.name)} />
-                )}
-              </Form.Item>
-            ))}
-            <Form.Item>
-              <Button onClick={() => add()} icon={<PlusOutlined />}>
-                Add
-              </Button>
-              <Form.ErrorList errors={errors} />
-            </Form.Item>
-          </>
-        )}
-      </Form.List>
-      <Form.List name="unique_identifiers">
-        {(fields, { add, remove }, { errors }) => (
-          <>
-            {fields.map((field, index) => (
-              <Form.Item
-                required={false}
-                label={
-                  index == 0 && (
-                    <Localized id="fanvid-form-unique-identifiers-label" />
-                  )
-                }
-                key={field.key}
-              >
-                <Form.Item {...field} key={field.key} noStyle>
-                  <Input style={{ width: "60%" }} />
-                </Form.Item>
-                {fields.length > 1 && (
-                  <MinusCircleOutlined onClick={() => remove(field.name)} />
-                )}
-              </Form.Item>
-            ))}
-            <Form.Item>
-              <Button onClick={() => add()} icon={<PlusOutlined />}>
-                Add
-              </Button>
-              <Form.ErrorList errors={errors} />
-            </Form.Item>
-          </>
-        )}
-      </Form.List>
+      <FormList name="urls" label={<Localized id="fanvid-form-urls-label" />} />
+      <FormList
+        name="unique_identifiers"
+        label={<Localized id="fanvid-form-unique-identifiers-label" />}
+      />
       <Form.Item
         label={<Localized id="fanvid-form-thumbnail-url-label" />}
         name="thumbnail_url"
