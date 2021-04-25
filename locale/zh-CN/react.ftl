@@ -7,6 +7,8 @@ homepage-intro =
     <plexLink>Plex</plexLink>. Check out the links in the
     navbar for more information.
 
+unique-identifier-bilibili = b站
+
 login-form-email-label = 邮箱
 login-form-email-error-required = 请输入邮箱
 login-form-password-label = 密码

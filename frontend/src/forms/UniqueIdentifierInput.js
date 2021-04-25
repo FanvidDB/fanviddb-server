@@ -7,22 +7,40 @@ const { Option } = Select;
 
 const UniqueIdentifierInput = ({ value = {}, id, onChange }) => {
   const onKindChange = (kind) => {
-    onChange({identifier: value.identifier, kind});
+    onChange({ identifier: value.identifier, kind });
   };
   const onIdentifierChange = (e) => {
-    onChange({kind: value.kind, identifier: e.target.value});
+    onChange({ kind: value.kind, identifier: e.target.value });
   };
 
   return (
     <Input.Group compact style={{ display: "inline-block", width: "200%" }}>
       <Select value={value.kind} onChange={onKindChange}>
-        <Option value="filename"><Localized id="unique-identifier-filename" /></Option>
-        <Option value="youtube"><Localized id="unique-identifier-youtube" /></Option>
-        <Option value="vimeo"><Localized id="unique-identifier-vimeo" /></Option>
-        <Option value="ao3"><Localized id="unique-identifier-ao3" /></Option>
-        <Option value="other"><Localized id="unique-identifier-other" /></Option>
+        <Option value="filename">
+          <Localized id="unique-identifier-filename" />
+        </Option>
+        <Option value="youtube">
+          <Localized id="unique-identifier-youtube" />
+        </Option>
+        <Option value="vimeo">
+          <Localized id="unique-identifier-vimeo" />
+        </Option>
+        <Option value="ao3">
+          <Localized id="unique-identifier-ao3" />
+        </Option>
+        <Option value="bilibili">
+          <Localized id="unique-identifier-bilibili" />
+        </Option>
+        <Option value="other">
+          <Localized id="unique-identifier-other" />
+        </Option>
       </Select>
-      <Input value={value.identifier} style={{ width: "50%" }} id={id} onChange={onIdentifierChange} />
+      <Input
+        value={value.identifier}
+        style={{ width: "50%" }}
+        id={id}
+        onChange={onIdentifierChange}
+      />
     </Input.Group>
   );
 };

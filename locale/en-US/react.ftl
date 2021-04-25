@@ -35,6 +35,7 @@ unique-identifier-filename = Filename
 unique-identifier-youtube = YouTube
 unique-identifier-vimeo = Vimeo
 unique-identifier-ao3 = AO3
+unique-identifier-bilibili = bilibili
 unique-identifier-other = Other
 
 
