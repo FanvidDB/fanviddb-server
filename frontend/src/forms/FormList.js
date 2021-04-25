@@ -1,11 +1,14 @@
 import React from "react";
-import { Button, Input, Form } from "antd";
+import { Space, Button, Input, Form } from "antd";
 import PropTypes from "prop-types";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 
 const { List, Item, ErrorList } = Form;
 
-const FormList = ({ label, name, ...props }) => {
+const FormList = ({ label, name, defaultValue, inputComponent, ...props }) => {
+  if (!inputComponent) {
+    inputComponent = <Input style={{ width: "200%" }} />;
+  }
   return (
     <>
       <label htmlFor={name + "_0"}>{label}</label>
@@ -18,14 +21,21 @@ const FormList = ({ label, name, ...props }) => {
                 key={field.key}
                 style={{ marginBottom: "2px" }}
               >
-                <Item {...field} key={field.key} noStyle>
-                  <Input style={{ width: "60%", marginRight: "8px" }} />
-                </Item>
-                <MinusCircleOutlined onClick={() => remove(field.name)} />
+                <Space align="center" style={{ width: "100%" }}>
+                  <MinusCircleOutlined onClick={() => remove(field.name)} />
+                  <Item
+                    {...field}
+                    key={field.key}
+                    noStyle
+                    style={{ width: "100%" }}
+                  >
+                    {inputComponent}
+                  </Item>
+                </Space>
               </Item>
             ))}
             <Item>
-              <Button onClick={() => add()} icon={<PlusOutlined />}>
+              <Button onClick={() => add(defaultValue)} icon={<PlusOutlined />}>
                 Add
               </Button>
               <ErrorList errors={errors} />
@@ -39,7 +49,9 @@ const FormList = ({ label, name, ...props }) => {
 
 FormList.propTypes = {
   name: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.node.isRequired,
+  inputComponent: PropTypes.node,
+  defaultValue: PropTypes.any,
 };
 
 export default FormList;

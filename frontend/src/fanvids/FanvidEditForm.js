@@ -12,6 +12,7 @@ import {
 import { Localized } from "@fluent/react";
 import { callApi } from "../api";
 import FormList from "../forms/FormList";
+import UniqueIdentifierInput from "../forms/UniqueIdentifierInput";
 import _ from "lodash";
 import PropTypes from "prop-types";
 
@@ -230,10 +231,16 @@ const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
           ]}
         />
       </Form.Item>
-      <FormList name="urls" label={<Localized id="fanvid-form-urls-label" />} />
+      <FormList
+        name="urls"
+        label={<Localized id="fanvid-form-urls-label" />}
+        defaultValue=""
+      />
       <FormList
         name="unique_identifiers"
         label={<Localized id="fanvid-form-unique-identifiers-label" />}
+        inputComponent={<UniqueIdentifierInput />}
+        defaultValue="filename:"
       />
       <Form.Item
         label={<Localized id="fanvid-form-thumbnail-url-label" />}
@@ -262,7 +269,7 @@ const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
 
 FanvidEditForm.propTypes = {
   onFanvidSaved: PropTypes.func.isRequired,
-  fanvid: PropTypes.shape,
+  fanvid: PropTypes.object,
 };
 
 export default FanvidEditForm;
