@@ -42,6 +42,19 @@ class Audio(BaseModel):
     language: str
 
 
+class UniqueIdentifierKind(str, Enum):
+    filename = "filename"
+    youtube = "youtube"
+    vimeo = "vimeo"
+    ao3 = "ao3"
+    other = "other"
+
+
+class UniqueIdentifier(BaseModel):
+    kind: UniqueIdentifierKind
+    identifier: str
+
+
 class BaseFanvid(BaseModel):
     title: Optional[str]
     creators: Optional[List[str]]
@@ -54,7 +67,7 @@ class BaseFanvid(BaseModel):
     summary: Optional[str]
     content_notes: Optional[List[ContentNotesEnum]]
     urls: Optional[List[HttpUrl]]
-    unique_identifiers: Optional[List[str]]
+    unique_identifiers: Optional[List[UniqueIdentifier]]
     thumbnail_url: Optional[HttpUrl]
 
     # Admin-only
@@ -73,7 +86,7 @@ class CreateFanvid(BaseFanvid):
     summary: str
     content_notes: List[ContentNotesEnum] = []
     urls: List[HttpUrl] = []
-    unique_identifiers: List[str] = []
+    unique_identifiers: List[UniqueIdentifier] = []
     thumbnail_url: HttpUrl
 
 

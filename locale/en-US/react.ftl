@@ -31,6 +31,12 @@ rating-teen = Teen
 rating-mature = Mature
 rating-explicit = Explicit
 
+unique-identifier-filename = Filename
+unique-identifier-youtube = YouTube
+unique-identifier-vimeo = Vimeo
+unique-identifier-ao3 = AO3
+unique-identifier-other = Other
+
 
 bottom-nav-general = { -fanviddb }
 bottom-nav-general-using-with-plex = Using with { -plex }

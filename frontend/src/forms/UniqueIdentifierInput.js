@@ -1,34 +1,38 @@
 import React from "react";
 import { Input, Select } from "antd";
+import { Localized } from "@fluent/react";
 import PropTypes from "prop-types";
 
 const { Option } = Select;
 
-const UniqueIdentifierInput = ({ value = "", onChange }) => {
-  const [type, id] = value.split(":");
-
-  const onTypeChange = (newType) => {
-    onChange([newType, id].join(":"));
+const UniqueIdentifierInput = ({ value = {}, id, onChange }) => {
+  const onKindChange = (kind) => {
+    onChange({identifier: value.identifier, kind});
   };
-  const onIdChange = (e) => {
-    onChange([type, e.target.value].join(":"));
+  const onIdentifierChange = (e) => {
+    onChange({kind: value.kind, identifier: e.target.value});
   };
 
   return (
     <Input.Group compact style={{ display: "inline-block", width: "200%" }}>
-      <Select value={type} onChange={onTypeChange}>
-        <Option value="filename">filename</Option>
-        <Option value="youtube">youtube ID</Option>
-        <Option value="vimeo">vimeo ID</Option>
-        <Option value="ao3">ao3 ID</Option>
+      <Select value={value.kind} onChange={onKindChange}>
+        <Option value="filename"><Localized id="unique-identifier-filename" /></Option>
+        <Option value="youtube"><Localized id="unique-identifier-youtube" /></Option>
+        <Option value="vimeo"><Localized id="unique-identifier-vimeo" /></Option>
+        <Option value="ao3"><Localized id="unique-identifier-ao3" /></Option>
+        <Option value="other"><Localized id="unique-identifier-other" /></Option>
       </Select>
-      <Input value={id} style={{ width: "50%" }} onChange={onIdChange} />
+      <Input value={value.identifier} style={{ width: "50%" }} id={id} onChange={onIdentifierChange} />
     </Input.Group>
   );
 };
 
 UniqueIdentifierInput.propTypes = {
-  value: PropTypes.string,
+  id: PropTypes.string,
+  value: PropTypes.shape({
+    kind: PropTypes.string,
+    identifier: PropTypes.string,
+  }),
   onChange: PropTypes.func,
 };
 
