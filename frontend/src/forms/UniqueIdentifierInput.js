@@ -14,7 +14,7 @@ const UniqueIdentifierInput = ({ value = {}, id, onChange }) => {
   };
 
   return (
-    <Input.Group compact style={{ display: "inline-block", width: "200%" }}>
+    <Input.Group compact style={{ display: "inline-block" }}>
       <Select value={value.kind} onChange={onKindChange}>
         <Option value="filename">
           <Localized id="unique-identifier-filename" />
