@@ -38,6 +38,12 @@ unique-identifier-ao3 = AO3
 unique-identifier-bilibili = bilibili
 unique-identifier-other = Other
 
+form-error-string-min-length =
+    { $limit_value ->
+        [one] This field cannot be empty.
+       *[other] This field must contain at least { $limit_value } characters.
+    }
+
 
 bottom-nav-general = { -fanviddb }
 bottom-nav-general-using-with-plex = Using with { -plex }

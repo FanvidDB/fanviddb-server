@@ -5,6 +5,7 @@ from typing import List
 from typing import Optional
 
 from pydantic import BaseModel
+from pydantic import Field
 from pydantic import HttpUrl
 
 
@@ -52,7 +53,7 @@ class UniqueIdentifierKind(str, Enum):
 
 class UniqueIdentifier(BaseModel):
     kind: UniqueIdentifierKind
-    identifier: str
+    identifier: str = Field(min_length=1)
 
 
 class BaseFanvid(BaseModel):

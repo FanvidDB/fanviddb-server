@@ -12,6 +12,7 @@ import {
 import { Localized } from "@fluent/react";
 import { callApi } from "../api";
 import FormList from "../forms/FormList";
+import { getError } from "../forms/apiErrors";
 import UniqueIdentifierInput from "../forms/UniqueIdentifierInput";
 import _ from "lodash";
 import PropTypes from "prop-types";
@@ -29,9 +30,19 @@ const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
       url = "/api/fanvids/" + fanvid.uuid;
       method = "PATCH";
     }
-    callApi(url, method, values).then(({ ok, json }) => {
-      let errors = {};
-      if (!ok) {
+    callApi(url, method, values).then(({ status, ok, json }) => {
+      let errors = [];
+      if (status == 422) {
+        for (const { loc, ctx, type } of json.detail) {
+          let name = loc.slice(1);
+          if (name.indexOf("unique_identifiers") != -1) {
+            name = name.slice(0, -1);
+          }
+          const error = getError(type, ctx);
+          errors.push({ name, errors: [error] });
+        }
+      }
+      if (!ok && _.isEmpty(errors)) {
         errors.title = [
           <Localized key="title-error" id="fanvid-form-error-unknown" />,
         ];
@@ -40,14 +51,7 @@ const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
       if (_.isEmpty(errors)) {
         onFanvidSaved(json);
       } else {
-        for (const name in errors) {
-          form.setFields([
-            {
-              name: name,
-              errors: errors[name],
-            },
-          ]);
-        }
+        form.setFields(errors);
       }
     });
   };
