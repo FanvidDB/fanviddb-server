@@ -1,8 +1,6 @@
 -fanviddb = FanvidDB
 -plex = Plex
 
-top-navbar-website-name = { -fanviddb }
-
 error-500 = Sorry, something went wrong. Please try again in a few minutes.
 error-404 = The page could not be found.
 
@@ -45,6 +43,9 @@ form-error-string-min-length =
     }
 form-error-url-host = URL host invalid, top level domain required
 
+top-navbar-website-name = { -fanviddb }
+
+side-nav-add-fanvid = Add Fanvid
 
 bottom-nav-general = { -fanviddb }
 bottom-nav-general-using-with-plex = Using with { -plex }

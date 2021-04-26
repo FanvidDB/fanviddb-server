@@ -11,12 +11,7 @@ const { Item, SubMenu } = Menu;
 const TopNavbar = () => {
   const { user, logout } = useContext(AuthContext);
   return (
-    <Menu
-      theme="dark"
-      mode="horizontal"
-      selectable={false}
-      style={{ float: "left" }}
-    >
+    <Menu theme="dark" mode="horizontal" selectable={false}>
       <Item key="home">
         <Link to="/">
           <Localized id="top-navbar-website-name" />

@@ -11,6 +11,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { AuthProvider } from "./auth/authContext";
 import RequireAuth from "./auth/RequireAuth";
 import TopNavbar from "./layout/TopNavbar";
+import SideNav from "./layout/SideNav";
 import BottomNav from "./layout/BottomNav";
 import FanvidEditPage from "./fanvids/FanvidEditPage";
 
@@ -27,7 +28,7 @@ const App = () => {
             </Header>
             <Layout>
               <Sider width={200} style={{ padding: "24px" }}>
-                {/* Currently empty */}
+                <SideNav />
               </Sider>
               <Content style={{ padding: "24px", minHeight: "280px" }}>
                 <Switch>
@@ -40,12 +41,12 @@ const App = () => {
                   <Route path="/verify-email/:token">
                     <VerifyEmailPage />
                   </Route>
-                  <Route path="/fanvid/create">
+                  <Route path="/fanvids/add">
                     <RequireAuth>
                       <FanvidEditPage />
                     </RequireAuth>
                   </Route>
-                  <Route path="/fanvid/edit/:uuid">
+                  <Route path="/fanvids/edit/:uuid">
                     <RequireAuth>
                       <FanvidEditPage />
                     </RequireAuth>
