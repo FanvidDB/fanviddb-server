@@ -258,6 +258,7 @@ const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
         name="unique_identifiers"
         label={<Localized id="fanvid-form-unique-identifiers-label" />}
         inputComponent={<UniqueIdentifierInput />}
+        defaultValue={{ kind: "filename" }}
       />
       <Form.Item
         label={<Localized id="fanvid-form-thumbnail-url-label" />}
