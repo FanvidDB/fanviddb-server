@@ -129,5 +129,7 @@ fanvid-form-summary-label = Summary
 fanvid-form-summary-error-required = Summary is required
 fanvid-form-content-notes-label = Content notes
 fanvid-form-urls-label = Canonical URLs
+fanvid-form-urls-error-invalid-url = Please enter a valid URL, including the scheme (http / https).
 fanvid-form-unique-identifiers-label = Unique identifiers
 fanvid-form-thumbnail-url-label = Thumbnail URL
+fanvid-form-thumbnail-url-error-invalid-url = Please enter a valid URL, including the scheme (http / https).

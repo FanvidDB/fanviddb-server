@@ -16,6 +16,8 @@ import UniqueIdentifierInput from "../forms/UniqueIdentifierInput";
 import _ from "lodash";
 import PropTypes from "prop-types";
 
+const urlRegex = /https?:\/\/.*\..*/;
+
 const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
   const [form] = Form.useForm();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -235,19 +237,44 @@ const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
         name="urls"
         label={<Localized id="fanvid-form-urls-label" />}
         defaultValue=""
-        inputComponent={<Input type="url" />}
+        inputComponent={<Input type="url" placeholder="https://" />}
+        rules={[
+          {
+            validator: (_, value) =>
+              urlRegex.test(value)
+                ? Promise.resolve()
+                : Promise.reject([
+                    <Localized
+                      key="error"
+                      id="fanvid-form-urls-error-invalid-url"
+                    />,
+                  ]),
+          },
+        ]}
       />
       <FormList
         name="unique_identifiers"
         label={<Localized id="fanvid-form-unique-identifiers-label" />}
         inputComponent={<UniqueIdentifierInput />}
-        defaultValue="filename:"
       />
       <Form.Item
         label={<Localized id="fanvid-form-thumbnail-url-label" />}
         name="thumbnail_url"
+        rules={[
+          {
+            validator: (_, value) =>
+              urlRegex.test(value)
+                ? Promise.resolve()
+                : Promise.reject([
+                    <Localized
+                      key="error"
+                      id="fanvid-form-thumbnail-url-error-invalid-url"
+                    />,
+                  ]),
+          },
+        ]}
       >
-        <Input type="url" />
+        <Input type="url" placeholder="https://" />
       </Form.Item>
       <Form.Item
         label={<Localized id="fanvid-form-premiere-date-label" />}

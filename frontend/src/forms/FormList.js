@@ -5,7 +5,14 @@ import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 
 const { List, Item, ErrorList } = Form;
 
-const FormList = ({ label, name, defaultValue, inputComponent, ...props }) => {
+const FormList = ({
+  label,
+  name,
+  defaultValue,
+  inputComponent,
+  rules,
+  ...props
+}) => {
   if (!inputComponent) {
     inputComponent = <Input />;
   }
@@ -28,6 +35,7 @@ const FormList = ({ label, name, defaultValue, inputComponent, ...props }) => {
                     key={field.key}
                     noStyle
                     style={{ width: "100%" }}
+                    rules={rules}
                   >
                     {inputComponent}
                   </Item>
@@ -52,6 +60,7 @@ FormList.propTypes = {
   label: PropTypes.node.isRequired,
   inputComponent: PropTypes.node,
   defaultValue: PropTypes.any,
+  rules: PropTypes.array,
 };
 
 export default FormList;
