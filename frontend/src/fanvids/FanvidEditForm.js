@@ -12,7 +12,7 @@ import {
 import { Localized } from "@fluent/react";
 import { callApi } from "../api";
 import FormList from "../forms/FormList";
-import { getError } from "../forms/apiErrors";
+import { getApiErrors } from "../forms/apiErrors";
 import UniqueIdentifierInput from "../forms/UniqueIdentifierInput";
 import _ from "lodash";
 import PropTypes from "prop-types";
@@ -33,14 +33,12 @@ const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
     callApi(url, method, values).then(({ status, ok, json }) => {
       let errors = [];
       if (status == 422) {
-        for (const { loc, ctx, type } of json.detail) {
-          let name = loc.slice(1);
-          if (name.indexOf("unique_identifiers") != -1) {
-            name = name.slice(0, -1);
+        errors = getApiErrors(json, (path) => {
+          if (path[1] == "unique_identifiers") {
+            return path.slice(0, -1);
           }
-          const error = getError(type, ctx);
-          errors.push({ name, errors: [error] });
-        }
+          return path;
+        });
       }
       if (!ok && _.isEmpty(errors)) {
         errors.title = [

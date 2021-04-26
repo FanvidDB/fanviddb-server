@@ -43,6 +43,7 @@ form-error-string-min-length =
         [one] This field cannot be empty.
        *[other] This field must contain at least { $limit_value } characters.
     }
+form-error-url-host = URL host invalid, top level domain required
 
 
 bottom-nav-general = { -fanviddb }
