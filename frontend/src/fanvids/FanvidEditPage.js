@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Skeleton, Result, Button } from "antd";
-import { Localized } from "@fluent/react";
+import { Skeleton } from "antd";
+import { Localized, useLocalization } from "@fluent/react";
 import { useParams, useHistory } from "react-router-dom";
 import { callApi } from "../api";
+import Http404Page from "../pages/Http404Page";
+import Http500Page from "../pages/Http500Page";
 import FanvidEditForm from "./FanvidEditForm";
+import Helmet from "react-helmet";
 
 const DEFAULT_FANVID = {
   urls: [""],
@@ -17,6 +20,7 @@ const FanvidEditPage = () => {
   const [is404, setIs404] = useState(false);
   const [is500, setIs500] = useState(false);
   const [fanvid, setFanvid] = useState(DEFAULT_FANVID);
+  const { l10n } = useLocalization();
 
   useEffect(() => {
     if (!uuid) {
@@ -45,42 +49,49 @@ const FanvidEditPage = () => {
   };
 
   if (isLoading) {
-    return <Skeleton />;
+    return (
+      <>
+        <Helmet>
+          <title>{l10n.getString("fanvid-edit-page-title-bar-loading")}</title>
+        </Helmet>
+        <Skeleton />
+      </>
+    );
   }
 
   if (is404) {
-    return (
-      <Result
-        title={<Localized id="error-404" />}
-        extra={
-          <Button type="primary" href="/">
-            Return Home
-          </Button>
-        }
-      />
-    );
+    return <Http404Page />;
   }
-
   if (is500) {
-    return (
-      <Result
-        title={<Localized id="error-500" />}
-        extra={
-          <Button type="primary" href="/">
-            Return Home
-          </Button>
-        }
-      />
-    );
+    return <Http500Page />;
   }
-
   return (
-    <div>
-      <h1>
-        {uuid ? fanvid.title : <Localized id="fanvid-page-create-title" />}
-      </h1>
-      <FanvidEditForm fanvid={fanvid} onFanvidSaved={onFanvidSaved} />
-    </div>
+    <>
+      <Helmet>
+        <title>
+          {uuid
+            ? l10n.getString("fanvid-edit-page-title-bar", {
+                title: fanvid.title,
+              })
+            : l10n.getString("fanvid-create-page-title-bar")}
+        </title>
+      </Helmet>
+      <div>
+        <h1>
+          {uuid ? (
+            <Localized
+              id="fanvid-edit-page-title"
+              vars={{
+                title: fanvid.title,
+              }}
+            />
+          ) : (
+            <Localized id="fanvid-create-page-title" />
+          )}
+        </h1>
+        <FanvidEditForm fanvid={fanvid} onFanvidSaved={onFanvidSaved} />
+      </div>
+    </>
   );
 };
 

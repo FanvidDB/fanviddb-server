@@ -2,7 +2,9 @@
   "name": "antd-demo",
   "version": "0.1.0",
   "private": true,
-  "dependencies": {},
+  "dependencies": {
+    "react-helmet": "^6.1.0"
+  },
   "scripts": {
     "start": "node frontend/scripts/start.js",
     "build": "node frontend/scripts/build.js",

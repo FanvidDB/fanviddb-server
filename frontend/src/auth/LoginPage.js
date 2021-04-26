@@ -1,21 +1,26 @@
 import React, { useContext } from "react";
+import Helmet from "react-helmet";
 import LoginForm from "./LoginForm";
-import { Localized } from "@fluent/react";
+import { Localized, useLocalization } from "@fluent/react";
 import AuthContext from "./authContext";
 
 const LoginPage = () => {
   const { loadUserData } = useContext(AuthContext);
+  const { l10n } = useLocalization();
   const onLogin = () => {
     loadUserData();
   };
   return (
-    <div>
+    <>
+      <Helmet>
+        <title>{l10n.getString("login-page-title-bar")}</title>
+      </Helmet>
       <h1>
-        <Localized id="homepage-title">FanvidDB</Localized>
+        <Localized id="login-page-title">FanvidDB</Localized>
       </h1>
       <p>
         <Localized
-          id="homepage-intro"
+          id="login-page-intro"
           elems={{
             plexLink: <a href="https://plex.tv" />,
           }}
@@ -25,7 +30,7 @@ const LoginPage = () => {
       </p>
 
       <LoginForm onLogin={onLogin} />
-    </div>
+    </>
   );
 };
 

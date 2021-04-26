@@ -62,9 +62,10 @@ bottom-nav-coding-metadata-agent = { -plex } Metadata Agent
 bottom-nav-coding-docs-site = Docs site
 bottom-nav-coding-api = API
 
-homepage-title = { -fanviddb }
-homepage-intro =
-    Welcome! FanvidDB is a central repository for fanvid-related
+login-page-title = { -fanviddb }
+login-page-title-bar = Login | { -fanviddb }
+login-page-intro =
+    Welcome! { -fanviddb } is a central repository for fanvid-related
     metadata, in particular for integration with
     <plexLink>Plex</plexLink>. Check out the links in the
     navbar for more information.
@@ -115,7 +116,11 @@ verify-email-error-bad-token = Invalid link; please <sendVerificationEmailLink>r
 # Expected to have a <loginLink>login link</loginLink>.
 verify-email-error-already-verified = You are already verified. You can now <loginLink>log in</loginLink>.
 
-fanvid-page-create-title = Create Fanvid
+fanvid-create-page-title = Create Fanvid
+fanvid-create-page-title-bar = Create Fanvid | { -fanviddb }
+fanvid-edit-page-title = Edit { $title }
+fanvid-edit-page-title-bar = Edit { $title } | { -fanviddb }
+fanvid-edit-page-title-bar-loading = Edit fanvid | { -fanviddb }
 fanvid-form-error-unknown = Unknown error occurred, please try again in a few minutes
 fanvid-form-save-button = Save
 fanvid-form-title-label = Title
