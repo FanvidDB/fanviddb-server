@@ -161,6 +161,19 @@ const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
       <Form.Item
         label={<Localized id="fanvid-form-content-notes-label" />}
         name="content_notes"
+        required
+        rules={[
+          {
+            validator: (rule, value) => (value && !_.isEmpty(value))
+                ? Promise.resolve()
+                : Promise.reject([
+                    <Localized
+                      key="error"
+                      id="fanvid-form-content-notes-error-required"
+                    />,
+                  ]),
+          },
+        ]}
       >
         <Checkbox.Group
           options={[

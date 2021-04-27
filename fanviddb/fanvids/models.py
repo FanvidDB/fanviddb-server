@@ -85,7 +85,7 @@ class CreateFanvid(BaseFanvid):
     rating: RatingEnum
     fandoms: List[str] = []
     summary: str
-    content_notes: List[ContentNotesEnum] = []
+    content_notes: List[ContentNotesEnum] = Field([], min_items=1)
     urls: List[HttpUrl] = []
     unique_identifiers: List[UniqueIdentifier] = []
     thumbnail_url: HttpUrl

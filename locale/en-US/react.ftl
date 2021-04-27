@@ -148,6 +148,7 @@ fanvid-form-fandoms-error-required = At least one fandom is required
 fanvid-form-summary-label = Summary
 fanvid-form-summary-error-required = Summary is required
 fanvid-form-content-notes-label = Content notes
+fanvid-form-content-notes-error-required = At least one content note must be selected. If none apply, select { content-notes-no-warnings-apply }.
 fanvid-form-urls-label = Canonical URLs
 fanvid-form-urls-error-invalid-url = Please enter a valid URL, including the scheme (http / https).
 fanvid-form-unique-identifiers-label = Unique identifiers
