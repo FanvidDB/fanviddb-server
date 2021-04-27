@@ -3,10 +3,15 @@ import { TimePicker } from "antd";
 import PropTypes from "prop-types";
 import moment from "moment";
 
-const DurationPicker = ({ value = 0, id, onChange }) => {
+const DurationPicker = ({ value = null, id, onChange }) => {
   const handleChange = (newValue) => {
-    const seconds = newValue.minutes() * 60 + newValue.seconds();
-    onChange(seconds);
+    // newValue is null if TimePicker was cleared.
+    if (newValue === null) {
+      onChange(null);
+    } else {
+      const seconds = newValue.minutes() * 60 + newValue.seconds();
+      onChange(seconds);
+    }
   };
   return (
     <TimePicker
