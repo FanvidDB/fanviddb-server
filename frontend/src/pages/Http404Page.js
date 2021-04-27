@@ -9,13 +9,13 @@ const Http404Page = () => {
   return (
     <>
       <Helmet>
-        <title>{l10n.getString("error-404")}</title>
+        <title>{l10n.getString("http-404-page-title-bar")}</title>
       </Helmet>
       <Result
-        title={<Localized id="error-404" />}
+        title={<Localized id="http-404-page-title" />}
         extra={
           <Button type="primary" href="/">
-            Return Home
+            <Localized id="http-404-page-escape-button" />
           </Button>
         }
       />

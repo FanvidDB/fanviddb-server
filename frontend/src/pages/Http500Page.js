@@ -9,13 +9,13 @@ const Http500Page = () => {
   return (
     <>
       <Helmet>
-        <title>{l10n.getString("error-500")}</title>
+        <title>{l10n.getString("http-500-page-title-bar")}</title>
       </Helmet>
       <Result
-        title={<Localized id="error-500" />}
+        title={<Localized id="http-500-page-title" />}
         extra={
           <Button type="primary" href="/">
-            Return Home
+            <Localized id="http-500-page-escape-button" />
           </Button>
         }
       />

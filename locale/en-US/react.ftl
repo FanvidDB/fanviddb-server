@@ -1,8 +1,12 @@
 -fanviddb = FanvidDB
 -plex = Plex
 
-error-500 = Sorry, something went wrong. Please try again in a few minutes.
-error-404 = The page could not be found.
+http-500-page-title = Sorry, something went wrong. Please try again in a few minutes.
+http-500-page-title-bar = Something went wrong | { -fanviddb }
+http-500-page-escape-button = Return Home
+http-404-page-title = The page could not be found.
+http-404-page-title-bar = Page not found | { -fanviddb }
+http-404-page-escape-button = Return Home
 
 
 content-notes-graphic-violence = Graphic Depictions Of Violence
