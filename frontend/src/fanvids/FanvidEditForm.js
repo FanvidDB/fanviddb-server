@@ -1,18 +1,10 @@
 import React, { useState } from "react";
-import {
-  Button,
-  Form,
-  Input,
-  InputNumber,
-  DatePicker,
-  Select,
-  Checkbox,
-  Radio,
-} from "antd";
+import { Button, Form, Input, DatePicker, Select, Checkbox, Radio } from "antd";
 import { Localized } from "@fluent/react";
 import { callApi } from "../api";
 import FormList from "../forms/FormList";
 import { getApiErrors } from "../forms/apiErrors";
+import DurationPicker from "../forms/DurationPicker";
 import UniqueIdentifierInput from "../forms/UniqueIdentifierInput";
 import _ from "lodash";
 import PropTypes from "prop-types";
@@ -112,7 +104,7 @@ const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
           },
         ]}
       >
-        <InputNumber />
+        <DurationPicker />
       </Form.Item>
       <Form.Item
         label={<Localized id="fanvid-form-rating-label" />}
@@ -164,7 +156,8 @@ const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
         required
         rules={[
           {
-            validator: (rule, value) => (value && !_.isEmpty(value))
+            validator: (rule, value) =>
+              value && !_.isEmpty(value)
                 ? Promise.resolve()
                 : Promise.reject([
                     <Localized
