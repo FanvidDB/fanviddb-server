@@ -15,6 +15,7 @@ import RequireAuth from "./auth/RequireAuth";
 import TopNavbar from "./layout/TopNavbar";
 import SideNav from "./layout/SideNav";
 import BottomNav from "./layout/BottomNav";
+import FanvidCreatePage from "./fanvids/FanvidCreatePage";
 import FanvidEditPage from "./fanvids/FanvidEditPage";
 
 const { Content, Header, Footer, Sider } = Layout;
@@ -45,7 +46,7 @@ const App = () => {
                   </Route>
                   <Route path="/fanvids/add">
                     <RequireAuth>
-                      <FanvidEditPage />
+                      <FanvidCreatePage />
                     </RequireAuth>
                   </Route>
                   <Route path="/fanvids/edit/:uuid">
