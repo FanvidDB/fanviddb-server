@@ -85,6 +85,7 @@ login-form-error-unknown = Unknown error; please try again in a few minutes.
 logout-button = Log out
 
 register-page-title = Register
+register-page-title-bar = Register | { -fanviddb }
 register-form-username-label = Username
 register-form-username-error-required = Please enter a username.
 register-form-username-error-already-exists = User already exists with that username.
@@ -98,6 +99,7 @@ register-form-password-error-stronger-password = Please choose a stronger passwo
 register-form-register-button = Register
 
 send-verification-email-page-title = Verify email
+send-verification-email-page-title-bar = Verify email | { -fanviddb }
 send-verification-email-form-success = We have sent an email to { $email } with a verification link.
     Please click the link to verify your email and then log in.
 send-verification-email-form-send-button = Send verification email
@@ -106,6 +108,7 @@ send-verification-email-form-email-error-required = Please enter your email
 send-verification-email-form-email-error-unknown = Unknown error; please try again in a few minutes.
 
 verify-email-page-title = Verify email
+verify-email-page-title-bar = Verify email | { -fanviddb }
 # Expected to have a <loginLink>login link</loginLink>.
 verify-email-success = Your email address is verified. You can now <loginLink>log in</loginLink>.
 verify-email-error-unknown = Unknown error; please try again in a few minutes.

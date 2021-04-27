@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import Helmet from "react-helmet";
 import { Alert } from "antd";
-import { Localized } from "@fluent/react";
+import { Localized, useLocalization } from "@fluent/react";
 import { useLocation } from "react-router-dom";
 import SendVerificationEmailForm from "./SendVerificationEmailForm";
 
 const SendVerificationEmailPage = () => {
+  const { l10n } = useLocalization();
   const location = useLocation();
   const [submittedEmail, setSubmittedEmail] = useState();
 
@@ -16,6 +18,11 @@ const SendVerificationEmailPage = () => {
 
   return (
     <div>
+      <Helmet>
+        <title>
+          {l10n.getString("send-verification-email-page-title-bar")}
+        </title>
+      </Helmet>
       <h1>
         <Localized id="send-verification-email-page-title" />
       </h1>

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
+import Helmet from "react-helmet";
 import { useParams, Link } from "react-router-dom";
 import { Spin } from "antd";
-import { Localized } from "@fluent/react";
+import { Localized, useLocalization } from "@fluent/react";
 import { callApi } from "../api";
 import _ from "lodash";
 
@@ -9,6 +10,7 @@ const VerifyEmailPage = () => {
   const { token } = useParams();
   const [isLoading, setIsLoading] = useState(true);
   const [errors, setErrors] = useState();
+  const { l10n } = useLocalization();
 
   useEffect(() => {
     callApi("/api/auth/verify", "POST", { token: token }).then(
@@ -72,6 +74,9 @@ const VerifyEmailPage = () => {
 
   return (
     <div>
+      <Helmet>
+        <title>{l10n.getString("verify-email-page-title-bar")}</title>
+      </Helmet>
       <h1>
         <Localized id="verify-email-page-title" />
       </h1>
