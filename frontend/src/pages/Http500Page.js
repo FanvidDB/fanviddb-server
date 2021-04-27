@@ -4,7 +4,7 @@ import { Result, Button } from "antd";
 import { Localized, useLocalization } from "@fluent/react";
 
 const Http500Page = () => {
-  const l10n = useLocalization();
+  const { l10n } = useLocalization();
 
   return (
     <>
