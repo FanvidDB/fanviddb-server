@@ -3,6 +3,8 @@ import { Layout } from "antd";
 import "./App.less";
 import "intl-pluralrules";
 import HomePage from "./pages/HomePage";
+import Http500Page from "./pages/Http500Page";
+import Http404Page from "./pages/Http404Page";
 import RegisterPage from "./auth/RegisterPage";
 import SendVerificationEmailPage from "./auth/SendVerificationEmailPage";
 import VerifyEmailPage from "./auth/VerifyEmailPage";
@@ -50,6 +52,12 @@ const App = () => {
                     <RequireAuth>
                       <FanvidEditPage />
                     </RequireAuth>
+                  </Route>
+                  <Route path="/404">
+                    <Http404Page />
+                  </Route>
+                  <Route path="/500">
+                    <Http500Page />
                   </Route>
                   <Route path="/">
                     <HomePage />
