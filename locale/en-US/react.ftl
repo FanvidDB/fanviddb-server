@@ -154,3 +154,9 @@ fanvid-form-urls-error-invalid-url = Please enter a valid URL, including the sch
 fanvid-form-unique-identifiers-label = Unique identifiers
 fanvid-form-thumbnail-url-label = Thumbnail URL
 fanvid-form-thumbnail-url-error-invalid-url = Please enter a valid URL, including the scheme (http / https).
+
+fanvid-list-page-title-bar = Fanvids | { -fanviddb }
+fanvid-list-error-unknown = Something went wrong. Please try again in a few minutes.
+
+fanvid-view-page-title-bar = { $title } | { -fanviddb }
+fanvid-view-page-title-bar-loading = Loading Fanvid... | { -fanviddb }

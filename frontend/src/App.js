@@ -2,7 +2,7 @@ import React from "react";
 import { Layout } from "antd";
 import "./App.less";
 import "intl-pluralrules";
-import HomePage from "./pages/HomePage";
+import FanvidListPage from "./fanvids/FanvidListPage";
 import Http500Page from "./pages/Http500Page";
 import Http404Page from "./pages/Http404Page";
 import RegisterPage from "./auth/RegisterPage";
@@ -18,6 +18,7 @@ import SideNav from "./layout/SideNav";
 import BottomNav from "./layout/BottomNav";
 import FanvidCreatePage from "./fanvids/FanvidCreatePage";
 import FanvidEditPage from "./fanvids/FanvidEditPage";
+import FanvidViewPage from "./fanvids/FanvidViewPage";
 
 const { Content, Header, Footer, Sider } = Layout;
 
@@ -58,6 +59,9 @@ const App = () => {
                       <FanvidEditPage />
                     </RequireAuth>
                   </Route>
+                  <Route path="/fanvids/view/:uuid">
+                    <FanvidViewPage />
+                  </Route>
                   <Route path="/404">
                     <Http404Page />
                   </Route>
@@ -66,7 +70,7 @@ const App = () => {
                   </Route>
                   <Route path="/">
                     <RequireAuth>
-                      <HomePage />
+                      <FanvidListPage />
                     </RequireAuth>
                   </Route>
                 </Switch>
