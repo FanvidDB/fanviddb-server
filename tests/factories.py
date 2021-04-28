@@ -8,6 +8,7 @@ from fastapi_users.password import get_password_hash
 from fanviddb.auth.db import users
 from fanviddb.db import database
 from fanviddb.fanvids.db import fanvids
+from fanviddb.fanvids.models import ContentNotesEnum
 
 
 class BaseFactory(factory.Factory):
@@ -41,7 +42,7 @@ class FanvidFactory(BaseFactory):
     rating = "gen"
     fandoms = ["The Locked Tomb Series"]
     summary = "This is a summary of the fanvid."
-    content_notes: List[str] = []
+    content_notes: List[str] = [ContentNotesEnum.no_warnings_apply]
     urls = ["https://google.com"]
     unique_identifiers: List[str] = []
     thumbnail_url = "https://tile.loc.gov/storage-services/service/pnp/cph/3c00000/3c00000/3c00100/3c00170_150px.jpg#h=150&w=121"  # noqa: E501
