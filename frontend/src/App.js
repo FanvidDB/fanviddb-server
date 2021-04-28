@@ -11,6 +11,7 @@ import VerifyEmailPage from "./auth/VerifyEmailPage";
 import LocalizationProvider from "./i18n/LocalizationProvider";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { AuthProvider } from "./auth/authContext";
+import LoginPage from "./auth/LoginPage";
 import RequireAuth from "./auth/RequireAuth";
 import TopNavbar from "./layout/TopNavbar";
 import SideNav from "./layout/SideNav";
@@ -35,6 +36,9 @@ const App = () => {
               </Sider>
               <Content style={{ padding: "24px", minHeight: "280px" }}>
                 <Switch>
+                  <Route path="/login">
+                    <LoginPage />
+                  </Route>
                   <Route path="/register">
                     <RegisterPage />
                   </Route>
@@ -61,7 +65,9 @@ const App = () => {
                     <Http500Page />
                   </Route>
                   <Route path="/">
-                    <HomePage />
+                    <RequireAuth>
+                      <HomePage />
+                    </RequireAuth>
                   </Route>
                 </Switch>
               </Content>

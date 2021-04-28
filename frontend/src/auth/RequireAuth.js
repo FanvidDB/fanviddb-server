@@ -11,7 +11,7 @@ const RequireAuth = ({ children }) => {
   }
 
   if (!user) {
-    return <Redirect to="/" />;
+    return <Redirect to="/login" />;
   }
 
   return children;

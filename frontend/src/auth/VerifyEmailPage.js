@@ -52,7 +52,7 @@ const VerifyEmailPage = () => {
               <Localized
                 key="already-verified"
                 id="verify-email-error-already-verified"
-                elems={{ loginLink: <Link to="/"></Link> }}
+                elems={{ loginLink: <Link to="/login"></Link> }}
               >
                 <span></span>
               </Localized>
@@ -86,7 +86,7 @@ const VerifyEmailPage = () => {
         <p>
           <Localized
             id="verify-email-success"
-            elems={{ loginLink: <Link to="/"></Link> }}
+            elems={{ loginLink: <Link to="/login"></Link> }}
           >
             <span></span>
           </Localized>
