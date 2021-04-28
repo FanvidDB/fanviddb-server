@@ -37,41 +37,44 @@ const App = () => {
               </Sider>
               <Content style={{ padding: "24px", minHeight: "280px" }}>
                 <Switch>
-                  <Route path="/login">
+                  <Route exact path="/login">
                     <LoginPage />
                   </Route>
-                  <Route path="/register">
+                  <Route exact path="/register">
                     <RegisterPage />
                   </Route>
-                  <Route path="/verify-email/send">
+                  <Route exact path="/verify-email/send">
                     <SendVerificationEmailPage />
                   </Route>
-                  <Route path="/verify-email/:token">
+                  <Route exact path="/verify-email/:token">
                     <VerifyEmailPage />
                   </Route>
-                  <Route path="/fanvids/add">
+                  <Route exact path="/fanvids/add">
                     <RequireAuth>
                       <FanvidCreatePage />
                     </RequireAuth>
                   </Route>
-                  <Route path="/fanvids/edit/:uuid">
+                  <Route exact path="/fanvids/edit/:uuid">
                     <RequireAuth>
                       <FanvidEditPage />
                     </RequireAuth>
                   </Route>
-                  <Route path="/fanvids/view/:uuid">
+                  <Route exact path="/fanvids/view/:uuid">
                     <FanvidViewPage />
                   </Route>
-                  <Route path="/404">
+                  <Route exact path="/404">
                     <Http404Page />
                   </Route>
-                  <Route path="/500">
+                  <Route exact path="/500">
                     <Http500Page />
                   </Route>
-                  <Route path="/">
+                  <Route exact path="/">
                     <RequireAuth>
                       <FanvidListPage />
                     </RequireAuth>
+                  </Route>
+                  <Route path="*">
+                    <Http404Page />
                   </Route>
                 </Switch>
               </Content>
