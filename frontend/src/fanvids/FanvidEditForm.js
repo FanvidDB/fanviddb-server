@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Button, Form, Input, DatePicker, Select, Checkbox, Radio } from "antd";
+import { Button, Form, Input, Select, Checkbox, Radio } from "antd";
 import { Localized } from "@fluent/react";
 import { callApi } from "../api";
 import FormList from "../forms/FormList";
 import { getApiErrors } from "../forms/apiErrors";
+import DatePicker from "../forms/DatePicker";
 import DurationPicker from "../forms/DurationPicker";
 import UniqueIdentifierInput from "../forms/UniqueIdentifierInput";
 import _ from "lodash";
