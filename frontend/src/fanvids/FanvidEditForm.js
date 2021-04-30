@@ -75,7 +75,7 @@ const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
           },
         ]}
       >
-        <Select mode="tags" tokenSeparators={[",", " "]} />
+        <Select mode="tags" tokenSeparators={[","]} />
       </Form.Item>
       <Form.Item
         label={<Localized id="fanvid-form-audio-title-label" />}
@@ -87,7 +87,7 @@ const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
         label={<Localized id="fanvid-form-audio-artists-or-sources-label" />}
         name={["audio", "artists_or_sources"]}
       >
-        <Select mode="tags" tokenSeparators={[",", " "]} />
+        <Select mode="tags" tokenSeparators={[","]} />
       </Form.Item>
       <Form.Item
         label={<Localized id="fanvid-form-audio-language-label" />}
@@ -137,7 +137,7 @@ const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
           },
         ]}
       >
-        <Select mode="tags" tokenSeparators={[",", " "]} />
+        <Select mode="tags" tokenSeparators={[","]} />
       </Form.Item>
       <Form.Item
         label={<Localized id="fanvid-form-summary-label" />}
