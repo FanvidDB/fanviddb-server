@@ -2,13 +2,16 @@ import React, { useContext } from "react";
 import Helmet from "react-helmet";
 import LoginForm from "./LoginForm";
 import { Localized, useLocalization } from "@fluent/react";
+import { useHistory } from "react-router-dom";
 import AuthContext from "./authContext";
 
 const LoginPage = () => {
   const { loadUserData } = useContext(AuthContext);
   const { l10n } = useLocalization();
+  const history = useHistory();
   const onLogin = () => {
     loadUserData();
+    history.push("/");
   };
   return (
     <>
