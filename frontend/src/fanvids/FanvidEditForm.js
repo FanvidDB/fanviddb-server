@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Button, Form, Input, Select, Checkbox, Radio } from "antd";
+import { Tag, Button, Form, Input, Select, Checkbox, Radio, Space } from "antd";
+import { CheckCircleOutlined } from "@ant-design/icons";
 import { Localized } from "@fluent/react";
 import { callApi } from "../api";
 import FormList from "../forms/FormList";
@@ -15,8 +16,12 @@ const urlRegex = /https?:\/\/.*\..*/;
 const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
   const [form] = Form.useForm();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDirty, setIsDirty] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const onFinish = (values) => {
+    setIsSuccess(false);
+    setIsSubmitting(true);
     let url = "/api/fanvids";
     let method = "POST";
     if (fanvid.uuid) {
@@ -41,6 +46,8 @@ const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
       setIsSubmitting(false);
       if (_.isEmpty(errors)) {
         onFanvidSaved(json);
+        setIsSuccess(true);
+        setIsDirty(false);
       } else {
         form.setFields(errors);
       }
@@ -52,6 +59,9 @@ const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
       onFinish={onFinish}
       form={form}
       initialValues={fanvid}
+      onFieldsChange={() => {
+        setIsDirty(true);
+      }}
     >
       <Form.Item
         label={<Localized id="fanvid-form-title-label" />}
@@ -298,9 +308,26 @@ const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
       >
         <Input />
       </Form.Item>
-      <Button type="primary" htmlType="submit" loading={isSubmitting}>
-        <Localized id="fanvid-form-save-button" />
-      </Button>
+      <Space>
+        <Button
+          type="primary"
+          htmlType="submit"
+          loading={isSubmitting}
+          disabled={!isDirty}
+        >
+          <Localized id="fanvid-form-save-button" />
+        </Button>
+        {isSuccess && !isDirty && (
+          <Tag icon={<CheckCircleOutlined />} color="success">
+            <Localized id="fanvid-form-save-success" />
+          </Tag>
+        )}
+        {!isSuccess && !isDirty && (
+          <Tag color="default">
+            <Localized id="fanvid-form-save-no-changes" />
+          </Tag>
+        )}
+      </Space>
     </Form>
   );
 };
