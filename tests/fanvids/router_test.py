@@ -10,16 +10,22 @@ from fanviddb.fanvids.models import Fanvid
 from ..factories import FanvidFactory
 
 
+def _serialize_fanvid(fanvid):
+    """Converts a return value from FanvidFactory / the database into an expected json response"""
+    serialized = fanvid.copy()
+    serialized["audio"] = {
+        "title": serialized.pop("audio_title"),
+        "artists_or_sources": serialized.pop("audio_artists_or_sources"),
+        "language": serialized.pop("audio_language"),
+    }
+    return jsonable_encoder(Fanvid(**serialized))
+
+
 @pytest.mark.asyncio
 async def test_create_fanvid(logged_in_client):
-    expected_data = jsonable_encoder(FanvidFactory.build())
+    expected_data = _serialize_fanvid(FanvidFactory.build())
     expected_data.pop("uuid")
     expected_data.pop("state")
-    expected_data["audio"] = {
-        "title": expected_data.pop("audio_title"),
-        "artists_or_sources": expected_data.pop("audio_artists_or_sources"),
-        "language": expected_data.pop("audio_language"),
-    }
     response = await logged_in_client.post(
         "/api/fanvids",
         json=expected_data,
@@ -38,24 +44,13 @@ async def test_create_fanvid(logged_in_client):
     query = select([fanvids])
     result = [dict(row) for row in await database.fetch_all(query)]
     assert len(result) == 1
-
-    result[0]["audio"] = {
-        "title": result[0].pop("audio_title"),
-        "artists_or_sources": result[0].pop("audio_artists_or_sources"),
-        "language": result[0].pop("audio_language"),
-    }
-    assert jsonable_encoder(Fanvid(**result[0])) == expected_data
+    assert _serialize_fanvid(result[0]) == expected_data
 
 
 @pytest.mark.asyncio
 async def test_create_fanvid__unauthenticated(fastapi_client):
-    expected_data = jsonable_encoder(FanvidFactory.build())
+    expected_data = _serialize_fanvid(FanvidFactory.build())
     expected_data.pop("uuid")
-    expected_data["audio"] = {
-        "title": expected_data.pop("audio_title"),
-        "artists_or_sources": expected_data.pop("audio_artists_or_sources"),
-        "language": expected_data.pop("audio_language"),
-    }
     response = await fastapi_client.post(
         "/api/fanvids",
         json=expected_data,
@@ -66,12 +61,7 @@ async def test_create_fanvid__unauthenticated(fastapi_client):
 @pytest.mark.asyncio
 async def test_list_fanvids__user(logged_in_client):
     fanvid = await FanvidFactory()
-    expected_fanvid = jsonable_encoder(fanvid)
-    expected_fanvid["audio"] = {
-        "title": expected_fanvid.pop("audio_title"),
-        "artists_or_sources": expected_fanvid.pop("audio_artists_or_sources"),
-        "language": expected_fanvid.pop("audio_language"),
-    }
+    expected_fanvid = _serialize_fanvid(fanvid)
     expected_response = {
         "fanvids": [expected_fanvid],
         "total_count": 1,
@@ -86,12 +76,7 @@ async def test_list_fanvids__user(logged_in_client):
 async def test_list_fanvids__api_key(fastapi_client):
     api_key = await generate_api_key()
     fanvid = await FanvidFactory()
-    expected_fanvid = jsonable_encoder(fanvid)
-    expected_fanvid["audio"] = {
-        "title": expected_fanvid.pop("audio_title"),
-        "artists_or_sources": expected_fanvid.pop("audio_artists_or_sources"),
-        "language": expected_fanvid.pop("audio_language"),
-    }
+    expected_fanvid = _serialize_fanvid(fanvid)
     expected_response = {
         "fanvids": [expected_fanvid],
         "total_count": 1,
@@ -108,12 +93,7 @@ async def test_list_fanvids__api_key(fastapi_client):
 @pytest.mark.asyncio
 async def test_list_fanvids__invalid_api_key(fastapi_client):
     fanvid = await FanvidFactory()
-    expected_response = jsonable_encoder(fanvid)
-    expected_response["audio"] = {
-        "title": expected_response.pop("audio_title"),
-        "artists_or_sources": expected_response.pop("audio_artists_or_sources"),
-        "language": expected_response.pop("audio_language"),
-    }
+    expected_response = _serialize_fanvid(fanvid)
     response = await fastapi_client.get(
         "/api/fanvids", headers={"X-API-Key": "nonsenseheader"}
     )
@@ -123,12 +103,7 @@ async def test_list_fanvids__invalid_api_key(fastapi_client):
 @pytest.mark.asyncio
 async def test_list_fanvids__unauthenticated(fastapi_client):
     fanvid = await FanvidFactory()
-    expected_response = jsonable_encoder(fanvid)
-    expected_response["audio"] = {
-        "title": expected_response.pop("audio_title"),
-        "artists_or_sources": expected_response.pop("audio_artists_or_sources"),
-        "language": expected_response.pop("audio_language"),
-    }
+    expected_response = _serialize_fanvid(fanvid)
     response = await fastapi_client.get("/api/fanvids")
     assert response.status_code == 401
 
@@ -146,12 +121,7 @@ async def test_list_fanvids__excludes_deleted(logged_in_client):
 @pytest.mark.asyncio
 async def test_read_fanvid(fastapi_client):
     fanvid = await FanvidFactory()
-    expected_response = jsonable_encoder(fanvid)
-    expected_response["audio"] = {
-        "title": expected_response.pop("audio_title"),
-        "artists_or_sources": expected_response.pop("audio_artists_or_sources"),
-        "language": expected_response.pop("audio_language"),
-    }
+    expected_response = _serialize_fanvid(fanvid)
     response = await fastapi_client.get(f"/api/fanvids/{str(fanvid['uuid'])}")
     assert response.status_code == 200
     response_data = response.json()
@@ -169,12 +139,7 @@ async def test_read_fanvid__404(fastapi_client):
 @pytest.mark.asyncio
 async def test_update_fanvid(logged_in_client):
     fanvid = await FanvidFactory()
-    expected_response = jsonable_encoder(fanvid)
-    expected_response["audio"] = {
-        "title": expected_response.pop("audio_title"),
-        "artists_or_sources": expected_response.pop("audio_artists_or_sources"),
-        "language": expected_response.pop("audio_language"),
-    }
+    expected_response = _serialize_fanvid(fanvid)
     expected_response["title"] = f"{expected_response['title']} and then some"
     response = await logged_in_client.patch(
         f"/api/fanvids/{str(fanvid['uuid'])}",
@@ -193,12 +158,7 @@ async def test_update_fanvid(logged_in_client):
 @pytest.mark.asyncio
 async def test_update_fanvid__unauthenticated(fastapi_client):
     fanvid = await FanvidFactory()
-    expected_response = jsonable_encoder(fanvid)
-    expected_response["audio"] = {
-        "title": expected_response.pop("audio_title"),
-        "artists_or_sources": expected_response.pop("audio_artists_or_sources"),
-        "language": expected_response.pop("audio_language"),
-    }
+    expected_response = _serialize_fanvid(fanvid)
     expected_response["title"] = f"{expected_response['title']} and then some"
     response = await fastapi_client.patch(
         f"/api/fanvids/{str(fanvid['uuid'])}",
