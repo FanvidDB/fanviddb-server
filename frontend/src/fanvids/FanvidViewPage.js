@@ -132,7 +132,7 @@ const FanvidViewPage = () => {
             <Paragraph>
               {fanvid.premiere_event}
               <br />
-              {fanvid.premiere_date}
+              {moment(fanvid.premiere_date).format("L")}
             </Paragraph>
           </Col>
           <Col span={8}>
