@@ -162,3 +162,10 @@ fanvid-list-error-unknown = Something went wrong. Please try again in a few minu
 
 fanvid-view-page-title-bar = { $title } | { -fanviddb }
 fanvid-view-page-title-bar-loading = Loading Fanvid... | { -fanviddb }
+fanvid-view-page-edit-link = Edit
+fanvid-view-page-fanvid-length-header = Length
+fanvid-view-page-fanvid-audio-header = Audio
+fanvid-view-page-fanvid-premiere-header = Premiere
+fanvid-view-page-fanvid-urls-header = URLs
+fanvid-view-page-added-label = Added
+fanvid-view-page-modified-label = Modified

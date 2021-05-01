@@ -1,12 +1,28 @@
 import React, { useState, useEffect } from "react";
-import { Skeleton, PageHeader, Button, Descriptions } from "antd";
-import { useLocalization } from "@fluent/react";
+import {
+  Space,
+  Skeleton,
+  PageHeader,
+  Button,
+  Descriptions,
+  Tag,
+  Typography,
+  Image,
+  Row,
+  Col,
+  List,
+  Divider,
+} from "antd";
+import { Localized, useLocalization } from "@fluent/react";
 import { useParams, Link } from "react-router-dom";
 import { callApi } from "../api";
 import Http404Page from "../pages/Http404Page";
 import Http500Page from "../pages/Http500Page";
 import Helmet from "react-helmet";
 import moment from "moment";
+import { contentNotes, ratings } from "./constants";
+
+const { Paragraph, Title, Text } = Typography;
 
 const FanvidViewPage = () => {
   const { l10n } = useLocalization();
@@ -60,60 +76,107 @@ const FanvidViewPage = () => {
       </Helmet>
       <PageHeader
         title={fanvid.title}
-        subTitle={fanvid.creators}
+        subTitle={
+          <Space>
+            <span>{fanvid.creators}</span>
+            <Divider type="vertical" />
+            <span>{fanvid.fandoms}</span>
+          </Space>
+        }
+        tags={
+          <>
+            <Tag>{ratings[fanvid.rating]}</Tag>
+            {fanvid.content_notes.map((contentNote) => (
+              <Tag
+                key={contentNote}
+                color={
+                  contentNote === "no-warnings-apply" ? "default" : "volcano"
+                }
+              >
+                {contentNotes[contentNote]}
+              </Tag>
+            ))}
+          </>
+        }
         extra={
           <Button key="edit">
-            <Link to={`/fanvids/edit/${fanvid.uuid}`}>Edit</Link>
+            <Link to={`/fanvids/edit/${fanvid.uuid}`}>
+              <Localized id="fanvid-view-page-edit-link" />
+            </Link>
           </Button>
         }
       >
-        <Descriptions size="small">
-          <Descriptions.Item label="Fandoms">
-            {fanvid.fandoms}
-          </Descriptions.Item>
-          <Descriptions.Item label="Premiere date">
-            {fanvid.premiere_date}
-          </Descriptions.Item>
-          <Descriptions.Item label="Premiere event">
-            {fanvid.premiere_event}
-          </Descriptions.Item>
-          <Descriptions.Item label="Audio Title">
-            {fanvid.audio.title}
-          </Descriptions.Item>
-          <Descriptions.Item label="Audio Artists or Sources">
-            {fanvid.audio.artists_or_sources}
-          </Descriptions.Item>
-          <Descriptions.Item label="Audio Language">
-            {fanvid.audio.language}
-          </Descriptions.Item>
-          <Descriptions.Item label="Length">
-            {fanvidLength.format("mm:ss")}
-          </Descriptions.Item>
-          <Descriptions.Item label="Rating">{fanvid.rating}</Descriptions.Item>
-          <Descriptions.Item label="Content notes">
-            {fanvid.content_notes}
-          </Descriptions.Item>
-        </Descriptions>
-        <img src={fanvid.thumbnail_url} style={{ maxWidth: "100%" }} />
-        <p>{fanvid.summary}</p>
-        <Descriptions size="small">
-          <Descriptions.Item label="URLs">
-            <ul>
-              {fanvid.urls.map((url) => (
-                <li key={url}>
-                  <a href={url}>{url}</a>
-                </li>
-              ))}
-            </ul>
-          </Descriptions.Item>
-          <Descriptions.Item label="Created">
-            {moment(fanvid.created_timestamp).format()}
-          </Descriptions.Item>
-          <Descriptions.Item label="Modified">
-            {moment(fanvid.modified_timestamp).format()}
-          </Descriptions.Item>
-        </Descriptions>
+        <Row>
+          <Col span={4}>
+            <Title level={5}>
+              <Localized id="fanvid-view-page-fanvid-length-header" />
+            </Title>
+            <Text>{fanvidLength.format("mm:ss")}</Text>
+          </Col>
+          <Col span={6}>
+            <Title level={5}>
+              <Localized id="fanvid-view-page-fanvid-audio-header" />
+            </Title>
+            <Paragraph>
+              {fanvid.audio.title}
+              <br />
+              {fanvid.audio.artists_or_sources}
+              <br />
+              {fanvid.audio.language}
+            </Paragraph>
+          </Col>
+          <Col span={6}>
+            <Title level={5}>
+              <Localized id="fanvid-view-page-fanvid-premiere-header" />
+            </Title>
+            <Paragraph>
+              {fanvid.premiere_event}
+              <br />
+              {fanvid.premiere_date}
+            </Paragraph>
+          </Col>
+          <Col span={8}>
+            <Image src={fanvid.thumbnail_url} />
+          </Col>
+        </Row>
+        <Paragraph>{fanvid.summary}</Paragraph>
+        <List
+          header={<Localized id="fanvid-view-page-fanvid-urls-header" />}
+          size="small"
+          dataSource={fanvid.urls}
+          renderItem={(url) => (
+            <List.Item>
+              <a href={url}>{url}</a>
+            </List.Item>
+          )}
+        />
       </PageHeader>
+
+      <Divider />
+      <Descriptions size="small" colon={false}>
+        <Descriptions.Item
+          label={
+            <Text type="secondary">
+              <Localized id="fanvid-view-page-added-label" />
+            </Text>
+          }
+        >
+          <Text type="secondary">
+            {moment(fanvid.created_timestamp).format("LLL")}
+          </Text>
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={
+            <Text type="secondary">
+              <Localized id="fanvid-view-page-modified-label" />
+            </Text>
+          }
+        >
+          <Text type="secondary">
+            {moment(fanvid.modified_timestamp).format("LLL")}
+          </Text>
+        </Descriptions.Item>
+      </Descriptions>
     </>
   );
 };
