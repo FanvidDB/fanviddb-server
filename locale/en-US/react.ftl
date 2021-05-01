@@ -123,8 +123,8 @@ verify-email-error-bad-token = Invalid link; please <sendVerificationEmailLink>r
 # Expected to have a <loginLink>login link</loginLink>.
 verify-email-error-already-verified = You are already verified. You can now <loginLink>log in</loginLink>.
 
-fanvid-create-page-title = Create Fanvid
-fanvid-create-page-title-bar = Create Fanvid | { -fanviddb }
+fanvid-create-page-title = Add Fanvid
+fanvid-create-page-title-bar = Add Fanvid | { -fanviddb }
 fanvid-edit-page-title = Edit { $title }
 fanvid-edit-page-title-bar = Edit { $title } | { -fanviddb }
 fanvid-edit-page-title-bar-loading = Edit fanvid | { -fanviddb }

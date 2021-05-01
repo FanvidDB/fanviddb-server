@@ -45,3 +45,12 @@ fanvid-view-page-fanvid-premiere-header = 首映
 fanvid-view-page-fanvid-urls-header = 网址
 fanvid-view-page-added-label = 加于
 fanvid-view-page-modified-label = 修订于
+
+fanvid-create-page-title = 加{ -fanvid }
+fanvid-create-page-title-bar = 加{ -fanvid } | { -fanviddb }
+fanvid-edit-page-title = 编辑 { $title }
+fanvid-edit-page-title-bar = 编辑 { $title } | { -fanviddb }
+fanvid-edit-page-title-bar-loading = 编辑{ -fanvid } | { -fanviddb }
+fanvid-form-save-button = 保存
+fanvid-form-save-success = 保存了
+fanvid-form-save-no-changes = 没有改变
