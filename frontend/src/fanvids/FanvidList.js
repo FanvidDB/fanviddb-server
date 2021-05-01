@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { List, Skeleton, Alert } from "antd";
+import { List, Skeleton, Alert, Space, Typography, Tag } from "antd";
 import { Link, useLocation } from "react-router-dom";
 import { Localized } from "@fluent/react";
 import { callApi } from "../api";
+import { contentNotes } from "./constants";
 import _ from "lodash";
+
+const { Text, Paragraph } = Typography;
 
 const FanvidList = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -40,24 +43,48 @@ const FanvidList = () => {
 
   return (
     <List
-      itemLayout="horizontal"
+      itemLayout="vertical"
       loading={isLoading}
       dataSource={fanvids}
-      renderItem={(item) => (
+      renderItem={(fanvid) => (
         <List.Item
           actions={[
-            <Link key="edit" to={`/fanvids/edit/${item.uuid}`}>
+            <Link key="edit" to={`/fanvids/edit/${fanvid.uuid}`}>
               edit
             </Link>,
+
+            <Paragraph key="content_notes">
+              {fanvid.content_notes.map((contentNote) => {
+                if (contentNote == "no-warnings-apply") return null;
+                if (
+                  !Object.prototype.hasOwnProperty.call(
+                    contentNotes,
+                    contentNote
+                  )
+                )
+                  return null;
+                return (
+                  <Tag key={contentNote} color="volcano">
+                    {contentNotes[contentNote]}
+                  </Tag>
+                );
+              })}
+            </Paragraph>,
           ]}
         >
-          <Skeleton loading={item.loading} active>
+          <Skeleton loading={fanvid.loading} active>
             <List.Item.Meta
               title={
-                <Link to={`/fanvids/view/${item.uuid}`}>{item.title}</Link>
+                <Link to={`/fanvids/view/${fanvid.uuid}`}>{fanvid.title}</Link>
               }
-              description={item.summary}
+              description={
+                <Space>
+                  <Text type="secondary">{fanvid.creators}</Text>
+                  <Text type="secondary">{fanvid.fandoms}</Text>
+                </Space>
+              }
             />
+            <Paragraph>{fanvid.summary}</Paragraph>
           </Skeleton>
         </List.Item>
       )}
