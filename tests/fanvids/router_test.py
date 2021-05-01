@@ -92,8 +92,7 @@ async def test_list_fanvids__api_key(fastapi_client):
 
 @pytest.mark.asyncio
 async def test_list_fanvids__invalid_api_key(fastapi_client):
-    fanvid = await FanvidFactory()
-    expected_response = _serialize_fanvid(fanvid)
+    await FanvidFactory()
     response = await fastapi_client.get(
         "/api/fanvids", headers={"X-API-Key": "nonsenseheader"}
     )
@@ -102,8 +101,7 @@ async def test_list_fanvids__invalid_api_key(fastapi_client):
 
 @pytest.mark.asyncio
 async def test_list_fanvids__unauthenticated(fastapi_client):
-    fanvid = await FanvidFactory()
-    expected_response = _serialize_fanvid(fanvid)
+    await FanvidFactory()
     response = await fastapi_client.get("/api/fanvids")
     assert response.status_code == 401
 

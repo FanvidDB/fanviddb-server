@@ -1,6 +1,5 @@
 import datetime
 import uuid
-from typing import List
 
 from fastapi import APIRouter
 from fastapi import Depends
@@ -91,7 +90,7 @@ async def list_fanvids(
     total_count_result = await database.fetch_one(
         select([func.count()]).select_from(base_query.alias("fanvids"))
     )
-    total_count = total_count_result["count_1"]
+    total_count = total_count_result["count_1"] if total_count_result else 0
     for fanvid in fanvids:
         fanvid["audio"] = {
             "title": fanvid.pop("audio_title"),
