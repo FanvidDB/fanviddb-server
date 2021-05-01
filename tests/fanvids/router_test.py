@@ -119,6 +119,42 @@ async def test_list_fanvids__excludes_deleted(logged_in_client):
 
 
 @pytest.mark.asyncio
+async def test_list_fanvids__limit(logged_in_client):
+    fanvids = await FanvidFactory.create_batch(10)
+    response = await logged_in_client.get("/api/fanvids?limit=5")
+    assert response.status_code == 200
+    response_data = response.json()
+    expected_fanvids = [_serialize_fanvid(f) for f in reversed(fanvids[5:])]
+    assert response_data['total_count'] == 10
+    assert len(response_data['fanvids']) == 5
+    assert response_data['fanvids'] == expected_fanvids
+
+
+@pytest.mark.asyncio
+async def test_list_fanvids__offset(logged_in_client):
+    fanvids = await FanvidFactory.create_batch(10)
+    response = await logged_in_client.get("/api/fanvids?offset=2")
+    assert response.status_code == 200
+    response_data = response.json()
+    expected_fanvids = [_serialize_fanvid(f) for f in reversed(fanvids[:-2])]
+    assert response_data['total_count'] == 10
+    assert len(response_data['fanvids']) == 8
+    assert response_data['fanvids'] == expected_fanvids
+
+
+@pytest.mark.asyncio
+async def test_list_fanvids__limit_and_offset(logged_in_client):
+    fanvids = await FanvidFactory.create_batch(10)
+    response = await logged_in_client.get("/api/fanvids?limit=5&offset=2")
+    assert response.status_code == 200
+    response_data = response.json()
+    expected_fanvids = [_serialize_fanvid(f) for f in reversed(fanvids[3:-2])]
+    assert response_data['total_count'] == 10
+    assert len(response_data['fanvids']) == 5
+    assert response_data['fanvids'] == expected_fanvids
+
+
+@pytest.mark.asyncio
 async def test_read_fanvid(fastapi_client):
     fanvid = await FanvidFactory()
     expected_response = _serialize_fanvid(fanvid)

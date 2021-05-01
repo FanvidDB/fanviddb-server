@@ -4,6 +4,7 @@ from typing import List
 
 from fastapi import APIRouter
 from fastapi import Depends
+from fastapi import Query
 from fluent.runtime import FluentLocalization  # type: ignore
 from sqlalchemy import func
 from sqlalchemy import update
@@ -72,6 +73,8 @@ async def list_fanvids(
     api_key: str = Depends(check_api_key_header),
     user: User = Depends(fastapi_users.current_user(optional=True)),
     fluent: FluentLocalization = Depends(fluent_dependency),
+    offset: int = 0,
+    limit: int = Query(10, le=50),
 ):
     if user is None and not api_key:
         raise HTTPException(
@@ -79,7 +82,7 @@ async def list_fanvids(
             detail=fluent.format_value("fanvid-user-or-api-key-required"),
         )
     base_query = select([db.fanvids]).where(db.fanvids.c.state != "deleted")
-    paginated_query = base_query.order_by(db.fanvids.c.created_timestamp.desc())
+    paginated_query = base_query.order_by(db.fanvids.c.created_timestamp.desc()).limit(limit).offset(offset)
     fanvids = [dict(row) for row in await database.fetch_all(paginated_query)]
     total_count_result = await database.fetch_one(
         select([func.count()]).select_from(base_query.alias("fanvids"))

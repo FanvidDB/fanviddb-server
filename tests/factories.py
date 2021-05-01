@@ -22,6 +22,10 @@ class BaseFactory(factory.Factory):
         return create_coro(**kwargs)
 
     @classmethod
+    async def create_batch(cls, size, **kwargs):
+        return [await cls.create(**kwargs) for _ in range(size)]
+
+    @classmethod
     def _build(_, model_class, **kwargs):
         return kwargs
 
