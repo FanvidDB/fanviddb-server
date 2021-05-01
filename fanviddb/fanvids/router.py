@@ -5,6 +5,7 @@ from typing import List
 from fastapi import APIRouter
 from fastapi import Depends
 from fluent.runtime import FluentLocalization  # type: ignore
+from sqlalchemy import func
 from sqlalchemy import update
 from sqlalchemy.sql import select
 from starlette.exceptions import HTTPException
@@ -19,6 +20,7 @@ from fanviddb.i18n.utils import fluent_dependency
 from . import db
 from .models import CreateFanvid
 from .models import Fanvid
+from .models import FanvidList
 from .models import UpdateFanvid
 
 router = APIRouter()
@@ -65,7 +67,7 @@ async def create_fanvid(
     return result
 
 
-@router.get("", response_model=List[Fanvid])
+@router.get("", response_model=FanvidList)
 async def list_fanvids(
     api_key: str = Depends(check_api_key_header),
     user: User = Depends(fastapi_users.current_user(optional=True)),
@@ -76,21 +78,21 @@ async def list_fanvids(
             status_code=HTTP_401_UNAUTHORIZED,
             detail=fluent.format_value("fanvid-user-or-api-key-required"),
         )
-    query = (
-        select([db.fanvids])
-        .where(db.fanvids.c.state != "deleted")
-        .order_by(db.fanvids.c.created_timestamp.desc())
+    base_query = select([db.fanvids]).where(db.fanvids.c.state != "deleted")
+    paginated_query = base_query.order_by(db.fanvids.c.created_timestamp.desc())
+    fanvids = [dict(row) for row in await database.fetch_all(paginated_query)]
+    total_count_result = await database.fetch_one(
+        select([func.count()]).select_from(base_query.alias("fanvids"))
     )
-    results = [dict(row) for row in await database.fetch_all(query)]
-
-    for result in results:
-        result["audio"] = {
-            "title": result.pop("audio_title"),
-            "artists_or_sources": result.pop("audio_artists_or_sources"),
-            "language": result.pop("audio_language"),
+    total_count = total_count_result["count_1"]
+    for fanvid in fanvids:
+        fanvid["audio"] = {
+            "title": fanvid.pop("audio_title"),
+            "artists_or_sources": fanvid.pop("audio_artists_or_sources"),
+            "language": fanvid.pop("audio_language"),
         }
 
-    return results
+    return {"total_count": total_count, "fanvids": fanvids}
 
 
 @router.get("/{fanvid_uuid}", response_model=Fanvid)

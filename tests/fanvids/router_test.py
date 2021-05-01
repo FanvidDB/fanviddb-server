@@ -66,28 +66,35 @@ async def test_create_fanvid__unauthenticated(fastapi_client):
 @pytest.mark.asyncio
 async def test_list_fanvids__user(logged_in_client):
     fanvid = await FanvidFactory()
-    expected_response = jsonable_encoder(fanvid)
-    expected_response["audio"] = {
-        "title": expected_response.pop("audio_title"),
-        "artists_or_sources": expected_response.pop("audio_artists_or_sources"),
-        "language": expected_response.pop("audio_language"),
+    expected_fanvid = jsonable_encoder(fanvid)
+    expected_fanvid["audio"] = {
+        "title": expected_fanvid.pop("audio_title"),
+        "artists_or_sources": expected_fanvid.pop("audio_artists_or_sources"),
+        "language": expected_fanvid.pop("audio_language"),
+    }
+    expected_response = {
+        "fanvids": [expected_fanvid],
+        "total_count": 1,
     }
     response = await logged_in_client.get("/api/fanvids")
     assert response.status_code == 200, response.json()
     response_data = response.json()
-    assert len(response_data) == 1
-    assert response_data[0] == expected_response
+    assert response_data == expected_response
 
 
 @pytest.mark.asyncio
 async def test_list_fanvids__api_key(fastapi_client):
     api_key = await generate_api_key()
     fanvid = await FanvidFactory()
-    expected_response = jsonable_encoder(fanvid)
-    expected_response["audio"] = {
-        "title": expected_response.pop("audio_title"),
-        "artists_or_sources": expected_response.pop("audio_artists_or_sources"),
-        "language": expected_response.pop("audio_language"),
+    expected_fanvid = jsonable_encoder(fanvid)
+    expected_fanvid["audio"] = {
+        "title": expected_fanvid.pop("audio_title"),
+        "artists_or_sources": expected_fanvid.pop("audio_artists_or_sources"),
+        "language": expected_fanvid.pop("audio_language"),
+    }
+    expected_response = {
+        "fanvids": [expected_fanvid],
+        "total_count": 1,
     }
     response = await fastapi_client.get(
         "/api/fanvids",
@@ -95,8 +102,7 @@ async def test_list_fanvids__api_key(fastapi_client):
     )
     assert response.status_code == 200
     response_data = response.json()
-    assert len(response_data) == 1
-    assert response_data[0] == expected_response
+    assert response_data == expected_response
 
 
 @pytest.mark.asyncio
@@ -133,7 +139,8 @@ async def test_list_fanvids__excludes_deleted(logged_in_client):
     response = await logged_in_client.get("/api/fanvids")
     assert response.status_code == 200
     response_data = response.json()
-    assert len(response_data) == 0
+    expected_response = {"fanvids": [], "total_count": 0}
+    assert response_data == expected_response
 
 
 @pytest.mark.asyncio

@@ -25,7 +25,7 @@ const FanvidList = () => {
           <Localized key="error-unknown" id="fanvid-list-error-unknown" />,
         ]);
       } else {
-        setFanvids(json);
+        setFanvids(json.fanvids);
       }
     });
   }, [searchParams.page]);

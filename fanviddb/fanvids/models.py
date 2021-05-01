@@ -99,3 +99,8 @@ class Fanvid(CreateFanvid):
     uuid: uuid.UUID
     created_timestamp: datetime.datetime
     modified_timestamp: datetime.datetime
+
+
+class FanvidList(BaseModel):
+    total_count: int
+    fanvids: List[Fanvid]
