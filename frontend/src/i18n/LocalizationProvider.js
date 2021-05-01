@@ -9,6 +9,8 @@ import PropTypes from "prop-types";
 import { DEFAULT_LOCALE, AVAILABLE_LOCALES } from "./config";
 import moment from "moment";
 import { negotiateLanguages } from "@fluent/langneg";
+import zhCN from "antd/lib/locale/zh_CN";
+import "moment/locale/zh-cn";
 
 export const LocaleContext = React.createContext();
 
@@ -50,7 +52,7 @@ const LocalizationProvider = ({ children }) => {
     }
   }, [currentLocales, bundles]);
 
-  const antdLocale = locale.replace("-", "");
+  const antdLocale = locale == "en-US" ? undefined : zhCN;
 
   const fluentBundles = currentLocales
     .map((locale) => bundles[locale])
