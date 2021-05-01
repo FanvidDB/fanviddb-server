@@ -28,7 +28,7 @@ content-notes-self-harm = Self-harm
 content-notes-suicide = Suicide
 content-notes-transphobia = Transphobia
 
-rating-gen = Gen
+rating-gen = General Audiences
 rating-teen = Teen
 rating-mature = Mature
 rating-explicit = Explicit
