@@ -155,6 +155,18 @@ async def test_list_fanvids__limit_and_offset(logged_in_client):
 
 
 @pytest.mark.asyncio
+async def test_list_fanvids__disallow_negative_limit(logged_in_client):
+    response = await logged_in_client.get("/api/fanvids?limit=-15")
+    assert response.status_code == 422, response.json()
+
+
+@pytest.mark.asyncio
+async def test_list_fanvids__disallow_negative_offset(logged_in_client):
+    response = await logged_in_client.get("/api/fanvids?offset=-15")
+    assert response.status_code == 422, response.json()
+
+
+@pytest.mark.asyncio
 async def test_read_fanvid(fastapi_client):
     fanvid = await FanvidFactory()
     expected_response = _serialize_fanvid(fanvid)

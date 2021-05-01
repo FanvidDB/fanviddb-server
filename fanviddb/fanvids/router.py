@@ -73,8 +73,8 @@ async def list_fanvids(
     api_key: str = Depends(check_api_key_header),
     user: User = Depends(fastapi_users.current_user(optional=True)),
     fluent: FluentLocalization = Depends(fluent_dependency),
-    offset: int = 0,
-    limit: int = Query(10, le=50),
+    offset: int = Query(0, ge=0),
+    limit: int = Query(10, ge=0, le=50),
 ):
     if user is None and not api_key:
         raise HTTPException(
