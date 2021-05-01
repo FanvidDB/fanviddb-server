@@ -32,12 +32,15 @@ const FanvidList = () => {
 
   if (!_.isEmpty(errors)) {
     return (
-      <Alert>
-        <List
-          dataSource={errors}
-          renderItem={(item) => <List.Item>{item}</List.Item>}
-        />
-      </Alert>
+      <Alert
+        type="error"
+        message={
+          <List
+            dataSource={errors}
+            renderItem={(item) => <List.Item>{item}</List.Item>}
+          />
+        }
+      />
     );
   }
 
