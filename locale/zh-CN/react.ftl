@@ -3,7 +3,14 @@
 
 side-nav-add-fanvid = 加{ -fanvid }
 
-homepage-title = { -fanviddb }
+bottom-nav-general = { -fanviddb }
+bottom-nav-general-about = 关于{ -fanviddb }
+bottom-nav-contributing-fanvid-data = { -fanvid }数据
+bottom-nav-contributing-translation = 翻译
+bottom-nav-coding = 写代码
+bottom-nav-coding-frontend = 前端
+bottom-nav-coding-backend = 后端
+
 homepage-intro =
     你好! FanvidDB is a central repository for fanvid-related
     metadata, in particular for integration with
