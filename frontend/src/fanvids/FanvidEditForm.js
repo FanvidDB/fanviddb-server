@@ -8,7 +8,7 @@ import { getApiErrors } from "../forms/apiErrors";
 import DatePicker from "../forms/DatePicker";
 import DurationPicker from "../forms/DurationPicker";
 import UniqueIdentifierInput from "../forms/UniqueIdentifierInput";
-import { contentNotes } from "./constants.js";
+import { contentNotes, ratings } from "./constants.js";
 import _ from "lodash";
 import PropTypes from "prop-types";
 
@@ -129,12 +129,10 @@ const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
         ]}
       >
         <Radio.Group
-          options={[
-            { value: "gen", label: <Localized id="rating-gen" /> },
-            { value: "teen", label: <Localized id="rating-teen" /> },
-            { value: "mature", label: <Localized id="rating-mature" /> },
-            { value: "explicit", label: <Localized id="rating-explicit" /> },
-          ]}
+          options={Object.entries(ratings).map(([value, label]) => ({
+            value,
+            label,
+          }))}
           optionType="button"
         />
       </Form.Item>

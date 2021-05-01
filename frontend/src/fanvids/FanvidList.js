@@ -3,7 +3,7 @@ import { List, Skeleton, Alert, Space, Typography, Tag } from "antd";
 import { Link, useLocation } from "react-router-dom";
 import { Localized } from "@fluent/react";
 import { callApi } from "../api";
-import { contentNotes } from "./constants";
+import { contentNotes, ratings } from "./constants";
 import _ from "lodash";
 
 const { Text, Paragraph } = Typography;
@@ -52,8 +52,10 @@ const FanvidList = () => {
             <Link key="edit" to={`/fanvids/edit/${fanvid.uuid}`}>
               edit
             </Link>,
-
-            <Paragraph key="content_notes">
+            <Tag key={fanvid.rating} color="default">
+              {ratings[fanvid.rating]}
+            </Tag>,
+            <>
               {fanvid.content_notes.map((contentNote) => {
                 if (contentNote == "no-warnings-apply") return null;
                 if (
@@ -69,7 +71,7 @@ const FanvidList = () => {
                   </Tag>
                 );
               })}
-            </Paragraph>,
+            </>,
           ]}
         >
           <Skeleton loading={fanvid.loading} active>

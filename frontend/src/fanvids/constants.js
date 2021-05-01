@@ -29,3 +29,10 @@ export const contentNotes = {
   suicide: <Localized id="content-notes-suicide" />,
   transphobia: <Localized id="content-notes-transphobia" />,
 };
+
+export const ratings = {
+  gen: <Localized id="rating-gen" />,
+  teen: <Localized id="rating-teen" />,
+  mature: <Localized id="rating-mature" />,
+  explicit: <Localized id="rating-explicit" />,
+};
