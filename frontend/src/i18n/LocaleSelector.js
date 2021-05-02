@@ -12,7 +12,9 @@ const LocaleSelector = () => {
       defaultValue={locale}
       onChange={(value) => setLocale(value)}
     >
+      <Option value="de-DE">Deutsch</Option>
       <Option value="en-US">English</Option>
+      <Option value="es-ES">Español</Option>
       <Option value="zh-CN">中文</Option>
     </Select>
   );
