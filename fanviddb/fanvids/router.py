@@ -21,8 +21,8 @@ from . import db
 from .models import CreateFanvid
 from .models import Fanvid
 from .models import FanvidList
-from .models import UpdateFanvid
 from .models import StateEnum
+from .models import UpdateFanvid
 
 router = APIRouter()
 
@@ -48,7 +48,7 @@ async def create_fanvid(
             "uuid": uuid.uuid4(),
             "created_timestamp": datetime.datetime.utcnow(),
             "modified_timestamp": datetime.datetime.utcnow(),
-            "state": StateEnum.active
+            "state": StateEnum.active,
         }
     )
     query = db.fanvids.insert().values(**fanvid_dict).returning(db.fanvids)
