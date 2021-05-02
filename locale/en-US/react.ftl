@@ -53,6 +53,8 @@ form-error-string-min-length =
 form-error-url-host = URL host invalid, top level domain required
 
 top-navbar-website-name = { -fanviddb }
+top-navbar-get-api-key = Get API key
+api-key-create-error-unknown = Unknown error while creating API key. Please try again.
 
 side-nav-add-fanvid = Add Fanvid
 
