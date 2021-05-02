@@ -11,14 +11,15 @@ bottom-nav-coding = 写代码
 bottom-nav-coding-frontend = 前端
 bottom-nav-coding-backend = 后端
 
-homepage-intro =
-    你好! FanvidDB is a central repository for fanvid-related
+unique-identifier-bilibili = b站
+
+login-page-title = { -fanviddb }
+login-page-title-bar = 登录 | { -fanviddb }
+login-page-intro =
+    你好! { -fanviddb } is a central repository for fanvid-related
     metadata, in particular for integration with
     <plexLink>Plex</plexLink>. Check out the links in the
     navbar for more information.
-
-unique-identifier-bilibili = b站
-
 login-form-email-label = 邮箱
 login-form-email-error-required = 请输入邮箱
 login-form-password-label = 密码
@@ -26,6 +27,7 @@ login-form-password-error-required = 请输入密码
 login-form-login-button = 登录
 login-form-forgot-password-link = 忘记密码?
 login-form-register-link = 注册
+logout-button = 登出
 
 register-page-title = 注册
 register-form-email-label = 邮箱
