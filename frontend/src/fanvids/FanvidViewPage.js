@@ -20,7 +20,7 @@ import Http404Page from "../pages/Http404Page";
 import Http500Page from "../pages/Http500Page";
 import Helmet from "react-helmet";
 import moment from "moment";
-import { contentNotes, ratings } from "./constants";
+import { contentNotes, ratings, languages } from "./constants";
 
 const { Paragraph, Title, Text } = Typography;
 
@@ -122,7 +122,13 @@ const FanvidViewPage = () => {
               <br />
               {fanvid.audio.artists_or_sources}
               <br />
-              {fanvid.audio.language}
+
+              {fanvid.audio.languages.map((language) => (
+                <span key={language}>
+                  {languages[language]}
+                  <br />
+                </span>
+              ))}
             </Paragraph>
           </Col>
           <Col span={6}>
