@@ -65,3 +65,22 @@ You can also edit translations and add support for new languages on your compute
 This might be easier if you're going to edit translations frequently.
 You will need to be familiar with Github and the command line.
 If you are not but you want to be, check out [First Day On Github](https://lab.github.com/githubtraining/first-day-on-github)!
+
+## Checking translation progress
+
+Note: This requires setting up the [backend](/coding/backend.html) first (specifically setting up and activating the python virtual environment).
+
+```bash
+source .venv/bin/activate
+```
+
+From the root of the repository, you can run the following:
+
+```bash
+# Get basic translation progress by locale and file
+./fluent_stats.py
+# Limit translation to the list of locales you pass.
+./fluent_stats.py -l en-US -l zh-CN
+# Show all the message ids that are missing in each file.
+./fluent_stats.py --show-missing-messages
+```
