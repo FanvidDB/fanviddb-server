@@ -15,28 +15,28 @@ class FanvidTable(Base):
     __tablename__ = "fanvids"
 
     uuid = Column(UUID(), default=uuid.uuid4, primary_key=True)
-    title = Column(String())
-    creators = Column(JSON())
-    premiere_date = Column(DateTime(), nullable=True)
-    premiere_event = Column(String())
-    audio_title = Column(String())
-    audio_artists_or_sources = Column(JSON())
-    audio_language = Column(String())
-    length = Column(INTERVAL())
-    rating = Column(String())
-    fandoms = Column(JSON())
-    summary = Column(String())
-    content_notes = Column(JSON())
-    urls = Column(JSON())
-    unique_identifiers = Column(JSON())
-    thumbnail_url = Column(String())
+    title = Column(String(), nullable=False)
+    creators = Column(JSON(), nullable=False)
+    premiere_date = Column(DateTime())
+    premiere_event = Column(String(), nullable=False)
+    audio_title = Column(String(), nullable=False)
+    audio_artists_or_sources = Column(JSON(), nullable=False)
+    audio_language = Column(String(), nullable=False)
+    length = Column(INTERVAL(), nullable=False)
+    rating = Column(String(), nullable=False)
+    fandoms = Column(JSON(), nullable=False)
+    summary = Column(String(), nullable=False)
+    content_notes = Column(JSON(), nullable=False)
+    urls = Column(JSON(), nullable=False)
+    unique_identifiers = Column(JSON(), nullable=False)
+    thumbnail_url = Column(String(), nullable=False)
 
     # Admin-only
-    state = Column(String())
+    state = Column(String(), nullable=False)
 
     # Internal
-    created_timestamp = Column(DateTime())
-    modified_timestamp = Column(DateTime())
+    created_timestamp = Column(DateTime(), nullable=False)
+    modified_timestamp = Column(DateTime(), nullable=False)
 
 
 fanvids = FanvidTable.__table__

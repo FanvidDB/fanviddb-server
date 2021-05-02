@@ -37,7 +37,7 @@ async def test_create_fanvid(logged_in_client):
             "uuid": response_data["uuid"],
             "created_timestamp": response_data["created_timestamp"],
             "modified_timestamp": response_data["modified_timestamp"],
-            "state": None,
+            "state": "active",
         }
     )
     assert response_data == expected_data

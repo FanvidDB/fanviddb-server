@@ -9,6 +9,11 @@ from pydantic import Field
 from pydantic import HttpUrl
 
 
+class StateEnum(str, Enum):
+    active = "active"
+    deleted = "deleted"
+
+
 class RatingEnum(str, Enum):
     gen = "gen"
     teen = "teen"
@@ -72,14 +77,14 @@ class BaseFanvid(BaseModel):
     thumbnail_url: Optional[HttpUrl]
 
     # Admin-only
-    state: Optional[str]
+    state: Optional[StateEnum]
 
 
 class CreateFanvid(BaseFanvid):
     title: str
     creators: List[str]
     premiere_date: Optional[datetime.date] = None
-    premiere_event: Optional[str] = None
+    premiere_event: str = ""
     audio: Optional[Audio] = None
     length: datetime.timedelta
     rating: RatingEnum
