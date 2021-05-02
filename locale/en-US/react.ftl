@@ -33,6 +33,11 @@ rating-teen = Teen
 rating-mature = Mature
 rating-explicit = Explicit
 
+language-en-US = English (US)
+language-es-ES = Spanish (Spain)
+language-de-DE = German (Germany)
+language-zh-CN = Chinese (Mainland)
+
 unique-identifier-filename = Filename
 unique-identifier-youtube = YouTube
 unique-identifier-vimeo = Vimeo
@@ -141,6 +146,7 @@ fanvid-form-premiere-event-label = Premiere event
 fanvid-form-audio-title-label = Audio Title
 fanvid-form-audio-artists-or-sources-label = Audio Artists or Sources
 fanvid-form-audio-languages-label = Audio Language
+fanvid-form-audio-languages-help = Additional languages may be specified as language codes, for example en-US for English as spoken in the United States.
 fanvid-form-length-label = Length
 fanvid-form-length-error-required = Length is required
 fanvid-form-rating-label = Rating

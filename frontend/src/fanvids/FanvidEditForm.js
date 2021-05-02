@@ -8,11 +8,13 @@ import { getApiErrors } from "../forms/apiErrors";
 import DatePicker from "../forms/DatePicker";
 import DurationPicker from "../forms/DurationPicker";
 import UniqueIdentifierInput from "../forms/UniqueIdentifierInput";
-import { contentNotes, ratings } from "./constants.js";
+import { contentNotes, ratings, languages } from "./constants.js";
 import _ from "lodash";
 import PropTypes from "prop-types";
 
 const urlRegex = /https?:\/\/.*\..*/;
+
+const { Option } = Select;
 
 const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
   const [form] = Form.useForm();
@@ -106,8 +108,15 @@ const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
       <Form.Item
         label={<Localized id="fanvid-form-audio-languages-label" />}
         name={["audio", "languages"]}
+        help={<Localized id="fanvid-form-audio-languages-help" />}
       >
-        <Select mode="tags" tokenSeparators={[","]} />
+        <Select mode="tags" tokenSeparators={[","]} allowClear>
+          {Object.entries(languages).map(([value, localized]) => (
+            <Option key={value} value={value}>
+              {localized}
+            </Option>
+          ))}
+        </Select>
       </Form.Item>
       <Form.Item
         label={<Localized id="fanvid-form-length-label" />}

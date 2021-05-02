@@ -1,6 +1,11 @@
 -fanviddb = FanvidDB
 -fanvid = 视频
 
+language-en-US = 英语 (美国)
+language-es-ES = 西语 (西班牙)
+language-de-DE = 德语 (德国)
+language-zh-CN = 汉语（中国）
+
 side-nav-add-fanvid = 加{ -fanvid }
 
 bottom-nav-general = { -fanviddb }

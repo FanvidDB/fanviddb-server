@@ -36,3 +36,10 @@ export const ratings = {
   mature: <Localized id="rating-mature" />,
   explicit: <Localized id="rating-explicit" />,
 };
+
+export const languages = {
+  "en-US": <Localized id="language-en-US" />,
+  "es-ES": <Localized id="language-es-ES" />,
+  "de-DE": <Localized id="language-de-DE" />,
+  "zh-CN": <Localized id="language-zh-CN" />,
+};
