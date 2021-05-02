@@ -12,7 +12,7 @@ describe("FanvidEditForm", () => {
       audio: {
         title: "string",
         artists_or_sources: ["string"],
-        language: "en-us",
+        languages: ["en-US"],
       },
       length: 0,
       rating: "gen",

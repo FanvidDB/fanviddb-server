@@ -36,6 +36,9 @@ const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
           if (path[1] == "unique_identifiers") {
             return path.slice(0, -1);
           }
+          if (path[1] == "audio" && path[2] == "languages") {
+            return path.slice(0, -1);
+          }
           return path;
         });
       }
@@ -101,10 +104,10 @@ const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
         <Select mode="tags" tokenSeparators={[","]} />
       </Form.Item>
       <Form.Item
-        label={<Localized id="fanvid-form-audio-language-label" />}
-        name={["audio", "language"]}
+        label={<Localized id="fanvid-form-audio-languages-label" />}
+        name={["audio", "languages"]}
       >
-        <Input />
+        <Select mode="tags" tokenSeparators={[","]} />
       </Form.Item>
       <Form.Item
         label={<Localized id="fanvid-form-length-label" />}

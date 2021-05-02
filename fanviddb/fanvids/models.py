@@ -7,6 +7,9 @@ from typing import Optional
 from pydantic import BaseModel
 from pydantic import Field
 from pydantic import HttpUrl
+from pydantic import constr
+
+LanguageCode = constr(regex=r"[a-z]{2}-[A-Z]{2}")
 
 
 class StateEnum(str, Enum):
@@ -45,7 +48,7 @@ class ContentNotesEnum(str, Enum):
 class Audio(BaseModel):
     title: str
     artists_or_sources: List[str] = []
-    language: str
+    languages: List[LanguageCode]  # type: ignore
 
 
 class UniqueIdentifierKind(str, Enum):

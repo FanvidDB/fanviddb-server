@@ -40,7 +40,7 @@ async def create_fanvid(
             {
                 "audio_title": audio["title"],
                 "audio_artists_or_sources": audio["artists_or_sources"],
-                "audio_language": audio["language"],
+                "audio_languages": audio["languages"],
             }
         )
     fanvid_dict.update(
@@ -64,7 +64,7 @@ async def create_fanvid(
     result["audio"] = {
         "title": result.pop("audio_title"),
         "artists_or_sources": result.pop("audio_artists_or_sources"),
-        "language": result.pop("audio_language"),
+        "languages": result.pop("audio_languages"),
     }
     return result
 
@@ -97,7 +97,7 @@ async def list_fanvids(
         fanvid["audio"] = {
             "title": fanvid.pop("audio_title"),
             "artists_or_sources": fanvid.pop("audio_artists_or_sources"),
-            "language": fanvid.pop("audio_language"),
+            "languages": fanvid.pop("audio_languages"),
         }
 
     return {"total_count": total_count, "fanvids": fanvids}
@@ -121,7 +121,7 @@ async def read_fanvid(
     result["audio"] = {
         "title": result.pop("audio_title"),
         "artists_or_sources": result.pop("audio_artists_or_sources"),
-        "language": result.pop("audio_language"),
+        "languages": result.pop("audio_languages"),
     }
 
     return result
@@ -141,7 +141,7 @@ async def update_fanvid(
             {
                 "audio_title": audio["title"],
                 "audio_artists_or_sources": audio["artists_or_sources"],
-                "audio_language": audio["language"],
+                "audio_languages": audio["languages"],
             }
         )
     fanvid_dict.update(
@@ -167,6 +167,6 @@ async def update_fanvid(
     result["audio"] = {
         "title": result.pop("audio_title"),
         "artists_or_sources": result.pop("audio_artists_or_sources"),
-        "language": result.pop("audio_language"),
+        "languages": result.pop("audio_languages"),
     }
     return result

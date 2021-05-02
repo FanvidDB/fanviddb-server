@@ -41,7 +41,7 @@ class FanvidFactory(BaseFactory):
     premiere_event = "Festivids 2020"
     audio_title = "Starship Iris: Episode 3"
     audio_artists_or_sources = ["Starship Iris"]
-    audio_language = "en-us"
+    audio_languages = ["en-US"]
     length = datetime.timedelta(minutes=3, seconds=15)
     rating = "gen"
     fandoms = ["The Locked Tomb Series"]

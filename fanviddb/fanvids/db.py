@@ -21,7 +21,7 @@ class FanvidTable(Base):
     premiere_event = Column(String(), nullable=False)
     audio_title = Column(String(), nullable=False)
     audio_artists_or_sources = Column(JSON(), nullable=False)
-    audio_language = Column(String(), nullable=False)
+    audio_languages = Column(JSON(), nullable=False)
     length = Column(INTERVAL(), nullable=False)
     rating = Column(String(), nullable=False)
     fandoms = Column(JSON(), nullable=False)

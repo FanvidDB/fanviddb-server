@@ -16,7 +16,7 @@ def _serialize_fanvid(fanvid):
     serialized["audio"] = {
         "title": serialized.pop("audio_title"),
         "artists_or_sources": serialized.pop("audio_artists_or_sources"),
-        "language": serialized.pop("audio_language"),
+        "languages": serialized.pop("audio_languages"),
     }
     return jsonable_encoder(Fanvid(**serialized))
 
