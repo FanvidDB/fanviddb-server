@@ -79,7 +79,7 @@ login-page-intro =
     Welcome! { -fanviddb } is a central repository for fanvid-related
     metadata, in particular for integration with
     <plexLink>Plex</plexLink>. Check out the links in the
-    navbar for more information.
+    footer for more information.
 
 login-form-email-label = Email
 login-form-email-error-required = Please enter your email.

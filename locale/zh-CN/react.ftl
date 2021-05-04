@@ -24,7 +24,7 @@ login-page-intro =
     你好! { -fanviddb } is a central repository for fanvid-related
     metadata, in particular for integration with
     <plexLink>Plex</plexLink>. Check out the links in the
-    navbar for more information.
+    footer for more information.
 login-form-email-label = 邮箱
 login-form-email-error-required = 请输入邮箱
 login-form-password-label = 密码
