@@ -7,3 +7,5 @@ unique-identifier-youtube = YouTube
 unique-identifier-vimeo = Vimeo
 unique-identifier-ao3 = AO3
 unique-identifier-bilibili = bilibili
+
+bottom-nav-contributing-translation = Traducción
