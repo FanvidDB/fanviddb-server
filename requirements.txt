@@ -46,7 +46,7 @@ psycopg2==2.8.6
 py==1.10.0
 pycodestyle==2.6.0
 pycparser==2.20
-pydantic==1.8.1
+pydantic==1.8.2
 pyflakes==2.2.0
 pyjwt==2.0.1
 pyparsing==2.4.7
