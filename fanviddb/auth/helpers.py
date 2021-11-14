@@ -101,7 +101,7 @@ class UserManager(BaseUserManager[UserCreate, UserDB]):
             ),
         )
 
-    async def   validate_password(self, password: str, user: Union[UserCreate, UserDB]):
+    async def validate_password(self, password: str, user: Union[UserCreate, UserDB]):
         strength = zxcvbn(password)
         if strength["score"] < 4:
             errors = []
