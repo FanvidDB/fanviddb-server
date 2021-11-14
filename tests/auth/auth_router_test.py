@@ -86,10 +86,6 @@ async def test_register__duplicate_username(fastapi_client):
 
 @pytest.mark.asyncio
 async def test_register__weak_password(fastapi_client):
-    await UserFactory(
-        username="wwx",
-        email="whatever@fanviddb.com",
-    )
     post_data = {
         "email": "suibian@fanviddb.com",
         "username": "wwx",
@@ -99,6 +95,7 @@ async def test_register__weak_password(fastapi_client):
         "/api/auth/register",
         json=post_data,
     )
-    assert response.status_code == 422, response.json()
+    assert response.status_code == 400, response.json()
     response_data = response.json()
-    assert response_data["detail"][0]["loc"] == ["body", "password"]
+    assert response_data.get("detail") is not None
+    assert response_data["detail"].get("reason") is not None

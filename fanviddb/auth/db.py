@@ -16,4 +16,5 @@ class UserTable(Base, SQLAlchemyBaseUserTable):
 users = UserTable.__table__
 
 
-user_db = SQLAlchemyUserDatabase(UserDB, database, users)
+async def get_user_db():
+    yield SQLAlchemyUserDatabase(UserDB, database, users)

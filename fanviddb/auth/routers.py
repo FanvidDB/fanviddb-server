@@ -1,65 +1,22 @@
+from typing import Optional
+from typing import Union
+
 from fastapi import APIRouter
+from fastapi import Depends
 from fastapi import Request
+from fastapi_users import BaseUserManager
+from zxcvbn import zxcvbn  # type: ignore
 
 from fanviddb import conf
 from fanviddb.email import send_email
 from fanviddb.i18n.utils import get_fluent
 from fanviddb.i18n.utils import get_request_locales
 
+from .db import get_user_db
 from .helpers import cookie_authentication
 from .helpers import fastapi_users
+from .models import UserCreate
 from .models import UserDB
-
-
-def on_after_forgot_password(user: UserDB, token: str, request: Request):
-    locales = get_request_locales(request)
-    fluent = get_fluent(locales)
-    send_email(
-        from_email=conf.DEFAULT_FROM_EMAIL,
-        to_emails=[user.email],
-        subject=fluent.format_value("email-forgot-password-subject"),
-        content=fluent.format_value("email-forgot-password-content", {"token": token}),
-    )
-
-
-def on_after_reset_password(user: UserDB, request: Request):
-    locales = get_request_locales(request)
-    fluent = get_fluent(locales)
-    send_email(
-        from_email=conf.DEFAULT_FROM_EMAIL,
-        to_emails=[user.email],
-        subject=fluent.format_value("email-after-reset-password-subject"),
-        content=fluent.format_value(
-            "email-after-reset-password-content", {"username": user.username}
-        ),
-    )
-
-
-def on_after_verification_request(user: UserDB, token: str, request: Request):
-    locales = get_request_locales(request)
-    fluent = get_fluent(locales)
-    send_email(
-        from_email=conf.DEFAULT_FROM_EMAIL,
-        to_emails=[user.email],
-        subject=fluent.format_value("email-verification-subject"),
-        content=fluent.format_value(
-            "email-verification-content", {"username": user.username, "token": token}
-        ),
-    )
-
-
-def on_after_verification(user: UserDB, request: Request):
-    locales = get_request_locales(request)
-    fluent = get_fluent(locales)
-    send_email(
-        from_email=conf.DEFAULT_FROM_EMAIL,
-        to_emails=[user.email],
-        subject=fluent.format_value("email-after-verification-subject"),
-        content=fluent.format_value(
-            "email-after-verification-content", {"username": user.username}
-        ),
-    )
-
 
 auth_router = APIRouter()
 auth_router.include_router(
@@ -69,20 +26,10 @@ auth_router.include_router(
     fastapi_users.get_register_router(),
 )
 auth_router.include_router(
-    fastapi_users.get_reset_password_router(
-        reset_password_token_secret=conf.EMAIL_TOKEN_SECRET_KEY,
-        reset_password_token_lifetime_seconds=60 * 5,
-        after_forgot_password=on_after_forgot_password,
-        after_reset_password=on_after_reset_password,
-    ),
+    fastapi_users.get_reset_password_router(),
 )
 auth_router.include_router(
-    fastapi_users.get_verify_router(
-        verification_token_secret=conf.EMAIL_TOKEN_SECRET_KEY,
-        verification_token_lifetime_seconds=60 * 5,
-        after_verification_request=on_after_verification_request,
-        after_verification=on_after_verification,
-    ),
+    fastapi_users.get_verify_router(),
 )
 
 users_router = fastapi_users.get_users_router(
