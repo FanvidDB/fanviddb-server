@@ -6,10 +6,15 @@ export async function callApi(
 ) {
   const fetchOpts = { method };
   if (bodyObject) {
+    fetchOpts.headers = {
+      "Content-Type": contentType,
+    };
     if (contentType == "application/json") {
       fetchOpts.body = JSON.stringify(bodyObject);
     } else if (contentType == "application/x-www-form-urlencoded") {
       fetchOpts.body = new URLSearchParams(bodyObject);
+    } else {
+      fetchOpts.body = bodyObject;
     }
   }
   const response = await fetch(url, fetchOpts);
