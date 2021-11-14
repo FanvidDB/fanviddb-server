@@ -1,7 +1,6 @@
 from typing import Optional
 
 from fastapi_users import models
-from pydantic import validator
 
 
 class User(models.BaseUser):

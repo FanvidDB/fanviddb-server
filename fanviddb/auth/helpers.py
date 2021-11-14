@@ -2,7 +2,6 @@ from typing import Optional
 from typing import Union
 from typing import cast
 
-from fastapi import APIRouter
 from fastapi import Depends
 from fastapi import HTTPException
 from fastapi import Request
@@ -11,8 +10,6 @@ from fastapi_users import BaseUserManager
 from fastapi_users import FastAPIUsers
 from fastapi_users import InvalidPasswordException
 from fastapi_users.authentication import CookieAuthentication
-from fastapi_users.models import BaseUserCreate
-from fastapi_users.models import BaseUserDB
 from sqlalchemy.sql import exists
 from sqlalchemy.sql import select
 from zxcvbn import zxcvbn  # type: ignore
@@ -32,7 +29,7 @@ from .models import UserUpdate
 
 auth_backends = []
 
-cookie_authentication = CookieAuthentication(
+cookie_authentication: CookieAuthentication = CookieAuthentication(
     secret=conf.AUTH_SECRET_KEY,
     lifetime_seconds=60 * 60 * 24 * 14,
     cookie_name="fanviddbauth",
@@ -49,7 +46,7 @@ class UserManager(BaseUserManager[UserCreate, UserDB]):
     verification_token_lifetime_seconds = 60 * 5
 
     def on_after_forgot_password(
-        user: UserDB, token: str, request: Optional[Request] = None
+        self, user: UserDB, token: str, request: Optional[Request] = None
     ):
         locales = get_request_locales(request)
         fluent = get_fluent(locales)
@@ -62,7 +59,7 @@ class UserManager(BaseUserManager[UserCreate, UserDB]):
             ),
         )
 
-    def on_after_reset_password(user: UserDB, request: Optional[Request] = None):
+    def on_after_reset_password(self, user: UserDB, request: Optional[Request] = None):
         locales = get_request_locales(request)
         fluent = get_fluent(locales)
         send_email(
@@ -75,7 +72,7 @@ class UserManager(BaseUserManager[UserCreate, UserDB]):
         )
 
     def on_after_request_verify(
-        user: UserDB, token: str, request: Optional[Request] = None
+        self, user: UserDB, token: str, request: Optional[Request] = None
     ):
         locales = get_request_locales(request)
         fluent = get_fluent(locales)
@@ -89,7 +86,7 @@ class UserManager(BaseUserManager[UserCreate, UserDB]):
             ),
         )
 
-    def on_after_verify(user: UserDB, request: Optional[Request] = None):
+    def on_after_verify(self, user: UserDB, request: Optional[Request] = None):
         locales = get_request_locales(request)
         fluent = get_fluent(locales)
         send_email(
@@ -115,10 +112,10 @@ class UserManager(BaseUserManager[UserCreate, UserDB]):
 
     async def create(
         self,
-        user: BaseUserCreate,
+        user: UserCreate,
         safe: bool = False,
         request: Optional[Request] = None,
-    ) -> BaseUserDB:
+    ) -> UserDB:
         user = cast(UserCreate, user)
         query = select([exists().where(users.c.username == user.username)])
         result = await database.fetch_one(query)
