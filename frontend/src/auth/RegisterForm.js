@@ -24,6 +24,16 @@ const RegisterForm = ({ onRegister }) => {
                 id="register-form-username-error-already-exists"
               />,
             ];
+          } else if (json.detail.code == "REGISTER_INVALID_PASSWORD") {
+            errors.password = json.detail.reason;
+            if (errors.password.length == 0) {
+              errors.password = [
+                <Localized
+                  key="password-error"
+                  id="register-form-password-error-stronger-password"
+                />,
+              ];
+            }
           } else {
             errors.email = [
               <Localized
