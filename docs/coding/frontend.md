@@ -17,8 +17,10 @@ The frontend uses [Bootstrap](https://getbootstrap.com/) for the docs pages and 
 First, create a fork of [github.com/FanvidDB/fanviddb-server](https://github.com/FanvidDB/fanviddb-server) that you can clone. Then you can do the following steps:
 
 1. `git clone git@github.com:your-username/fanviddb-server.git`
-2. [Install `yarn`](https://classic.yarnpkg.com/en/docs/install#mac-stable)
-3. (Optional) If you want to interact with the backend, [set up the backend](/coding/backend.html)
+2. [Install `nvm`](https://github.com/nvm-sh/nvm#installing-and-updating)
+3. Run `nvm install 16` to install node 16
+4. [Install `yarn`](https://classic.yarnpkg.com/en/docs/install#mac-stable)
+5. (Optional) If you want to interact with the backend, [set up the backend](/coding/backend.html)
 
 ## One-off build
 
