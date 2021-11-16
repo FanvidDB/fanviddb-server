@@ -7,6 +7,11 @@ TESTING = config("TESTING", cast=bool, default=False)
 
 DATABASE_URL = config("DATABASE_URL", cast=databases.DatabaseURL)
 
+# Shim for backwards-compat with older postgres:// DATABASE_URLs.
+# https://stackoverflow.com/questions/66690321/flask-and-heroku-sqlalchemy-exc-nosuchmoduleerror-cant-load-plugin-sqlalchemy
+if DATABASE_URL.scheme == "postgres":
+    DATABASE_URL = DATABASE_URL.replace(scheme="postgresql")
+
 if "@localhost/circle_test" in DATABASE_URL.database:
     TEST_DATABASE_URL = DATABASE_URL
 else:
