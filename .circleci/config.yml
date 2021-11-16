@@ -19,7 +19,7 @@ jobs:
       - image: cimg/python:3.7.10
         environment:
           AUTH_SECRET_KEY: secret
-          DATABASE_URL: postgres://circle_test:fanviddb_test@localhost/circle_test?sslmode=disable
+          DATABASE_URL: postgresql://circle_test:fanviddb_test@localhost/circle_test?sslmode=disable
           EMAIL_TOKEN_SECRET_KEY: secret
       - image: circleci/postgres:12.6
         environment:
