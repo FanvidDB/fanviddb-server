@@ -14,14 +14,37 @@ The backend uses [FastAPI](fastapi.tiangolo.com/), an async [Python](https://www
 
 ## Setup (Mac OS)
 
+### Prerequisites
+
+1. Install [Postgres.app](https://postgresapp.com/)
+2. Install [homebrew](https://brew.sh/), a package manager for Mac OS.
+3. In a terminal, run:
+   ```
+   brew install pyenv libpq openssl
+   ```
+4. Follow the printed instructions to make sure [pyenv](https://github.com/pyenv/pyenv) and libpq are initialized when your terminal starts up. It should be something like:
+   ```
+   echo 'export PATH="/usr/local/opt/libpq/bin:$PATH"' >> ~/.zshrc
+   echo 'eval "$(pyenv init --path)"' >> ~/.zprofile
+   echo 'eval "$(pyenv init -)"' >> ~/.zshrc
+   ```
+5. Restart your terminal
+6. Install Python 3.7
+   ```
+   pyenv install 3.7.12
+   ```
+
 ### Fork & clone the repository
 
-First, create a fork of [github.com/FanvidDB/fanviddb-server](https://github.com/FanvidDB/fanviddb-server) that you can clone.
+Create a fork of [github.com/FanvidDB/fanviddb-server](https://github.com/FanvidDB/fanviddb-server) that you can clone.
 
 ```bash
 git clone git@github.com:your-username/fanviddb-server.git
+cd fanviddb-server
+pyenv local 3.7.12
 python -m venv .venv
 source .venv/bin/activate
+pip install -U pip wheel
 pip install -r requirements.txt
 ```
 
@@ -41,10 +64,9 @@ This will create a `.env` file with the basic configuration needed by the app.
 
 ### Database configuration
 
-1. Install [Postgres.app](https://postgresapp.com/)
-2. Open Postgres.app and double-click on the `postgres` database
-3. Run `CREATE DATABASE fanviddb;` in the terminal that opens to create a database called `fanviddb`.
-4. In the terminal where you cloned the repository, run `alembic upgrade head` to create the database tables that the application needs.
+1. Open Postgres.app and double-click on the `postgres` database
+2. Run `CREATE DATABASE fanviddb;` in the terminal that opens to create a database called `fanviddb`.
+3. In the terminal where you cloned the repository, run `alembic upgrade head` to create the database tables that the application needs.
 
 ## Running the server
 

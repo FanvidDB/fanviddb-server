@@ -8,7 +8,7 @@ jobs:
   backend-lint:
     executor:
       name: python/default
-      tag: 3.7.10
+      tag: 3.7.12
     steps:
       - checkout
       - python/install-packages:
@@ -16,7 +16,7 @@ jobs:
       - run: make backend-lint
   backend-test:
     docker:
-      - image: cimg/python:3.7.10
+      - image: cimg/python:3.7.12
         environment:
           AUTH_SECRET_KEY: secret
           DATABASE_URL: postgresql://circle_test:fanviddb_test@localhost/circle_test?sslmode=disable
