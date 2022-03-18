@@ -4,6 +4,7 @@ from sqlalchemy.sql import select
 
 from fanviddb.api_keys.helpers import generate as generate_api_key
 from fanviddb.db import database
+from fanviddb.fanvids.db import _to_api
 from fanviddb.fanvids.db import fanvids
 from fanviddb.fanvids.models import Fanvid
 
@@ -12,12 +13,7 @@ from ..factories import FanvidFactory
 
 def _serialize_fanvid(fanvid):
     """Converts a return value from FanvidFactory / the database into an expected json response"""
-    serialized = fanvid.copy()
-    serialized["audio"] = {
-        "title": serialized.pop("audio_title"),
-        "artists_or_sources": serialized.pop("audio_artists_or_sources"),
-        "languages": serialized.pop("audio_languages"),
-    }
+    serialized = _to_api(fanvid)
     return jsonable_encoder(Fanvid(**serialized))
 
 
