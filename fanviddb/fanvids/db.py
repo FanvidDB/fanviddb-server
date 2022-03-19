@@ -9,10 +9,12 @@ from typing import Tuple
 from sqlalchemy import JSON
 from sqlalchemy import Column
 from sqlalchemy import DateTime
+from sqlalchemy import Index
 from sqlalchemy import String
 from sqlalchemy import func
 from sqlalchemy import update
 from sqlalchemy.dialects.postgresql import INTERVAL
+from sqlalchemy.dialects.postgresql import TSVECTOR
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import select
 
@@ -23,6 +25,10 @@ from .models import CreateFanvid
 from .models import Fanvid
 from .models import StateEnum
 from .models import UpdateFanvid
+
+# For now, hard-code this. If we have some way of knowing per-fanvid what
+# language to search in, we could be more granular.
+FILENAME_SEARCH_LANGUAGE = "english"
 
 
 class FanvidTable(Base):
@@ -52,6 +58,11 @@ class FanvidTable(Base):
     # Internal
     created_timestamp = Column(DateTime(), nullable=False)
     modified_timestamp = Column(DateTime(), nullable=False)
+    filename_search_doc = Column(TSVECTOR(), nullable=False)
+
+    __table_args__ = (
+        Index("filename_search_index", "filename_search_doc", postgresql_using="gin"),
+    )
 
 
 fanvids = FanvidTable.__table__
@@ -77,7 +88,20 @@ def _to_api(fanvid: Mapping[str, Any]):
         "artists_or_sources": fanvid.pop("audio_artists_or_sources"),
         "languages": fanvid.pop("audio_languages"),
     }
+    del fanvid["filename_search_doc"]
     return fanvid
+
+
+def _filename_search_doc(fanvid: Mapping[str, Any]):
+    return func.to_tsvector(
+        FILENAME_SEARCH_LANGUAGE,
+        " || ' ' || ".join(
+            [fanvid["title"]]
+            + fanvid["creators"]
+            + fanvid["fandoms"]
+            + [ui["identifier"] for ui in fanvid["unique_identifiers"]]
+        ),
+    )
 
 
 async def create_fanvid(fanvid: CreateFanvid) -> Optional[Fanvid]:
@@ -88,6 +112,7 @@ async def create_fanvid(fanvid: CreateFanvid) -> Optional[Fanvid]:
             "created_timestamp": datetime.datetime.utcnow(),
             "modified_timestamp": datetime.datetime.utcnow(),
             "state": StateEnum.active,
+            "filename_search_doc": _filename_search_doc(fanvid_dict),
         }
     )
     query = fanvids.insert().values(**fanvid_dict).returning(fanvids)
@@ -142,5 +167,14 @@ async def update_fanvid(
     result = await database.fetch_one(query)
     if not result:
         return None
+
+    # If any of the filename_search_doc fields changed, update it
+    if set(fanvid_dict) & set(("title", "creators", "fandoms", "unique_identifiers")):
+        query = (
+            update(fanvids)
+            .where(fanvids.c.uuid == fanvid_uuid)
+            .values(filename_search_doc=_filename_search_doc(dict(result)))
+        )
+        await database.fetch_one(query)
 
     return _to_api(result)

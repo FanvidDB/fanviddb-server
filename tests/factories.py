@@ -54,6 +54,7 @@ class FanvidFactory(BaseFactory):
     state = "active"
     created_timestamp = factory.LazyFunction(datetime.datetime.utcnow)
     modified_timestamp = factory.LazyFunction(datetime.datetime.utcnow)
+    filename_search_doc = ""
 
 
 class UserFactory(BaseFactory):
