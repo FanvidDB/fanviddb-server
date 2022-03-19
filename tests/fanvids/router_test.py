@@ -6,15 +6,24 @@ from fanviddb.api_keys.helpers import generate as generate_api_key
 from fanviddb.db import database
 from fanviddb.fanvids.db import _to_api
 from fanviddb.fanvids.db import fanvids
+from fanviddb.fanvids.db import update_fanvid
 from fanviddb.fanvids.models import Fanvid
+from fanviddb.fanvids.models import FanvidWithRelevance
+from fanviddb.fanvids.models import UpdateFanvid
 
 from ..factories import FanvidFactory
 
+RELEVANCE_UNSET = object()
 
-def _serialize_fanvid(fanvid):
+
+def _serialize_fanvid(fanvid, relevance=RELEVANCE_UNSET):
     """Converts a return value from FanvidFactory / the database into an expected json response"""
+    fanvid_class = Fanvid
+    if relevance != RELEVANCE_UNSET:
+        fanvid["relevance"] = relevance
+        fanvid_class = FanvidWithRelevance
     serialized = _to_api(fanvid)
-    return jsonable_encoder(Fanvid(**serialized))
+    return jsonable_encoder(fanvid_class(**serialized))
 
 
 @pytest.mark.asyncio
@@ -57,7 +66,7 @@ async def test_create_fanvid__unauthenticated(fastapi_client):
 @pytest.mark.asyncio
 async def test_list_fanvids__user(logged_in_client):
     fanvid = await FanvidFactory()
-    expected_fanvid = _serialize_fanvid(fanvid)
+    expected_fanvid = _serialize_fanvid(fanvid, relevance=None)
     expected_response = {
         "fanvids": [expected_fanvid],
         "total_count": 1,
@@ -72,7 +81,7 @@ async def test_list_fanvids__user(logged_in_client):
 async def test_list_fanvids__api_key(fastapi_client):
     api_key = await generate_api_key()
     fanvid = await FanvidFactory()
-    expected_fanvid = _serialize_fanvid(fanvid)
+    expected_fanvid = _serialize_fanvid(fanvid, relevance=None)
     expected_response = {
         "fanvids": [expected_fanvid],
         "total_count": 1,
@@ -118,7 +127,9 @@ async def test_list_fanvids__limit(logged_in_client):
     response = await logged_in_client.get("/api/fanvids?limit=5")
     assert response.status_code == 200
     response_data = response.json()
-    expected_fanvids = [_serialize_fanvid(f) for f in reversed(fanvids[5:])]
+    expected_fanvids = [
+        _serialize_fanvid(f, relevance=None) for f in reversed(fanvids[5:])
+    ]
     assert response_data["total_count"] == 10
     assert len(response_data["fanvids"]) == 5
     assert response_data["fanvids"] == expected_fanvids
@@ -130,7 +141,9 @@ async def test_list_fanvids__offset(logged_in_client):
     response = await logged_in_client.get("/api/fanvids?offset=2")
     assert response.status_code == 200
     response_data = response.json()
-    expected_fanvids = [_serialize_fanvid(f) for f in reversed(fanvids[:-2])]
+    expected_fanvids = [
+        _serialize_fanvid(f, relevance=None) for f in reversed(fanvids[:-2])
+    ]
     assert response_data["total_count"] == 10
     assert len(response_data["fanvids"]) == 8
     assert response_data["fanvids"] == expected_fanvids
@@ -142,10 +155,59 @@ async def test_list_fanvids__limit_and_offset(logged_in_client):
     response = await logged_in_client.get("/api/fanvids?limit=5&offset=2")
     assert response.status_code == 200
     response_data = response.json()
-    expected_fanvids = [_serialize_fanvid(f) for f in reversed(fanvids[3:-2])]
+    expected_fanvids = [
+        _serialize_fanvid(f, relevance=None) for f in reversed(fanvids[3:-2])
+    ]
     assert response_data["total_count"] == 10
     assert len(response_data["fanvids"]) == 5
     assert response_data["fanvids"] == expected_fanvids
+
+
+@pytest.mark.asyncio
+async def test_list_fanvids__filename_search(logged_in_client):
+    fanvid1 = await FanvidFactory(
+        title="Hello",
+        creators=["World"],
+        fandoms=["foo"],
+        unique_identifiers=[{"kind": "youtube", "identifier": "bar"}],
+    )
+    fanvid2 = await FanvidFactory(
+        title="Hello",
+        creators=["World"],
+        fandoms=["whatever"],
+        unique_identifiers=[{"kind": "youtube", "identifier": "bar"}],
+    )
+    fanvid3 = await FanvidFactory(
+        title="Goodnight",
+        creators=["World"],
+        fandoms=["whatever"],
+        unique_identifiers=[{"kind": "youtube", "identifier": "suibian"}],
+    )
+    fanvid4 = await FanvidFactory(
+        title="Irrelevant",
+        creators=["other"],
+        fandoms=["parrot"],
+        unique_identifiers=[],
+    )
+
+    # Trigger search doc update.
+    for fanvid in (fanvid1, fanvid2, fanvid3, fanvid4):
+        await update_fanvid(
+            fanvid_uuid=fanvid["uuid"], fanvid=UpdateFanvid(title=fanvid["title"])
+        )
+
+    filename = "whatever - Hello - World [bar].mp4"
+
+    response = await logged_in_client.get("/api/fanvids", params={"filename": filename})
+    assert response.status_code == 200
+    response_data = response.json()
+    expected_fanvids = [fanvid2, fanvid1, fanvid3]
+    assert response_data["total_count"] == 3
+    assert len(response_data["fanvids"]) == 3
+    assert all([fanvid["relevance"] for fanvid in response_data["fanvids"]])
+    response_uuids = [fanvid["uuid"] for fanvid in response_data["fanvids"]]
+    expected_uuids = [str(fanvid["uuid"]) for fanvid in expected_fanvids]
+    assert response_uuids == expected_uuids
 
 
 @pytest.mark.asyncio

@@ -109,6 +109,10 @@ class Fanvid(CreateFanvid):
     modified_timestamp: datetime.datetime
 
 
+class FanvidWithRelevance(Fanvid):
+    relevance: Optional[float] = None
+
+
 class FanvidList(BaseModel):
     total_count: int
-    fanvids: List[Fanvid]
+    fanvids: List[FanvidWithRelevance]

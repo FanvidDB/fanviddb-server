@@ -1,5 +1,6 @@
 import datetime
 import uuid
+from pathlib import Path
 from typing import Any
 from typing import List
 from typing import Mapping
@@ -11,18 +12,23 @@ from sqlalchemy import Column
 from sqlalchemy import DateTime
 from sqlalchemy import Index
 from sqlalchemy import String
+from sqlalchemy import desc
 from sqlalchemy import func
 from sqlalchemy import update
 from sqlalchemy.dialects.postgresql import INTERVAL
 from sqlalchemy.dialects.postgresql import TSVECTOR
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import select
+from sqlalchemy.sql.functions import Function
 
 from fanviddb.db import Base
 from fanviddb.db import database
 
+from .constants import FILENAME_PUNCTUATION_RE
+from .constants import VIDEO_EXTENSIONS
 from .models import CreateFanvid
 from .models import Fanvid
+from .models import FanvidWithRelevance
 from .models import StateEnum
 from .models import UpdateFanvid
 
@@ -93,15 +99,28 @@ def _to_api(fanvid: Mapping[str, Any]):
 
 
 def _filename_search_doc(fanvid: Mapping[str, Any]):
+    strings = (
+        [fanvid["title"]]
+        + fanvid["creators"]
+        + fanvid["fandoms"]
+        + [ui["identifier"] for ui in fanvid["unique_identifiers"]]
+    )
     return func.to_tsvector(
         FILENAME_SEARCH_LANGUAGE,
-        " || ' ' || ".join(
-            [fanvid["title"]]
-            + fanvid["creators"]
-            + fanvid["fandoms"]
-            + [ui["identifier"] for ui in fanvid["unique_identifiers"]]
-        ),
+        " || ' ' || ".join(strings),
     )
+
+
+def filename_to_tsquery(filename: str) -> Function:
+    # Remove video file suffixes
+    path = Path(filename)
+    while path.suffix in VIDEO_EXTENSIONS:
+        path = path.with_suffix("")
+    # For filename search, we don't allow a full websearch-style query language;
+    # we just need to match as many of the present words as possible.
+    query = FILENAME_PUNCTUATION_RE.sub(" ", str(path)).strip()
+    query = " | ".join(query.split(" "))
+    return func.to_tsquery(FILENAME_SEARCH_LANGUAGE, query)
 
 
 async def create_fanvid(fanvid: CreateFanvid) -> Optional[Fanvid]:
@@ -123,19 +142,31 @@ async def create_fanvid(fanvid: CreateFanvid) -> Optional[Fanvid]:
     return _to_api(result)
 
 
-async def list_fanvids(offset: int, limit: int) -> Tuple[int, List[Fanvid]]:
-    base_query = select([fanvids]).where(fanvids.c.state != "deleted")
-
-    paginated_query = (
-        base_query.order_by(fanvids.c.created_timestamp.desc())
-        .limit(limit)
-        .offset(offset)
+async def list_fanvids(
+    offset: int, limit: int, filename: Optional[str] = None
+) -> Tuple[int, List[FanvidWithRelevance]]:
+    query = (
+        select([fanvids])
+        .where(fanvids.c.state != "deleted")
+        .order_by(fanvids.c.created_timestamp.desc())
     )
-    fanvid_list = [
-        _to_api(dict(row)) for row in await database.fetch_all(paginated_query)
-    ]
+
+    if filename:
+        filename_tsquery = filename_to_tsquery(filename)
+        query = query.add_columns(  # type: ignore
+            func.ts_rank(fanvids.c.filename_search_doc, filename_tsquery).label(
+                "relevance"
+            )
+        )
+        query = query.where(fanvids.c.filename_search_doc.op("@@")(filename_tsquery))
+        # Clear out existing sorts - only use relevance.
+        query = query.order_by(None).order_by(desc("relevance"))
+
+    page = query.limit(limit).offset(offset)
+
+    fanvid_list = [_to_api(dict(row)) for row in await database.fetch_all(page)]
     total_count_result = await database.fetch_one(
-        select([func.count()]).select_from(base_query.alias("fanvids"))
+        select([func.count()]).select_from(query.alias("fanvids"))
     )
     total_count = total_count_result["count_1"] if total_count_result else 0
     return total_count, fanvid_list
@@ -170,11 +201,11 @@ async def update_fanvid(
 
     # If any of the filename_search_doc fields changed, update it
     if set(fanvid_dict) & set(("title", "creators", "fandoms", "unique_identifiers")):
+        filename_search_doc = _filename_search_doc(dict(result))
         query = (
             update(fanvids)
             .where(fanvids.c.uuid == fanvid_uuid)
-            .values(filename_search_doc=_filename_search_doc(dict(result)))
+            .values(filename_search_doc=filename_search_doc)
         )
-        await database.fetch_one(query)
 
     return _to_api(result)

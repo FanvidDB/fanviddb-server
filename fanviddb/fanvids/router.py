@@ -1,4 +1,5 @@
 import uuid
+from typing import Optional
 
 from fastapi import APIRouter
 from fastapi import Depends
@@ -43,6 +44,7 @@ async def list_fanvids(
     fluent: FluentLocalization = Depends(fluent_dependency),
     offset: int = Query(0, ge=0),
     limit: int = Query(10, ge=0, le=50),
+    filename: Optional[str] = None,
 ):
     if user is None and not api_key:
         raise HTTPException(
@@ -53,6 +55,7 @@ async def list_fanvids(
     total_count, fanvids = await db.list_fanvids(
         offset=offset,
         limit=limit,
+        filename=filename,
     )
 
     return {"total_count": total_count, "fanvids": fanvids}
