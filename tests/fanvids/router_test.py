@@ -2,7 +2,6 @@ import pytest
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.sql import select
 
-from fanviddb import conf
 from fanviddb.api_keys.helpers import generate as generate_api_key
 from fanviddb.db import database
 from fanviddb.fanvids.db import _to_api
@@ -165,12 +164,7 @@ async def test_list_fanvids__limit_and_offset(logged_in_client):
 
 
 @pytest.mark.asyncio
-@pytest.mark.skipif(
-    conf.IS_CIRCLECI,
-    reason="circleci full text search doesn't work for some reason",
-)
 async def test_list_fanvids__filename_search(logged_in_client):
-    assert "@localhost/circle_test" in conf.TEST_DATABASE_URL.database
     fanvid1 = await FanvidFactory(
         title="Hello",
         creators=["World"],

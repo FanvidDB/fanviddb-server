@@ -207,5 +207,6 @@ async def update_fanvid(
             .where(fanvids.c.uuid == fanvid_uuid)
             .values(filename_search_doc=filename_search_doc)
         )
+        await database.fetch_one(query)
 
     return _to_api(result)
