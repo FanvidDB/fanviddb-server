@@ -1,3 +1,5 @@
+import os
+
 import databases
 from starlette.config import Config
 
@@ -12,10 +14,8 @@ DATABASE_URL = config("DATABASE_URL", cast=databases.DatabaseURL)
 if DATABASE_URL.scheme == "postgres":
     DATABASE_URL = DATABASE_URL.replace(scheme="postgresql")
 
-if "@localhost/circle_test" in DATABASE_URL.database:
-    TEST_DATABASE_URL = DATABASE_URL
-else:
-    TEST_DATABASE_URL = DATABASE_URL.replace(database="test_" + DATABASE_URL.database)
+IS_CIRCLECI = os.getenv("IS_CIRCLECI") == "true"
+TEST_DATABASE_URL = DATABASE_URL.replace(database="test_" + DATABASE_URL.database)
 AUTH_SECRET_KEY = config("AUTH_SECRET_KEY")
 EMAIL_TOKEN_SECRET_KEY = config("EMAIL_TOKEN_SECRET_KEY")
 
