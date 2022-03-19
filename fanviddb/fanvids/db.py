@@ -154,7 +154,7 @@ async def list_fanvids(
     if filename:
         filename_tsquery = filename_to_tsquery(filename)
         query = query.add_columns(  # type: ignore
-            func.ts_rank(fanvids.c.filename_search_doc, filename_tsquery).label(
+            func.ts_rank(fanvids.c.filename_search_doc, filename_tsquery, 32).label(
                 "relevance"
             )
         )
