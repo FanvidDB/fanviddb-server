@@ -45,9 +45,9 @@ class UserManager(BaseUserManager[UserCreate, UserDB]):
     verification_token_secret = conf.EMAIL_TOKEN_SECRET_KEY
     verification_token_lifetime_seconds = 60 * 5
 
-    def on_after_forgot_password(
+    async def on_after_forgot_password(
         self, user: UserDB, token: str, request: Optional[Request] = None
-    ):
+    ) -> None:
         locales = get_request_locales(request)
         fluent = get_fluent(locales)
         send_email(
@@ -59,7 +59,9 @@ class UserManager(BaseUserManager[UserCreate, UserDB]):
             ),
         )
 
-    def on_after_reset_password(self, user: UserDB, request: Optional[Request] = None):
+    async def on_after_reset_password(
+        self, user: UserDB, request: Optional[Request] = None
+    ) -> None:
         locales = get_request_locales(request)
         fluent = get_fluent(locales)
         send_email(
@@ -71,9 +73,9 @@ class UserManager(BaseUserManager[UserCreate, UserDB]):
             ),
         )
 
-    def on_after_request_verify(
+    async def on_after_request_verify(
         self, user: UserDB, token: str, request: Optional[Request] = None
-    ):
+    ) -> None:
         locales = get_request_locales(request)
         fluent = get_fluent(locales)
         send_email(
@@ -86,7 +88,9 @@ class UserManager(BaseUserManager[UserCreate, UserDB]):
             ),
         )
 
-    def on_after_verify(self, user: UserDB, request: Optional[Request] = None):
+    async def on_after_verify(
+        self, user: UserDB, request: Optional[Request] = None
+    ) -> None:
         locales = get_request_locales(request)
         fluent = get_fluent(locales)
         send_email(
