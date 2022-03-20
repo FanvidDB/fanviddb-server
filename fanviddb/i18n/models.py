@@ -7,4 +7,3 @@ class Locale(str, Enum):
 
 
 DEFAULT_LOCALE = Locale.en_US
-DEFAULT_LOCALE = Locale.zh_CN
