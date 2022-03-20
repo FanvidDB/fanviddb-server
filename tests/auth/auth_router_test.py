@@ -1,13 +1,28 @@
 import pytest
 from fastapi.encoders import jsonable_encoder
+from fastapi_users.jwt import generate_jwt
 from fastapi_users.password import pwd_context
 from passlib import pwd  # type: ignore
 from sqlalchemy.sql import select
 
 from fanviddb.auth.db import users
+from fanviddb.auth.helpers import UserManager
 from fanviddb.db import database
 
 from ..factories import UserFactory
+
+
+def generate_test_jwt(user, secret, audience):
+    token_data = {
+        "user_id": str(user["id"]),
+        "email": user["email"],
+        "aud": audience,
+    }
+    return generate_jwt(
+        token_data,
+        secret,
+        lifetime_seconds=60,
+    )
 
 
 @pytest.mark.asyncio
@@ -99,3 +114,83 @@ async def test_register__weak_password(fastapi_client):
     response_data = response.json()
     assert response_data.get("detail") is not None
     assert response_data["detail"].get("reason") is not None
+
+
+@pytest.mark.asyncio
+async def test_request_verify__sends_email_to_user(fastapi_client, mocker):
+    mocked_send_email = mocker.patch("fanviddb.auth.helpers.send_email")
+    user = await UserFactory(is_verified=False)
+    response = await fastapi_client.post(
+        "/api/auth/request-verify-token",
+        json={"email": user["email"]},
+    )
+    assert response.status_code == 202, response.json()
+    response_data = response.json()
+    assert response_data is None
+    assert mocked_send_email.call_count == 1
+    assert mocked_send_email.call_args[1]["to_emails"] == [user["email"]]
+
+
+@pytest.mark.asyncio
+async def test_verify__invalid_token(fastapi_client, mocker):
+    mocked_send_email = mocker.patch("fanviddb.auth.helpers.send_email")
+    response = await fastapi_client.post(
+        "/api/auth/verify", json={"token": "awkelrjasd"}
+    )
+    assert response.status_code == 400
+    assert response.json() == {"detail": "VERIFY_USER_BAD_TOKEN"}
+    assert mocked_send_email.call_count == 0
+
+
+@pytest.mark.asyncio
+async def test_verify__sends_email_to_user(fastapi_client, mocker):
+    mocked_send_email = mocker.patch("fanviddb.auth.helpers.send_email")
+    user = await UserFactory(is_verified=False)
+    response = await fastapi_client.post(
+        "/api/auth/verify",
+        json={
+            "token": generate_test_jwt(
+                user,
+                secret=UserManager.verification_token_secret,
+                audience=UserManager.verification_token_audience,
+            )
+        },
+    )
+    assert response.status_code == 200
+    assert response.json()["email"] == user["email"]
+    assert mocked_send_email.call_count == 1
+    assert mocked_send_email.call_args[1]["to_emails"] == [user["email"]]
+
+
+@pytest.mark.asyncio
+async def test_forgot_password__sends_email_to_user(fastapi_client, mocker):
+    mocked_send_email = mocker.patch("fanviddb.auth.helpers.send_email")
+    user = await UserFactory(is_verified=True)
+    response = await fastapi_client.post(
+        "/api/auth/forgot-password", json={"email": user["email"]}
+    )
+    assert response.status_code == 202
+    assert response.json() is None
+    assert mocked_send_email.call_count == 1
+    assert mocked_send_email.call_args[1]["to_emails"] == [user["email"]]
+
+
+@pytest.mark.asyncio
+async def test_reset_password__sends_email_to_user(fastapi_client, mocker):
+    mocked_send_email = mocker.patch("fanviddb.auth.helpers.send_email")
+    user = await UserFactory(is_verified=True)
+    response = await fastapi_client.post(
+        "/api/auth/reset-password",
+        json={
+            "token": generate_test_jwt(
+                user,
+                secret=UserManager.reset_password_token_secret,
+                audience=UserManager.reset_password_token_audience,
+            ),
+            "password": "TEST-asdfjkraew;lkrjv;oiuoi234q09q3pof;alkdm.x@#>{S",
+        },
+    )
+    assert response.status_code == 200, response.json()
+    assert response.json() is None
+    assert mocked_send_email.call_count == 1
+    assert mocked_send_email.call_args[1]["to_emails"] == [user["email"]]
