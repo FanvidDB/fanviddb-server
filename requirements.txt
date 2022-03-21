@@ -71,7 +71,7 @@ sniffio==1.2.0
 sniffio==1.2.0
 sqlalchemy-stubs==0.4
 sqlalchemy-utils==0.37.9
-sqlalchemy==1.4.27
+sqlalchemy==1.4.32
 starkbank-ecdsa==2.0.1
 starlette==0.16.0
 text-unidecode==1.3
