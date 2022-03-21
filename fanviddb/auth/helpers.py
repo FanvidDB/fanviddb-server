@@ -9,7 +9,9 @@ from fastapi import status
 from fastapi_users import BaseUserManager
 from fastapi_users import FastAPIUsers
 from fastapi_users import InvalidPasswordException
-from fastapi_users.authentication import CookieAuthentication
+from fastapi_users.authentication import AuthenticationBackend
+from fastapi_users.authentication import CookieTransport
+from fastapi_users.authentication import JWTStrategy
 from sqlalchemy.sql import exists
 from sqlalchemy.sql import select
 from zxcvbn import zxcvbn  # type: ignore
@@ -27,15 +29,22 @@ from .models import UserCreate
 from .models import UserDB
 from .models import UserUpdate
 
-auth_backends = []
-
-cookie_authentication: CookieAuthentication = CookieAuthentication(
-    secret=conf.AUTH_SECRET_KEY,
-    lifetime_seconds=60 * 60 * 24 * 14,
+AUTH_LIFETIME = 60 * 60 * 24 * 14
+cookie_transport = CookieTransport(
+    cookie_max_age=AUTH_LIFETIME,
     cookie_name="fanviddbauth",
 )
 
-auth_backends.append(cookie_authentication)
+
+def get_jwt_strategy() -> JWTStrategy:
+    return JWTStrategy(secret=conf.AUTH_SECRET_KEY, lifetime_seconds=AUTH_LIFETIME)
+
+
+cookie_authentication = AuthenticationBackend(
+    name="cookie",
+    transport=cookie_transport,
+    get_strategy=get_jwt_strategy,
+)
 
 
 class UserManager(BaseUserManager[UserCreate, UserDB]):
@@ -136,10 +145,10 @@ async def get_user_manager(user_db=Depends(get_user_db)):
 
 
 fastapi_users = FastAPIUsers(
-    get_user_manager,
-    auth_backends,
-    User,
-    UserCreate,
-    UserUpdate,
-    UserDB,
+    get_user_manager=get_user_manager,
+    auth_backends=[cookie_authentication],
+    user_model=User,
+    user_create_model=UserCreate,
+    user_update_model=UserUpdate,
+    user_db_model=UserDB,
 )
