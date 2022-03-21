@@ -27,9 +27,9 @@ fluent.runtime==0.3.1
 fluent.syntax==0.18.1
 greenlet==1.1.2
 h11==0.12.0
-httpcore==0.12.3
+httpcore==0.14.7
 httptools==0.1.1
-httpx==0.17.1
+httpx==0.22.0
 idna==3.3
 importlib-metadata==3.7.2
 iniconfig==1.1.1
@@ -66,10 +66,9 @@ pytz==2021.1
 PyYAML==5.4.1
 regex==2020.11.13
 requests==2.27.1
-rfc3986==1.4.0
+rfc3986==1.5.0
 sendgrid==6.6.0
 six==1.16.0
-sniffio==1.2.0
 sniffio==1.2.0
 sqlalchemy-stubs==0.4
 sqlalchemy-utils==0.37.9

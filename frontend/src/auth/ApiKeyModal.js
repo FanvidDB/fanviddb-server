@@ -15,7 +15,7 @@ const ApiKeyModal = ({ visible, onClose }) => {
       return;
     }
     setIsLoading(true);
-    callApi("/api/api_keys/", "POST").then(({ ok, json }) => {
+    callApi("/api/api_keys", "POST").then(({ ok, json }) => {
       if (!ok) {
         setErrors([
           <Localized key="error-unknown" id="api-key-create-error-unknown" />,
