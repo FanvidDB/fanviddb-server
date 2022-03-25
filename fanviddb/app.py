@@ -8,7 +8,6 @@ from starlette.staticfiles import StaticFiles
 from .api_keys.router import api_key_router
 from .auth.routers import auth_router
 from .auth.routers import users_router
-from .db import database
 from .email import EmailSendFailed
 from .fanvids.router import router as fanvid_router
 
@@ -26,34 +25,34 @@ class HelpfulStaticFiles(StaticFiles):
 
 main_app = Starlette()
 
-api = FastAPI(docs_url=None)
+api_app = FastAPI(docs_url=None)
 
-api.include_router(
+api_app.include_router(
     fanvid_router,
     prefix="/fanvids",
     tags=["Fanvids"],
 )
-api.include_router(
+api_app.include_router(
     auth_router,
     prefix="/auth",
     tags=["Auth"],
 )
-api.include_router(
+api_app.include_router(
     users_router,
     prefix="/users",
     tags=["Users"],
 )
-api.include_router(
+api_app.include_router(
     api_key_router,
     prefix="/api_keys",
     tags=["API Keys"],
 )
 
 
-frontend = Starlette()
+frontend_app = Starlette()
 
 
-@frontend.middleware("http")
+@frontend_app.middleware("http")
 async def default_response(request, call_next):
     response = await call_next(request)
     if response.status_code == 404:
@@ -61,7 +60,7 @@ async def default_response(request, call_next):
     return response
 
 
-frontend.mount(
+frontend_app.mount(
     "/", HelpfulStaticFiles(directory="frontend/build/", html=True, check_dir=False)
 )
 main_app.mount(
@@ -78,27 +77,17 @@ main_app.mount(
 )
 main_app.mount(
     "/api",
-    api,
+    api_app,
     name="api",
 )
 main_app.mount(
     "/",
-    frontend,
+    frontend_app,
     name="frontend",
 )
 
 
-@main_app.on_event("startup")
-async def startup():
-    await database.connect()
-
-
-@main_app.on_event("shutdown")
-async def shutdown():
-    await database.disconnect()
-
-
-@api.exception_handler(EmailSendFailed)
+@api_app.exception_handler(EmailSendFailed)
 async def email_send_failed_handler(__: Request, exc: EmailSendFailed):
     return JSONResponse(
         status_code=503,

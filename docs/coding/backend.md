@@ -20,11 +20,10 @@ The backend uses [FastAPI](fastapi.tiangolo.com/), an async [Python](https://www
 2. Install [homebrew](https://brew.sh/), a package manager for Mac OS.
 3. In a terminal, run:
    ```
-   brew install pyenv libpq openssl
+   brew install pyenv
    ```
-4. Follow the printed instructions to make sure [pyenv](https://github.com/pyenv/pyenv) and libpq are initialized when your terminal starts up. It should be something like:
+4. Follow the printed instructions to make sure [pyenv](https://github.com/pyenv/pyenv) is initialized when your terminal starts up. It should be something like:
    ```
-   echo 'export PATH="/usr/local/opt/libpq/bin:$PATH"' >> ~/.zshrc
    echo 'eval "$(pyenv init --path)"' >> ~/.zprofile
    echo 'eval "$(pyenv init -)"' >> ~/.zshrc
    ```

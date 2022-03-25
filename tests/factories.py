@@ -5,25 +5,25 @@ from typing import List
 import factory  # type: ignore
 from fastapi_users.password import get_password_hash
 
-from fanviddb.auth.db import users
-from fanviddb.db import database
-from fanviddb.fanvids.db import fanvids
-from fanviddb.fanvids.models import ContentNotesEnum
+from fanviddb.auth.models import UserTable
+from fanviddb.fanvids.models import FanvidTable
+from fanviddb.fanvids.schema import ContentNotesEnum
 
 
 class BaseFactory(factory.Factory):
     @classmethod
-    def _create(_, model_class, **kwargs):
+    def _create(_, model_class, db_session, **kwargs):
         async def create_coro(**kwargs):
-            stmt = model_class.insert().values(**kwargs)
-            await database.execute(stmt)
+            instance = model_class(**kwargs)
+            db_session.add(instance)
+            await db_session.commit()
             return kwargs
 
         return create_coro(**kwargs)
 
     @classmethod
-    async def create_batch(cls, size, **kwargs):
-        return [await cls.create(**kwargs) for _ in range(size)]
+    async def create_batch(cls, db_session, size, **kwargs):
+        return [await cls.create(db_session=db_session, **kwargs) for _ in range(size)]
 
     @classmethod
     def _build(_, model_class, **kwargs):
@@ -32,7 +32,7 @@ class BaseFactory(factory.Factory):
 
 class FanvidFactory(BaseFactory):
     class Meta:
-        model = fanvids
+        model = FanvidTable
 
     uuid = factory.LazyFunction(uuid.uuid4)
     title = "Fanvid"
@@ -59,7 +59,7 @@ class FanvidFactory(BaseFactory):
 
 class UserFactory(BaseFactory):
     class Meta:
-        model = users
+        model = UserTable
 
     id = factory.LazyFunction(uuid.uuid4)
     username = factory.Sequence(lambda n: f"user{n}")
@@ -70,8 +70,11 @@ class UserFactory(BaseFactory):
     password = "password"
 
     @classmethod
-    def _create(_, model_class, **kwargs):
+    def _create(_, model_class, db_session, **kwargs):
         password = kwargs.pop("password")
         return super()._create(
-            model_class, hashed_password=get_password_hash(password), **kwargs
+            model_class,
+            db_session,
+            hashed_password=get_password_hash(password),
+            **kwargs,
         )

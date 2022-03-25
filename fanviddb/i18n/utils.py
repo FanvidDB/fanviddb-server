@@ -6,8 +6,8 @@ from fluent.runtime import FluentLocalization  # type: ignore
 from fluent.runtime import FluentResourceLoader  # type: ignore
 from starlette.requests import Request
 
-from .models import DEFAULT_LOCALE
-from .models import Locale
+from .schema import DEFAULT_LOCALE
+from .schema import Locale
 
 
 def get_request_locales(request: Optional[Request] = None) -> List[Locale]:

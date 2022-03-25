@@ -3,13 +3,12 @@ from fastapi.encoders import jsonable_encoder
 from sqlalchemy.sql import select
 
 from fanviddb.api_keys.helpers import generate as generate_api_key
-from fanviddb.db import database
-from fanviddb.fanvids.db import _to_api
-from fanviddb.fanvids.db import fanvids
-from fanviddb.fanvids.db import update_fanvid
-from fanviddb.fanvids.models import Fanvid
-from fanviddb.fanvids.models import FanvidWithRelevance
-from fanviddb.fanvids.models import UpdateFanvid
+from fanviddb.fanvids.crud import _to_api
+from fanviddb.fanvids.crud import fanvids
+from fanviddb.fanvids.crud import update_fanvid
+from fanviddb.fanvids.schema import Fanvid
+from fanviddb.fanvids.schema import FanvidWithRelevance
+from fanviddb.fanvids.schema import UpdateFanvid
 
 from ..factories import FanvidFactory
 
@@ -27,7 +26,7 @@ def _serialize_fanvid(fanvid, relevance=RELEVANCE_UNSET):
 
 
 @pytest.mark.asyncio
-async def test_create_fanvid(logged_in_client):
+async def test_create_fanvid(db_session, logged_in_client):
     expected_data = _serialize_fanvid(FanvidFactory.build())
     expected_data.pop("uuid")
     expected_data.pop("state")
@@ -47,9 +46,10 @@ async def test_create_fanvid(logged_in_client):
     )
     assert response_data == expected_data
     query = select([fanvids])
-    result = [dict(row) for row in await database.fetch_all(query)]
-    assert len(result) == 1
-    assert _serialize_fanvid(result[0]) == expected_data
+    result = await db_session.execute(query)
+    rows = [row._asdict() for row in result.all()]
+    assert len(rows) == 1
+    assert _serialize_fanvid(rows[0]) == expected_data
 
 
 @pytest.mark.asyncio
@@ -64,8 +64,8 @@ async def test_create_fanvid__unauthenticated(fastapi_client):
 
 
 @pytest.mark.asyncio
-async def test_list_fanvids__user(logged_in_client):
-    fanvid = await FanvidFactory()
+async def test_list_fanvids__user(db_session, logged_in_client):
+    fanvid = await FanvidFactory(db_session=db_session)
     expected_fanvid = _serialize_fanvid(fanvid, relevance=None)
     expected_response = {
         "fanvids": [expected_fanvid],
@@ -78,9 +78,9 @@ async def test_list_fanvids__user(logged_in_client):
 
 
 @pytest.mark.asyncio
-async def test_list_fanvids__api_key(fastapi_client):
-    api_key = await generate_api_key()
-    fanvid = await FanvidFactory()
+async def test_list_fanvids__api_key(db_session, fastapi_client):
+    api_key = await generate_api_key(db_session)
+    fanvid = await FanvidFactory(db_session=db_session)
     expected_fanvid = _serialize_fanvid(fanvid, relevance=None)
     expected_response = {
         "fanvids": [expected_fanvid],
@@ -96,8 +96,8 @@ async def test_list_fanvids__api_key(fastapi_client):
 
 
 @pytest.mark.asyncio
-async def test_list_fanvids__invalid_api_key(fastapi_client):
-    await FanvidFactory()
+async def test_list_fanvids__invalid_api_key(db_session, fastapi_client):
+    await FanvidFactory(db_session=db_session)
     response = await fastapi_client.get(
         "/api/fanvids", headers={"X-API-Key": "nonsenseheader"}
     )
@@ -105,15 +105,15 @@ async def test_list_fanvids__invalid_api_key(fastapi_client):
 
 
 @pytest.mark.asyncio
-async def test_list_fanvids__unauthenticated(fastapi_client):
-    await FanvidFactory()
+async def test_list_fanvids__unauthenticated(db_session, fastapi_client):
+    await FanvidFactory(db_session=db_session)
     response = await fastapi_client.get("/api/fanvids")
     assert response.status_code == 401
 
 
 @pytest.mark.asyncio
-async def test_list_fanvids__excludes_deleted(logged_in_client):
-    await FanvidFactory(state="deleted")
+async def test_list_fanvids__excludes_deleted(db_session, logged_in_client):
+    await FanvidFactory(db_session=db_session, state="deleted")
     response = await logged_in_client.get("/api/fanvids")
     assert response.status_code == 200
     response_data = response.json()
@@ -122,8 +122,8 @@ async def test_list_fanvids__excludes_deleted(logged_in_client):
 
 
 @pytest.mark.asyncio
-async def test_list_fanvids__limit(logged_in_client):
-    fanvids = await FanvidFactory.create_batch(10)
+async def test_list_fanvids__limit(db_session, logged_in_client):
+    fanvids = await FanvidFactory.create_batch(db_session, 10)
     response = await logged_in_client.get("/api/fanvids?limit=5")
     assert response.status_code == 200
     response_data = response.json()
@@ -136,8 +136,8 @@ async def test_list_fanvids__limit(logged_in_client):
 
 
 @pytest.mark.asyncio
-async def test_list_fanvids__offset(logged_in_client):
-    fanvids = await FanvidFactory.create_batch(10)
+async def test_list_fanvids__offset(db_session, logged_in_client):
+    fanvids = await FanvidFactory.create_batch(db_session, 10)
     response = await logged_in_client.get("/api/fanvids?offset=2")
     assert response.status_code == 200
     response_data = response.json()
@@ -150,8 +150,8 @@ async def test_list_fanvids__offset(logged_in_client):
 
 
 @pytest.mark.asyncio
-async def test_list_fanvids__limit_and_offset(logged_in_client):
-    fanvids = await FanvidFactory.create_batch(10)
+async def test_list_fanvids__limit_and_offset(db_session, logged_in_client):
+    fanvids = await FanvidFactory.create_batch(db_session, 10)
     response = await logged_in_client.get("/api/fanvids?limit=5&offset=2")
     assert response.status_code == 200
     response_data = response.json()
@@ -164,26 +164,30 @@ async def test_list_fanvids__limit_and_offset(logged_in_client):
 
 
 @pytest.mark.asyncio
-async def test_list_fanvids__filename_search(logged_in_client):
+async def test_list_fanvids__filename_search(db_session, logged_in_client):
     fanvid1 = await FanvidFactory(
+        db_session=db_session,
         title="Hello",
         creators=["World"],
         fandoms=["foo"],
         unique_identifiers=[{"kind": "youtube", "identifier": "bar"}],
     )
     fanvid2 = await FanvidFactory(
+        db_session=db_session,
         title="Hello",
         creators=["World"],
         fandoms=["whatever"],
         unique_identifiers=[{"kind": "youtube", "identifier": "bar"}],
     )
     fanvid3 = await FanvidFactory(
+        db_session=db_session,
         title="Goodnight",
         creators=["World"],
         fandoms=["whatever"],
         unique_identifiers=[{"kind": "youtube", "identifier": "suibian"}],
     )
     fanvid4 = await FanvidFactory(
+        db_session=db_session,
         title="Irrelevant",
         creators=["other"],
         fandoms=["parrot"],
@@ -193,7 +197,9 @@ async def test_list_fanvids__filename_search(logged_in_client):
     # Trigger search doc update.
     for fanvid in (fanvid1, fanvid2, fanvid3, fanvid4):
         await update_fanvid(
-            fanvid_uuid=fanvid["uuid"], fanvid=UpdateFanvid(title=fanvid["title"])
+            session=db_session,
+            fanvid_uuid=fanvid["uuid"],
+            fanvid=UpdateFanvid(title=fanvid["title"]),
         )
 
     filename = "whatever - Hello - World [bar].mp4"
@@ -223,8 +229,8 @@ async def test_list_fanvids__disallow_negative_offset(logged_in_client):
 
 
 @pytest.mark.asyncio
-async def test_read_fanvid(fastapi_client):
-    fanvid = await FanvidFactory()
+async def test_read_fanvid(db_session, fastapi_client):
+    fanvid = await FanvidFactory(db_session=db_session)
     expected_response = _serialize_fanvid(fanvid)
     response = await fastapi_client.get(f"/api/fanvids/{str(fanvid['uuid'])}")
     assert response.status_code == 200
@@ -241,8 +247,8 @@ async def test_read_fanvid__404(fastapi_client):
 
 
 @pytest.mark.asyncio
-async def test_update_fanvid(logged_in_client):
-    fanvid = await FanvidFactory()
+async def test_update_fanvid(db_session, logged_in_client):
+    fanvid = await FanvidFactory(db_session=db_session)
     expected_response = _serialize_fanvid(fanvid)
     expected_response["title"] = f"{expected_response['title']} and then some"
     response = await logged_in_client.patch(
@@ -260,8 +266,8 @@ async def test_update_fanvid(logged_in_client):
 
 
 @pytest.mark.asyncio
-async def test_update_fanvid__unauthenticated(fastapi_client):
-    fanvid = await FanvidFactory()
+async def test_update_fanvid__unauthenticated(db_session, fastapi_client):
+    fanvid = await FanvidFactory(db_session=db_session)
     expected_response = _serialize_fanvid(fanvid)
     expected_response["title"] = f"{expected_response['title']} and then some"
     response = await fastapi_client.patch(

@@ -14,6 +14,10 @@ DATABASE_URL = config("DATABASE_URL", cast=databases.DatabaseURL)
 if DATABASE_URL.scheme == "postgres":
     DATABASE_URL = DATABASE_URL.replace(scheme="postgresql")
 
+# Shim for backwards-compat with non-async postgres DATABASE_URLs.
+if DATABASE_URL.scheme == "postgresql":
+    DATABASE_URL = DATABASE_URL.replace(scheme="postgresql+asyncpg")
+
 IS_CIRCLECI = os.getenv("IS_CIRCLECI") == "true"
 TEST_DATABASE_URL = DATABASE_URL.replace(database="test_" + DATABASE_URL.database)
 AUTH_SECRET_KEY = config("AUTH_SECRET_KEY")

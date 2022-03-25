@@ -1,19 +1,12 @@
-from typing import Optional
+from fastapi_users.db import SQLAlchemyBaseUserTable
+from sqlalchemy import Column
+from sqlalchemy import String
 
-from fastapi_users import models
-
-
-class User(models.BaseUser):
-    username: Optional[str]
+from fanviddb.db import Base
 
 
-class UserCreate(models.BaseUserCreate):
-    username: str
+class UserTable(Base, SQLAlchemyBaseUserTable):
+    username = Column(String(length=40), nullable=False, unique=True)
 
 
-class UserUpdate(models.BaseUserUpdate):
-    username: Optional[str]
-
-
-class UserDB(User, models.BaseUserDB):
-    username: str
+users = UserTable.__table__  # type: ignore

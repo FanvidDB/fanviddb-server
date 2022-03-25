@@ -12,22 +12,23 @@ from fastapi_users import InvalidPasswordException
 from fastapi_users.authentication import AuthenticationBackend
 from fastapi_users.authentication import CookieTransport
 from fastapi_users.authentication import JWTStrategy
+from fastapi_users.db import SQLAlchemyUserDatabase
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql import exists
 from sqlalchemy.sql import select
 from zxcvbn import zxcvbn  # type: ignore
 
 from fanviddb import conf
-from fanviddb.db import database
+from fanviddb.db import get_async_session
 from fanviddb.email import send_email
 from fanviddb.i18n.utils import get_fluent
 from fanviddb.i18n.utils import get_request_locales
 
-from .db import get_user_db
-from .db import users
-from .models import User
-from .models import UserCreate
-from .models import UserDB
-from .models import UserUpdate
+from .models import UserTable
+from .schema import User
+from .schema import UserCreate
+from .schema import UserDB
+from .schema import UserUpdate
 
 AUTH_LIFETIME = 60 * 60 * 24 * 14
 cookie_transport = CookieTransport(
@@ -53,6 +54,7 @@ class UserManager(BaseUserManager[UserCreate, UserDB]):
     reset_password_token_lifetime_seconds = 60 * 5
     verification_token_secret = conf.EMAIL_TOKEN_SECRET_KEY
     verification_token_lifetime_seconds = 60 * 5
+    user_db: SQLAlchemyUserDatabase
 
     async def on_after_forgot_password(
         self, user: UserDB, token: str, request: Optional[Request] = None
@@ -130,14 +132,19 @@ class UserManager(BaseUserManager[UserCreate, UserDB]):
         request: Optional[Request] = None,
     ) -> UserDB:
         user = cast(UserCreate, user)
-        query = select([exists().where(users.c.username == user.username)])
-        result = await database.fetch_one(query)
-        if result and result.get("anon_1"):
+        query = select([exists().where(UserTable.username == user.username)])
+        result = await self.user_db.session.execute(query)
+        row = result.first()
+        if row and row._mapping.get("anon_1"):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="REGISTER_USERNAME_ALREADY_EXISTS",
             )
         return await super().create(user, safe, request)
+
+
+async def get_user_db(session: AsyncSession = Depends(get_async_session)):
+    yield SQLAlchemyUserDatabase(UserDB, session, UserTable)
 
 
 async def get_user_manager(user_db=Depends(get_user_db)):

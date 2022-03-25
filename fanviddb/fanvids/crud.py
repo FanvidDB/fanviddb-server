@@ -2,76 +2,42 @@ import datetime
 import uuid
 from pathlib import Path
 from typing import Any
+from typing import Dict
 from typing import List
 from typing import Mapping
 from typing import Optional
 from typing import Tuple
 
-from sqlalchemy import JSON
-from sqlalchemy import Column
-from sqlalchemy import DateTime
-from sqlalchemy import Index
-from sqlalchemy import String
 from sqlalchemy import desc
 from sqlalchemy import func
+from sqlalchemy import type_coerce
 from sqlalchemy import update
-from sqlalchemy.dialects.postgresql import INTERVAL
-from sqlalchemy.dialects.postgresql import TSVECTOR
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql import select
 from sqlalchemy.sql.functions import Function
-
-from fanviddb.db import Base
-from fanviddb.db import database
+from sqlalchemy.types import UserDefinedType
 
 from .constants import FILENAME_PUNCTUATION_RE
 from .constants import VIDEO_EXTENSIONS
-from .models import CreateFanvid
-from .models import Fanvid
-from .models import FanvidWithRelevance
-from .models import StateEnum
-from .models import UpdateFanvid
+from .models import fanvids
+from .schema import CreateFanvid
+from .schema import Fanvid
+from .schema import FanvidWithRelevance
+from .schema import StateEnum
+from .schema import UpdateFanvid
 
 # For now, hard-code this. If we have some way of knowing per-fanvid what
 # language to search in, we could be more granular.
 FILENAME_SEARCH_LANGUAGE = "english"
 
 
-class FanvidTable(Base):
+# Workaround required for async sqlalchemy tsvector
+# https://github.com/sqlalchemy/sqlalchemy/issues/6833#issuecomment-892844560
+class REGCONFIG(UserDefinedType):
+    cache_ok = True
 
-    __tablename__ = "fanvids"
-
-    uuid = Column(UUID(), default=uuid.uuid4, primary_key=True)
-    title = Column(String(), nullable=False)
-    creators = Column(JSON(), nullable=False)
-    premiere_date = Column(DateTime())
-    premiere_event = Column(String(), nullable=False)
-    audio_title = Column(String(), nullable=False)
-    audio_artists_or_sources = Column(JSON(), nullable=False)
-    audio_languages = Column(JSON(), nullable=False)
-    length = Column(INTERVAL(), nullable=False)
-    rating = Column(String(), nullable=False)
-    fandoms = Column(JSON(), nullable=False)
-    summary = Column(String(), nullable=False)
-    content_notes = Column(JSON(), nullable=False)
-    urls = Column(JSON(), nullable=False)
-    unique_identifiers = Column(JSON(), nullable=False)
-    thumbnail_url = Column(String(), nullable=False)
-
-    # Admin-only
-    state = Column(String(), nullable=False)
-
-    # Internal
-    created_timestamp = Column(DateTime(), nullable=False)
-    modified_timestamp = Column(DateTime(), nullable=False)
-    filename_search_doc = Column(TSVECTOR(), nullable=False)
-
-    __table_args__ = (
-        Index("filename_search_index", "filename_search_doc", postgresql_using="gin"),
-    )
-
-
-fanvids = FanvidTable.__table__
+    def get_col_spec(self, **_):
+        return "regconfig"
 
 
 def _to_db(fanvid: dict):
@@ -87,8 +53,7 @@ def _to_db(fanvid: dict):
     return fanvid
 
 
-def _to_api(fanvid: Mapping[str, Any]):
-    fanvid = dict(fanvid)
+def _to_api(fanvid: Dict[str, Any]):
     fanvid["audio"] = {
         "title": fanvid.pop("audio_title"),
         "artists_or_sources": fanvid.pop("audio_artists_or_sources"),
@@ -106,7 +71,7 @@ def _filename_search_doc(fanvid: Mapping[str, Any]):
         + [ui["identifier"] for ui in fanvid["unique_identifiers"]]
     )
     return func.to_tsvector(
-        FILENAME_SEARCH_LANGUAGE,
+        type_coerce(FILENAME_SEARCH_LANGUAGE, REGCONFIG),  # type: ignore
         " || ' ' || ".join(strings),
     )
 
@@ -120,10 +85,14 @@ def filename_to_tsquery(filename: str) -> Function:
     # we just need to match as many of the present words as possible.
     query = FILENAME_PUNCTUATION_RE.sub(" ", str(path)).strip()
     query = " | ".join(query.split(" "))
-    return func.to_tsquery(FILENAME_SEARCH_LANGUAGE, query)
+    return func.to_tsquery(
+        type_coerce(FILENAME_SEARCH_LANGUAGE, REGCONFIG), query  # type: ignore
+    )
 
 
-async def create_fanvid(fanvid: CreateFanvid) -> Optional[Fanvid]:
+async def create_fanvid(
+    session: AsyncSession, fanvid: CreateFanvid
+) -> Optional[Fanvid]:
     fanvid_dict = _to_db(fanvid.dict())
     fanvid_dict.update(
         {
@@ -135,15 +104,17 @@ async def create_fanvid(fanvid: CreateFanvid) -> Optional[Fanvid]:
         }
     )
     query = fanvids.insert().values(**fanvid_dict).returning(fanvids)
-    result = await database.fetch_one(query)
-    if not result:
+    result = await session.execute(query)
+    await session.commit()
+    row = result.first()
+    if not row:
         return None
 
-    return _to_api(result)
+    return _to_api(row._asdict())
 
 
 async def list_fanvids(
-    offset: int, limit: int, filename: Optional[str] = None
+    session: AsyncSession, offset: int, limit: int, filename: Optional[str] = None
 ) -> Tuple[int, List[FanvidWithRelevance]]:
     query = (
         select([fanvids])
@@ -164,24 +135,29 @@ async def list_fanvids(
 
     page = query.limit(limit).offset(offset)
 
-    fanvid_list = [_to_api(dict(row)) for row in await database.fetch_all(page)]
-    total_count_result = await database.fetch_one(
+    result = await session.execute(page)
+    fanvid_list = [_to_api(row._asdict()) for row in result.all()]
+    total_count_result = await session.execute(
         select([func.count()]).select_from(query.alias("fanvids"))
     )
-    total_count = total_count_result["count_1"] if total_count_result else 0
+    total_count_row = total_count_result.first()
+    total_count = total_count_row.count_1 if total_count_row else 0
     return total_count, fanvid_list
 
 
-async def read_fanvid(fanvid_uuid: uuid.UUID) -> Optional[Fanvid]:
+async def read_fanvid(
+    session: AsyncSession, fanvid_uuid: uuid.UUID
+) -> Optional[Fanvid]:
     query = select([fanvids]).where(fanvids.c.uuid == fanvid_uuid)
-    result = await database.fetch_one(query)
-    if not result:
+    result = await session.execute(query)
+    row = result.first()
+    if not row:
         return None
-    return _to_api(result)
+    return _to_api(row._asdict())
 
 
 async def update_fanvid(
-    fanvid_uuid: uuid.UUID, fanvid: UpdateFanvid
+    session: AsyncSession, fanvid_uuid: uuid.UUID, fanvid: UpdateFanvid
 ) -> Optional[Fanvid]:
     fanvid_dict = _to_db(fanvid.dict(exclude_unset=True))
     fanvid_dict.update(
@@ -195,18 +171,21 @@ async def update_fanvid(
         .values(fanvid_dict)
         .returning(fanvids)
     )
-    result = await database.fetch_one(query)
-    if not result:
+    result = await session.execute(query)
+    await session.commit()
+    row = result.first()
+    if not row:
         return None
 
     # If any of the filename_search_doc fields changed, update it
     if set(fanvid_dict) & set(("title", "creators", "fandoms", "unique_identifiers")):
-        filename_search_doc = _filename_search_doc(dict(result))
+        filename_search_doc = _filename_search_doc(row._asdict())
         query = (
             update(fanvids)
             .where(fanvids.c.uuid == fanvid_uuid)
             .values(filename_search_doc=filename_search_doc)
         )
-        await database.fetch_one(query)
+        await session.execute(query)
+        await session.commit()
 
-    return _to_api(result)
+    return _to_api(row._asdict())

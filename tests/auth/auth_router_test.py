@@ -5,9 +5,8 @@ from fastapi_users.password import pwd_context
 from passlib import pwd  # type: ignore
 from sqlalchemy.sql import select
 
-from fanviddb.auth.db import users
 from fanviddb.auth.helpers import UserManager
-from fanviddb.db import database
+from fanviddb.auth.models import users
 
 from ..factories import UserFactory
 
@@ -26,7 +25,7 @@ def generate_test_jwt(user, secret, audience):
 
 
 @pytest.mark.asyncio
-async def test_register(fastapi_client):
+async def test_register(db_session, fastapi_client):
     post_data = {
         "email": "hello@example.com",
         "username": "hello",
@@ -49,17 +48,20 @@ async def test_register(fastapi_client):
 
     assert response_data == expected_data
     query = select([users])
-    result = [dict(row) for row in await database.fetch_all(query)]
-    assert len(result) == 1
-    user_data = jsonable_encoder(result[0])
+    result = await db_session.execute(query)
+    _rows = result.all()
+    rows = [row._asdict() for row in _rows]
+    assert len(rows) == 1
+    user_data = jsonable_encoder(rows[0])
     hashed_password = user_data.pop("hashed_password", "!")
     assert user_data == expected_data
     pwd_context.verify(post_data["password"], hashed_password)
 
 
 @pytest.mark.asyncio
-async def test_register__duplicate_email(fastapi_client):
+async def test_register__duplicate_email(db_session, fastapi_client):
     await UserFactory(
+        db_session=db_session,
         username="whatever",
         email="wwx@fanviddb.com",
     )
@@ -79,8 +81,9 @@ async def test_register__duplicate_email(fastapi_client):
 
 
 @pytest.mark.asyncio
-async def test_register__duplicate_username(fastapi_client):
+async def test_register__duplicate_username(db_session, fastapi_client):
     await UserFactory(
+        db_session=db_session,
         username="wwx",
         email="whatever@fanviddb.com",
     )
@@ -117,9 +120,9 @@ async def test_register__weak_password(fastapi_client):
 
 
 @pytest.mark.asyncio
-async def test_request_verify__sends_email_to_user(fastapi_client, mocker):
+async def test_request_verify__sends_email_to_user(db_session, fastapi_client, mocker):
     mocked_send_email = mocker.patch("fanviddb.auth.helpers.send_email")
-    user = await UserFactory(is_verified=False)
+    user = await UserFactory(db_session=db_session, is_verified=False)
     response = await fastapi_client.post(
         "/api/auth/request-verify-token",
         json={"email": user["email"]},
@@ -143,9 +146,9 @@ async def test_verify__invalid_token(fastapi_client, mocker):
 
 
 @pytest.mark.asyncio
-async def test_verify__sends_email_to_user(fastapi_client, mocker):
+async def test_verify__sends_email_to_user(db_session, fastapi_client, mocker):
     mocked_send_email = mocker.patch("fanviddb.auth.helpers.send_email")
-    user = await UserFactory(is_verified=False)
+    user = await UserFactory(db_session=db_session, is_verified=False)
     response = await fastapi_client.post(
         "/api/auth/verify",
         json={
@@ -163,9 +166,9 @@ async def test_verify__sends_email_to_user(fastapi_client, mocker):
 
 
 @pytest.mark.asyncio
-async def test_forgot_password__sends_email_to_user(fastapi_client, mocker):
+async def test_forgot_password__sends_email_to_user(db_session, fastapi_client, mocker):
     mocked_send_email = mocker.patch("fanviddb.auth.helpers.send_email")
-    user = await UserFactory(is_verified=True)
+    user = await UserFactory(db_session=db_session, is_verified=True)
     response = await fastapi_client.post(
         "/api/auth/forgot-password", json={"email": user["email"]}
     )
@@ -176,9 +179,9 @@ async def test_forgot_password__sends_email_to_user(fastapi_client, mocker):
 
 
 @pytest.mark.asyncio
-async def test_reset_password__sends_email_to_user(fastapi_client, mocker):
+async def test_reset_password__sends_email_to_user(db_session, fastapi_client, mocker):
     mocked_send_email = mocker.patch("fanviddb.auth.helpers.send_email")
-    user = await UserFactory(is_verified=True)
+    user = await UserFactory(db_session=db_session, is_verified=True)
     response = await fastapi_client.post(
         "/api/auth/reset-password",
         json={
