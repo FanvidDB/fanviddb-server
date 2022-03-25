@@ -20,7 +20,7 @@ jobs:
         environment:
           AUTH_SECRET_KEY: secret
           IS_CIRCLECI: "true"
-          DATABASE_URL: postgresql://circle_test:fanviddb_test@localhost/circle_test?sslmode=disable
+          DATABASE_URL: postgresql+asyncpg://circle_test:fanviddb_test@localhost/circle_test?ssl=disable
           EMAIL_TOKEN_SECRET_KEY: secret
       - image: cimg/postgres:14.1
         environment:
