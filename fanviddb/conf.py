@@ -1,7 +1,7 @@
 import os
 
-from starlette.config import Config
 from sqlalchemy.engine.url import make_url
+from starlette.config import Config
 
 config = Config(".env")
 
