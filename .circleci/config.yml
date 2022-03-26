@@ -13,6 +13,7 @@ jobs:
       - checkout
       - python/install-packages:
           pkg-manager: pip
+          args: --no-deps
       - run: make backend-lint
   backend-test:
     docker:
