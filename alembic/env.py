@@ -42,9 +42,8 @@ def run_migrations_offline():
     script output.
 
     """
-    url = str(conf.DATABASE_URL)
     context.configure(
-        url=url,
+        url=conf.DATABASE_URL,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
@@ -69,7 +68,7 @@ async def run_migrations_online():
 
     """
     connectable = create_async_engine(
-        str(conf.DATABASE_URL),
+        conf.DATABASE_URL,
     )
 
     async with connectable.connect() as connection:
