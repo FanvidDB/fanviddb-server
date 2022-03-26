@@ -1,10 +1,11 @@
+import asyncio
 from logging.config import fileConfig
 
-from sqlalchemy import create_engine
+from sqlalchemy.ext.asyncio import create_async_engine
 
-import fanviddb.api_keys.db  # noqa: F401
-import fanviddb.auth.db  # noqa: F401
-import fanviddb.fanvids.db  # noqa: F401
+import fanviddb.api_keys.models  # noqa: F401
+import fanviddb.auth.models  # noqa: F401
+import fanviddb.fanvids.models  # noqa: F401
 from alembic import context
 from fanviddb import conf
 from fanviddb import db
@@ -53,25 +54,31 @@ def run_migrations_offline():
         context.run_migrations()
 
 
-def run_migrations_online():
+def do_run_migrations(connection):
+    context.configure(connection=connection, target_metadata=target_metadata)
+
+    with context.begin_transaction():
+        context.run_migrations()
+
+
+async def run_migrations_online():
     """Run migrations in 'online' mode.
 
     In this scenario we need to create an Engine
     and associate a connection with the context.
 
     """
-    connectable = create_engine(
+    connectable = create_async_engine(
         str(conf.DATABASE_URL),
     )
 
-    with connectable.connect() as connection:
-        context.configure(connection=connection, target_metadata=target_metadata)
+    async with connectable.connect() as connection:
+        await connection.run_sync(do_run_migrations)
 
-        with context.begin_transaction():
-            context.run_migrations()
+    await connectable.dispose()
 
 
 if context.is_offline_mode():
     run_migrations_offline()
 else:
-    run_migrations_online()
+    asyncio.run(run_migrations_online())
