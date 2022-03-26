@@ -19,6 +19,8 @@ if DATABASE_URL.startswith("postgresql://"):
     DATABASE_URL = DATABASE_URL.replace("postgresql", "postgresql+asyncpg", 1)
 
 _url = make_url(DATABASE_URL)
+if _url.database is None:
+    raise Exception("Url does not have a database.")
 TEST_DATABASE_URL = str(_url.set(database="test_" + _url.database))
 
 IS_CIRCLECI = os.getenv("IS_CIRCLECI") == "true"
