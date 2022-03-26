@@ -1,7 +1,6 @@
 import pytest
 from fastapi.encoders import jsonable_encoder
 from fastapi_users.jwt import generate_jwt
-from fastapi_users.password import pwd_context
 from passlib import pwd  # type: ignore
 from sqlalchemy.sql import select
 
@@ -9,6 +8,7 @@ from fanviddb.auth.helpers import UserManager
 from fanviddb.auth.models import users
 
 from ..factories import UserFactory
+from ..factories import password_helper
 
 
 def generate_test_jwt(user, secret, audience):
@@ -55,7 +55,7 @@ async def test_register(db_session, fastapi_client):
     user_data = jsonable_encoder(rows[0])
     hashed_password = user_data.pop("hashed_password", "!")
     assert user_data == expected_data
-    pwd_context.verify(post_data["password"], hashed_password)
+    password_helper.verify_and_update(post_data["password"], hashed_password)
 
 
 @pytest.mark.asyncio

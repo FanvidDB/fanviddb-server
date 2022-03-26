@@ -3,11 +3,13 @@ import uuid
 from typing import List
 
 import factory  # type: ignore
-from fastapi_users.password import get_password_hash
+from fastapi_users.password import PasswordHelper
 
 from fanviddb.auth.models import UserTable
 from fanviddb.fanvids.models import FanvidTable
 from fanviddb.fanvids.schema import ContentNotesEnum
+
+password_helper = PasswordHelper()
 
 
 class BaseFactory(factory.Factory):
@@ -75,6 +77,6 @@ class UserFactory(BaseFactory):
         return super()._create(
             model_class,
             db_session,
-            hashed_password=get_password_hash(password),
+            hashed_password=password_helper.hash(password),
             **kwargs,
         )
