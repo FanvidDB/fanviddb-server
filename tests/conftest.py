@@ -2,7 +2,7 @@ import asyncio
 from typing import AsyncGenerator
 
 import pytest
-import pytest_asyncio
+import pytest_asyncio  # type: ignore
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.config import environ
