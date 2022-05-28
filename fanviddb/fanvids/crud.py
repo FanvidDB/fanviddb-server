@@ -20,11 +20,11 @@ from sqlalchemy.types import UserDefinedType
 from .constants import FILENAME_PUNCTUATION_RE
 from .constants import VIDEO_EXTENSIONS
 from .models import fanvids
-from .schema import CreateFanvid
-from .schema import Fanvid
-from .schema import FanvidWithRelevance
+from .schema import FanvidCreate
+from .schema import FanvidRead
+from .schema import FanvidReadWithRelevance
+from .schema import FanvidUpdate
 from .schema import StateEnum
-from .schema import UpdateFanvid
 
 # For now, hard-code this. If we have some way of knowing per-fanvid what
 # language to search in, we could be more granular.
@@ -91,8 +91,8 @@ def filename_to_tsquery(filename: str) -> Function:
 
 
 async def create_fanvid(
-    session: AsyncSession, fanvid: CreateFanvid
-) -> Optional[Fanvid]:
+    session: AsyncSession, fanvid: FanvidCreate
+) -> Optional[FanvidRead]:
     fanvid_dict = _to_db(fanvid.dict())
     fanvid_dict.update(
         {
@@ -115,7 +115,7 @@ async def create_fanvid(
 
 async def list_fanvids(
     session: AsyncSession, offset: int, limit: int, filename: Optional[str] = None
-) -> Tuple[int, List[FanvidWithRelevance]]:
+) -> Tuple[int, List[FanvidReadWithRelevance]]:
     query = (
         select([fanvids])
         .where(fanvids.c.state != "deleted")
@@ -147,7 +147,7 @@ async def list_fanvids(
 
 async def read_fanvid(
     session: AsyncSession, fanvid_uuid: uuid.UUID
-) -> Optional[Fanvid]:
+) -> Optional[FanvidRead]:
     query = select([fanvids]).where(fanvids.c.uuid == fanvid_uuid)
     result = await session.execute(query)
     row = result.first()
@@ -157,8 +157,8 @@ async def read_fanvid(
 
 
 async def update_fanvid(
-    session: AsyncSession, fanvid_uuid: uuid.UUID, fanvid: UpdateFanvid
-) -> Optional[Fanvid]:
+    session: AsyncSession, fanvid_uuid: uuid.UUID, fanvid: FanvidUpdate
+) -> Optional[FanvidRead]:
     fanvid_dict = _to_db(fanvid.dict(exclude_unset=True))
     fanvid_dict.update(
         {

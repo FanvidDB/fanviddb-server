@@ -29,7 +29,7 @@ async def generate(session: AsyncSession) -> str:
         secret = pwd.genword(entropy="secure", charset="ascii_50")
         api_key = f"{pk}_{secret}"
 
-        instance = models.ApiKeyTable(
+        instance = models.ApiKey(
             pk=pk,
             hashed_api_key=api_key_context.hash(api_key),
             created_timestamp=datetime.datetime.utcnow(),

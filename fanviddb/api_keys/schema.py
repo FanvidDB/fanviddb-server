@@ -1,5 +1,5 @@
 from pydantic import BaseModel
 
 
-class ApiKey(BaseModel):
+class ApiKeyRead(BaseModel):
     api_key: str

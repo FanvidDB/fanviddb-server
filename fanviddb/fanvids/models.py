@@ -16,7 +16,7 @@ from fanviddb.db import Base
 FILENAME_SEARCH_LANGUAGE = "english"
 
 
-class FanvidTable(Base):
+class Fanvid(Base):
 
     __tablename__ = "fanvids"
 
@@ -50,4 +50,4 @@ class FanvidTable(Base):
     )
 
 
-fanvids = FanvidTable.__table__
+fanvids = Fanvid.__table__

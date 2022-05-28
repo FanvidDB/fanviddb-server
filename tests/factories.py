@@ -6,7 +6,7 @@ import factory  # type: ignore
 from fastapi_users.password import PasswordHelper
 
 from fanviddb.auth.models import User
-from fanviddb.fanvids.models import FanvidTable
+from fanviddb.fanvids.models import Fanvid
 from fanviddb.fanvids.schema import ContentNotesEnum
 
 password_helper = PasswordHelper()
@@ -34,7 +34,7 @@ class BaseFactory(factory.Factory):
 
 class FanvidFactory(BaseFactory):
     class Meta:
-        model = FanvidTable
+        model = Fanvid
 
     uuid = factory.LazyFunction(uuid.uuid4)
     title = "Fanvid"

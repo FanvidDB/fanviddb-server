@@ -83,7 +83,7 @@ class BaseFanvid(BaseModel):
     state: Optional[StateEnum]
 
 
-class CreateFanvid(BaseFanvid):
+class FanvidCreate(BaseFanvid):
     title: str
     creators: List[str]
     premiere_date: Optional[datetime.date] = None
@@ -99,20 +99,20 @@ class CreateFanvid(BaseFanvid):
     thumbnail_url: HttpUrl
 
 
-class UpdateFanvid(BaseFanvid):
+class FanvidUpdate(BaseFanvid):
     pass
 
 
-class Fanvid(CreateFanvid):
+class FanvidRead(FanvidCreate):
     uuid: uuid.UUID
     created_timestamp: datetime.datetime
     modified_timestamp: datetime.datetime
 
 
-class FanvidWithRelevance(Fanvid):
+class FanvidReadWithRelevance(FanvidRead):
     relevance: Optional[float] = None
 
 
 class FanvidList(BaseModel):
     total_count: int
-    fanvids: List[FanvidWithRelevance]
+    fanvids: List[FanvidReadWithRelevance]

@@ -8,7 +8,7 @@ from fanviddb.api_keys.helpers import api_key_context
 from fanviddb.api_keys.helpers import check_api_key_header
 from fanviddb.api_keys.helpers import generate
 from fanviddb.api_keys.helpers import verify
-from fanviddb.api_keys.models import ApiKeyTable
+from fanviddb.api_keys.models import ApiKey
 from fanviddb.api_keys.models import api_keys
 
 
@@ -24,7 +24,7 @@ async def test_generate(db_session):
 
 @pytest.mark.asyncio
 async def test_generate__conflict(db_session, mocker):
-    instance = ApiKeyTable(
+    instance = ApiKey(
         pk="pkone",
         hashed_api_key="whatever",
         created_timestamp=datetime.datetime.utcnow(),
@@ -52,7 +52,7 @@ async def test_generate__conflict(db_session, mocker):
 async def test_generate__permaconflict(db_session, mocker):
     # Simulate high frequency of collisions (though that should only happen
     # with 15 trillion+ api keys)
-    instance = ApiKeyTable(
+    instance = ApiKey(
         pk="pkone",
         hashed_api_key="whatever",
         created_timestamp=datetime.datetime.utcnow(),

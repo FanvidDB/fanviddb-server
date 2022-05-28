@@ -16,17 +16,17 @@ from fanviddb.db import get_async_session
 from fanviddb.i18n.utils import fluent_dependency
 
 from . import crud
-from .schema import CreateFanvid
-from .schema import Fanvid
+from .schema import FanvidCreate
 from .schema import FanvidList
-from .schema import UpdateFanvid
+from .schema import FanvidRead
+from .schema import FanvidUpdate
 
 router = APIRouter()
 
 
-@router.post("", response_model=Fanvid, status_code=201)
+@router.post("", response_model=FanvidRead, status_code=201)
 async def create_fanvid(
-    fanvid: CreateFanvid,
+    fanvid: FanvidCreate,
     user: User = Depends(fastapi_users.current_user()),
     fluent: FluentLocalization = Depends(fluent_dependency),
     session: AsyncSession = Depends(get_async_session),
@@ -66,7 +66,7 @@ async def list_fanvids(
     return {"total_count": total_count, "fanvids": fanvids}
 
 
-@router.get("/{fanvid_uuid}", response_model=Fanvid)
+@router.get("/{fanvid_uuid}", response_model=FanvidRead)
 async def read_fanvid(
     fanvid_uuid: uuid.UUID,
     fluent: FluentLocalization = Depends(fluent_dependency),
@@ -80,10 +80,10 @@ async def read_fanvid(
     return result
 
 
-@router.patch("/{fanvid_uuid}", response_model=Fanvid)
+@router.patch("/{fanvid_uuid}", response_model=FanvidRead)
 async def update_fanvid(
     fanvid_uuid: uuid.UUID,
-    fanvid: UpdateFanvid,
+    fanvid: FanvidUpdate,
     user: User = Depends(fastapi_users.current_user()),
     fluent: FluentLocalization = Depends(fluent_dependency),
     session: AsyncSession = Depends(get_async_session),

@@ -6,9 +6,9 @@ from fanviddb.api_keys.helpers import generate as generate_api_key
 from fanviddb.fanvids.crud import _to_api
 from fanviddb.fanvids.crud import fanvids
 from fanviddb.fanvids.crud import update_fanvid
-from fanviddb.fanvids.schema import Fanvid
-from fanviddb.fanvids.schema import FanvidWithRelevance
-from fanviddb.fanvids.schema import UpdateFanvid
+from fanviddb.fanvids.schema import FanvidRead
+from fanviddb.fanvids.schema import FanvidReadWithRelevance
+from fanviddb.fanvids.schema import FanvidUpdate
 
 from ..factories import FanvidFactory
 
@@ -17,10 +17,10 @@ RELEVANCE_UNSET = object()
 
 def _serialize_fanvid(fanvid, relevance=RELEVANCE_UNSET):
     """Converts a return value from FanvidFactory / the database into an expected json response"""
-    fanvid_class = Fanvid
+    fanvid_class = FanvidRead
     if relevance != RELEVANCE_UNSET:
         fanvid["relevance"] = relevance
-        fanvid_class = FanvidWithRelevance
+        fanvid_class = FanvidReadWithRelevance
     serialized = _to_api(fanvid)
     return jsonable_encoder(fanvid_class(**serialized))
 
@@ -199,7 +199,7 @@ async def test_list_fanvids__filename_search(db_session, logged_in_client):
         await update_fanvid(
             session=db_session,
             fanvid_uuid=fanvid["uuid"],
-            fanvid=UpdateFanvid(title=fanvid["title"]),
+            fanvid=FanvidUpdate(title=fanvid["title"]),
         )
 
     filename = "whatever - Hello - World [bar].mp4"

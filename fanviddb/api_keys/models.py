@@ -5,7 +5,7 @@ from sqlalchemy import String
 from fanviddb.db import Base
 
 
-class ApiKeyTable(Base):
+class ApiKey(Base):
 
     __tablename__ = "api_keys"
 
@@ -21,4 +21,4 @@ class ApiKeyTable(Base):
     created_timestamp = Column(DateTime())
 
 
-api_keys = ApiKeyTable.__table__
+api_keys = ApiKey.__table__
