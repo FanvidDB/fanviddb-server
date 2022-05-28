@@ -1,7 +1,6 @@
 import uuid
 from typing import Optional
 from typing import Union
-from typing import cast
 
 from fastapi import Depends
 from fastapi import HTTPException
@@ -11,6 +10,8 @@ from fastapi_users import BaseUserManager
 from fastapi_users import FastAPIUsers
 from fastapi_users import InvalidPasswordException
 from fastapi_users import UUIDIDMixin
+from fastapi_users import models as fastapi_users_models
+from fastapi_users import schemas as fastapi_users_schemas
 from fastapi_users.authentication import AuthenticationBackend
 from fastapi_users.authentication import CookieTransport
 from fastapi_users.authentication import JWTStrategy
@@ -27,9 +28,6 @@ from fanviddb.i18n.utils import get_fluent
 from fanviddb.i18n.utils import get_request_locales
 
 from .models import User
-from .schema import UserCreate
-from .schema import UserRead
-from .schema import UserUpdate
 
 AUTH_LIFETIME = 60 * 60 * 24 * 14
 cookie_transport = CookieTransport(
@@ -113,7 +111,11 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
             ),
         )
 
-    async def validate_password(self, password: str, user: User):
+    async def validate_password(
+        self,
+        password: str,
+        user: Union[fastapi_users_schemas.UC, fastapi_users_models.UP],
+    ):
         strength = zxcvbn(password)
         if strength["score"] < 4:
             errors = []
@@ -127,12 +129,16 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
 
     async def create(
         self,
-        user: UserCreate,
+        user: fastapi_users_schemas.UC,
         safe: bool = False,
         request: Optional[Request] = None,
     ) -> User:
-        user = cast(UserCreate, user)
-        query = select([exists().where(User.username == user.username)])
+        # `user` is actually going to be a UserCreate, which
+        # has a username attribute. This workaround avoids
+        # mypy complaining about type errors.
+        username = getattr(user, "username", None)
+        assert username is not None
+        query = select([exists().where(User.username == username)])
         result = await self.user_db.session.execute(query)
         row = result.first()
         if row and row._mapping.get("anon_1"):
