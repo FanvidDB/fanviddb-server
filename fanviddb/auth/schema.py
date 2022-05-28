@@ -1,19 +1,16 @@
+import uuid
 from typing import Optional
 
-from fastapi_users import models
+from fastapi_users import schemas
 
 
-class User(models.BaseUser):
+class UserRead(schemas.BaseUser[uuid.UUID]):
     username: Optional[str]
 
 
-class UserCreate(models.BaseUserCreate):
+class UserCreate(schemas.BaseUserCreate):
     username: str
 
 
-class UserUpdate(models.BaseUserUpdate):
+class UserUpdate(schemas.BaseUserUpdate):
     username: Optional[str]
-
-
-class UserDB(User, models.BaseUserDB):
-    username: str

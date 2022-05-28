@@ -1,12 +1,12 @@
-from fastapi_users.db import SQLAlchemyBaseUserTable
+from fastapi_users.db import SQLAlchemyBaseUserTableUUID
 from sqlalchemy import Column
 from sqlalchemy import String
 
 from fanviddb.db import Base
 
 
-class UserTable(Base, SQLAlchemyBaseUserTable):
+class User(SQLAlchemyBaseUserTableUUID, Base):
     username = Column(String(length=40), nullable=False, unique=True)
 
 
-users = UserTable.__table__  # type: ignore
+users = User.__table__  # type: ignore

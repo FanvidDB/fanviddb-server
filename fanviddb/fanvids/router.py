@@ -11,7 +11,7 @@ from starlette.status import HTTP_401_UNAUTHORIZED
 
 from fanviddb.api_keys.helpers import check_api_key_header
 from fanviddb.auth.helpers import fastapi_users
-from fanviddb.auth.schema import User
+from fanviddb.auth.models import User
 from fanviddb.db import get_async_session
 from fanviddb.i18n.utils import fluent_dependency
 

@@ -1,3 +1,4 @@
+import uuid
 from typing import Optional
 from typing import Union
 from typing import cast
@@ -9,6 +10,7 @@ from fastapi import status
 from fastapi_users import BaseUserManager
 from fastapi_users import FastAPIUsers
 from fastapi_users import InvalidPasswordException
+from fastapi_users import UUIDIDMixin
 from fastapi_users.authentication import AuthenticationBackend
 from fastapi_users.authentication import CookieTransport
 from fastapi_users.authentication import JWTStrategy
@@ -24,10 +26,9 @@ from fanviddb.email import send_email
 from fanviddb.i18n.utils import get_fluent
 from fanviddb.i18n.utils import get_request_locales
 
-from .models import UserTable
-from .schema import User
+from .models import User
 from .schema import UserCreate
-from .schema import UserDB
+from .schema import UserRead
 from .schema import UserUpdate
 
 AUTH_LIFETIME = 60 * 60 * 24 * 14
@@ -48,8 +49,7 @@ cookie_authentication = AuthenticationBackend(
 )
 
 
-class UserManager(BaseUserManager[UserCreate, UserDB]):
-    user_db_model = UserDB
+class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
     reset_password_token_secret = conf.EMAIL_TOKEN_SECRET_KEY
     reset_password_token_lifetime_seconds = 60 * 5
     verification_token_secret = conf.EMAIL_TOKEN_SECRET_KEY
@@ -57,7 +57,7 @@ class UserManager(BaseUserManager[UserCreate, UserDB]):
     user_db: SQLAlchemyUserDatabase
 
     async def on_after_forgot_password(
-        self, user: UserDB, token: str, request: Optional[Request] = None
+        self, user: User, token: str, request: Optional[Request] = None
     ) -> None:
         locales = get_request_locales(request)
         fluent = get_fluent(locales)
@@ -71,7 +71,7 @@ class UserManager(BaseUserManager[UserCreate, UserDB]):
         )
 
     async def on_after_reset_password(
-        self, user: UserDB, request: Optional[Request] = None
+        self, user: User, request: Optional[Request] = None
     ) -> None:
         locales = get_request_locales(request)
         fluent = get_fluent(locales)
@@ -85,7 +85,7 @@ class UserManager(BaseUserManager[UserCreate, UserDB]):
         )
 
     async def on_after_request_verify(
-        self, user: UserDB, token: str, request: Optional[Request] = None
+        self, user: User, token: str, request: Optional[Request] = None
     ) -> None:
         locales = get_request_locales(request)
         fluent = get_fluent(locales)
@@ -100,7 +100,7 @@ class UserManager(BaseUserManager[UserCreate, UserDB]):
         )
 
     async def on_after_verify(
-        self, user: UserDB, request: Optional[Request] = None
+        self, user: User, request: Optional[Request] = None
     ) -> None:
         locales = get_request_locales(request)
         fluent = get_fluent(locales)
@@ -113,7 +113,7 @@ class UserManager(BaseUserManager[UserCreate, UserDB]):
             ),
         )
 
-    async def validate_password(self, password: str, user: Union[UserCreate, UserDB]):
+    async def validate_password(self, password: str, user: User):
         strength = zxcvbn(password)
         if strength["score"] < 4:
             errors = []
@@ -130,9 +130,9 @@ class UserManager(BaseUserManager[UserCreate, UserDB]):
         user: UserCreate,
         safe: bool = False,
         request: Optional[Request] = None,
-    ) -> UserDB:
+    ) -> User:
         user = cast(UserCreate, user)
-        query = select([exists().where(UserTable.username == user.username)])
+        query = select([exists().where(User.username == user.username)])
         result = await self.user_db.session.execute(query)
         row = result.first()
         if row and row._mapping.get("anon_1"):
@@ -144,18 +144,14 @@ class UserManager(BaseUserManager[UserCreate, UserDB]):
 
 
 async def get_user_db(session: AsyncSession = Depends(get_async_session)):
-    yield SQLAlchemyUserDatabase(UserDB, session, UserTable)
+    yield SQLAlchemyUserDatabase(session, User)
 
 
 async def get_user_manager(user_db=Depends(get_user_db)):
     yield UserManager(user_db)
 
 
-fastapi_users = FastAPIUsers(
+fastapi_users = FastAPIUsers[User, uuid.UUID](
     get_user_manager=get_user_manager,
     auth_backends=[cookie_authentication],
-    user_model=User,
-    user_create_model=UserCreate,
-    user_update_model=UserUpdate,
-    user_db_model=UserDB,
 )

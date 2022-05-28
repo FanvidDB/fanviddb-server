@@ -5,7 +5,7 @@ from typing import List
 import factory  # type: ignore
 from fastapi_users.password import PasswordHelper
 
-from fanviddb.auth.models import UserTable
+from fanviddb.auth.models import User
 from fanviddb.fanvids.models import FanvidTable
 from fanviddb.fanvids.schema import ContentNotesEnum
 
@@ -61,7 +61,7 @@ class FanvidFactory(BaseFactory):
 
 class UserFactory(BaseFactory):
     class Meta:
-        model = UserTable
+        model = User
 
     id = factory.LazyFunction(uuid.uuid4)
     username = factory.Sequence(lambda n: f"user{n}")
