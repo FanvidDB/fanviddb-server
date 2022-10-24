@@ -50,7 +50,7 @@ describe("DurationPicker", () => {
       const input = getByLabelText("Label");
       fireEvent.mouseDown(input);
       fireEvent.change(input, { target: { value: pickerValue } });
-      const button = getByRole("button", { name: "Ok" });
+      const button = getByRole("button", { name: "OK" });
       fireEvent.click(button);
 
       const submitButton = getByRole("button", { name: "Submit" });

@@ -1,10 +1,8 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
-import { FluentBundle, FluentResource } from "@fluent/bundle";
 import {
   LocalizationProvider as FluentProvider,
-  ReactLocalization,
 } from "@fluent/react";
 
 jest.mock("../api", () => {
@@ -16,12 +14,7 @@ jest.mock("../api", () => {
 import { callApi } from "../api";
 import LoginPage from "./LoginPage";
 import AuthContext from "./authContext";
-import fs from "fs";
-
-const bundle = new FluentBundle("en-US");
-const enUS = fs.readFileSync("locale/en-US/react.ftl").toString();
-bundle.addResource(new FluentResource(enUS));
-const l10n = new ReactLocalization([bundle]);
+import { l10n } from "../i18n/test";
 
 beforeEach(() => {
   callApi.mockClear();

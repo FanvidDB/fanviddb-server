@@ -1,6 +1,12 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import FanvidEditForm from "./FanvidEditForm";
+import {
+  LocalizationProvider as FluentProvider,
+} from "@fluent/react";
+
+
+import { l10n } from "../i18n/test";
 
 describe("FanvidEditForm", () => {
   test("renders with fanvid data", () => {
@@ -27,6 +33,10 @@ describe("FanvidEditForm", () => {
       created_timestamp: "2021-03-15T03:11:37.875202",
       modified_timestamp: "2021-03-15T03:11:37.875205",
     };
-    render(<FanvidEditForm fanvid={fanvid} onFanvidSaved={() => {}} />);
+    render(
+      <FluentProvider l10n={l10n}>
+        <FanvidEditForm fanvid={fanvid} onFanvidSaved={() => {}} />
+      </FluentProvider>
+    );
   });
 });

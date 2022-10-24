@@ -1,13 +1,21 @@
 import React from "react";
 import TestRenderer from "react-test-renderer";
-import SendVerificationEmailPage from "./SendVerificationEmailPage";
+import {
+  LocalizationProvider as FluentProvider,
+} from "@fluent/react";
 import { MemoryRouter } from "react-router-dom";
 import { Form } from "antd";
+
+
+import SendVerificationEmailPage from "./SendVerificationEmailPage";
+import { l10n } from "../i18n/test";
 
 test("has no initial email if not in location", () => {
   const testRenderer = TestRenderer.create(
     <MemoryRouter>
-      <SendVerificationEmailPage />
+      <FluentProvider l10n={l10n}>
+        <SendVerificationEmailPage />
+      </FluentProvider>
     </MemoryRouter>
   );
   const form = testRenderer.root.findByType(Form);
@@ -22,7 +30,9 @@ test("renders with email in location state", () => {
         { pathname: "/", search: `?email=${encodeURIComponent(email)}` },
       ]}
     >
-      <SendVerificationEmailPage />
+      <FluentProvider l10n={l10n}>
+        <SendVerificationEmailPage />
+      </FluentProvider>
     </MemoryRouter>
   );
   const form = testRenderer.root.findByType(Form);

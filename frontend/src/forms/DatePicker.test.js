@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { render, fireEvent } from "@testing-library/react";
-import DatePicker from "./DatePicker";
 import { Form, Button } from "antd";
+import { act } from 'react-dom/test-utils';
+
+import DatePicker from "./DatePicker";
 
 const TestForm = () => {
   const [date, setDate] = useState("2021-01-01");
@@ -43,14 +45,20 @@ describe("DatePicker", () => {
       <TestForm />
     );
     const input = getByLabelText("Date");
-    fireEvent.mouseDown(input);
-    fireEvent.change(input, { target: { value: pickerValue } });
+    act(() => {
+      fireEvent.mouseDown(input);
+      fireEvent.change(input, { target: { value: pickerValue } });
+    })
 
     const date = getByText("23");
-    fireEvent.click(date);
+    act(() => {
+      fireEvent.click(date);
+    })
 
     const submitButton = getByRole("button", { name: "Submit" });
-    fireEvent.submit(submitButton);
+    act(() => {
+      fireEvent.submit(submitButton);
+    })
 
     const output = await findByTestId("date");
     expect(output).toHaveTextContent(expected);
