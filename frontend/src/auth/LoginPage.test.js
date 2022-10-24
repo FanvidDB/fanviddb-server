@@ -1,9 +1,7 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
-import {
-  LocalizationProvider as FluentProvider,
-} from "@fluent/react";
+import { LocalizationProvider as FluentProvider } from "@fluent/react";
 
 jest.mock("../api", () => {
   return {
