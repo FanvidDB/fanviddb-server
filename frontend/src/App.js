@@ -9,7 +9,7 @@ import RegisterPage from "./auth/RegisterPage";
 import SendVerificationEmailPage from "./auth/SendVerificationEmailPage";
 import VerifyEmailPage from "./auth/VerifyEmailPage";
 import LocalizationProvider from "./i18n/LocalizationProvider";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./auth/authContext";
 import LoginPage from "./auth/LoginPage";
 import RequireAuth from "./auth/RequireAuth";
@@ -36,47 +36,49 @@ const App = () => {
                 <SideNav />
               </Sider>
               <Content style={{ padding: "24px", minHeight: "280px" }}>
-                <Switch>
-                  <Route exact path="/login">
-                    <LoginPage />
-                  </Route>
-                  <Route exact path="/register">
-                    <RegisterPage />
-                  </Route>
-                  <Route exact path="/verify-email/send">
-                    <SendVerificationEmailPage />
-                  </Route>
-                  <Route exact path="/verify-email/:token">
-                    <VerifyEmailPage />
-                  </Route>
-                  <Route exact path="/fanvids/add">
-                    <RequireAuth>
-                      <FanvidCreatePage />
-                    </RequireAuth>
-                  </Route>
-                  <Route exact path="/fanvids/edit/:uuid">
-                    <RequireAuth>
-                      <FanvidEditPage />
-                    </RequireAuth>
-                  </Route>
-                  <Route exact path="/fanvids/view/:uuid">
-                    <FanvidViewPage />
-                  </Route>
-                  <Route exact path="/404">
-                    <Http404Page />
-                  </Route>
-                  <Route exact path="/500">
-                    <Http500Page />
-                  </Route>
-                  <Route exact path="/">
-                    <RequireAuth>
-                      <FanvidListPage />
-                    </RequireAuth>
-                  </Route>
-                  <Route path="*">
-                    <Http404Page />
-                  </Route>
-                </Switch>
+                <Routes>
+                  <Route path="login" element={<LoginPage />} />
+                  <Route path="register" element={<RegisterPage />} />
+                  <Route
+                    path="verify-email/send"
+                    element={<SendVerificationEmailPage />}
+                  />
+                  <Route
+                    path="verify-email/:token"
+                    element={<VerifyEmailPage />}
+                  />
+                  <Route
+                    path="fanvids/add"
+                    element={
+                      <RequireAuth>
+                        <FanvidCreatePage />
+                      </RequireAuth>
+                    }
+                  />
+                  <Route
+                    path="fanvids/edit/:uuid"
+                    element={
+                      <RequireAuth>
+                        <FanvidEditPage />
+                      </RequireAuth>
+                    }
+                  />
+                  <Route
+                    path="fanvids/view/:uuid"
+                    element={<FanvidViewPage />}
+                  />
+                  <Route path="404" element={<Http404Page />} />
+                  <Route path="500" element={<Http500Page />} />
+                  <Route
+                    path="/"
+                    element={
+                      <RequireAuth>
+                        <FanvidListPage />
+                      </RequireAuth>
+                    }
+                  />
+                  <Route path="*" element={<Http404Page />} />
+                </Routes>
               </Content>
             </Layout>
             <Footer>

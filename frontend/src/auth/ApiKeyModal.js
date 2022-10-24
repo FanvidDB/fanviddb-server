@@ -6,12 +6,12 @@ import { callApi } from "../api";
 
 const { Paragraph, Text } = Typography;
 
-const ApiKeyModal = ({ visible, onClose }) => {
+const ApiKeyModal = ({ open, onCancel }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [apiKey, setApiKey] = useState(null);
   const [errors, setErrors] = useState([]);
   useEffect(() => {
-    if (!visible) {
+    if (!open) {
       return;
     }
     setIsLoading(true);
@@ -27,9 +27,9 @@ const ApiKeyModal = ({ visible, onClose }) => {
       }
       setIsLoading(false);
     });
-  }, [visible]);
+  }, [open]);
   return (
-    <Modal visible={visible} footer={null} closable={true} onCancel={onClose}>
+    <Modal open={open} footer={null} closable={true} onCancel={onCancel}>
       <Skeleton
         title={false}
         paragraph={{ rows: 1 }}
@@ -48,8 +48,8 @@ const ApiKeyModal = ({ visible, onClose }) => {
 };
 
 ApiKeyModal.propTypes = {
-  visible: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  onCancel: PropTypes.func.isRequired,
 };
 
 export default ApiKeyModal;

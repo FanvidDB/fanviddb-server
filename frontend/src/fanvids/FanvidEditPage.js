@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Skeleton } from "antd";
 import { Localized, useLocalization } from "@fluent/react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { callApi } from "../api";
 import Http404Page from "../pages/Http404Page";
 import Http500Page from "../pages/Http500Page";
@@ -10,7 +10,7 @@ import Helmet from "react-helmet";
 
 const FanvidEditPage = () => {
   const { uuid } = useParams();
-  const history = useHistory();
+  let navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [is404, setIs404] = useState(false);
   const [is500, setIs500] = useState(false);
@@ -33,7 +33,7 @@ const FanvidEditPage = () => {
 
   const onFanvidSaved = (fanvid) => {
     if (fanvid.uuid != uuid) {
-      history.push("/fanvids/edit/" + fanvid.uuid);
+      navigate("/fanvids/edit/" + fanvid.uuid);
     } else {
       setFanvid(fanvid);
     }

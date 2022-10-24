@@ -15,7 +15,7 @@ exit $$status
 
 frontend-lint:
 	status=0;\
-yarn lint || status=1;\
+BABEL_ENV=development yarn lint || status=1;\
 yarn prettier --check . || status=1;\
 exit $$status
 

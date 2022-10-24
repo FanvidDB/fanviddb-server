@@ -66,6 +66,8 @@ module.exports = {
   testsSetup: resolveModule(resolveApp, "frontend/src/setupTests"),
   proxySetup: resolveApp("frontend/src/setupProxy.js"),
   appNodeModules: resolveApp("node_modules"),
+  appWebpackCache: resolveApp("node_modules/.cache"),
+  appTsBuildInfoFile: resolveApp("node_modules/.cache/tsconfig.tsbuildinfo"),
   swSrc: resolveModule(resolveApp, "frontend/src/service-worker"),
   publicUrlOrPath,
 };
