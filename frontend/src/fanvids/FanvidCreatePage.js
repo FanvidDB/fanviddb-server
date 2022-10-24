@@ -1,6 +1,6 @@
 import React from "react";
 import { Localized, useLocalization } from "@fluent/react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import FanvidEditForm from "./FanvidEditForm";
 import Helmet from "react-helmet";
 
@@ -10,11 +10,11 @@ const DEFAULT_FANVID = {
 };
 
 const FanvidCreatePage = () => {
-  const history = useHistory();
+  let navigate = useNavigate();
   const { l10n } = useLocalization();
 
   const onFanvidSaved = (fanvid) => {
-    history.push("/fanvids/edit/" + fanvid.uuid);
+    navigate("/fanvids/edit/" + fanvid.uuid);
   };
 
   return (

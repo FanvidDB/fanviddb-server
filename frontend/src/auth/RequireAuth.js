@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Skeleton } from "antd";
 import AuthContext from "./authContext";
-import { Redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
 const RequireAuth = ({ children }) => {
@@ -11,7 +11,7 @@ const RequireAuth = ({ children }) => {
   }
 
   if (!user) {
-    return <Redirect to="/login" />;
+    return <Navigate to="/login" replace />;
   }
 
   return children;

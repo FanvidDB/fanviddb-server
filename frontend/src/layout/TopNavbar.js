@@ -7,39 +7,55 @@ import LocaleSelector from "../i18n/LocaleSelector";
 import AuthContext from "../auth/authContext";
 import ApiKeyModal from "../auth/ApiKeyModal";
 
-const { Item, SubMenu } = Menu;
-
 const TopNavbar = () => {
   const { user, logout } = useContext(AuthContext);
   const [showApiKeyModal, setShowApiKeyModal] = useState(false);
+
+  const items = [
+        {
+          key: "home",
+          label: <Link to="/"><Localized id="top-navbar-website-name" /></Link>
+        },
+        {
+          key: "locale",
+          label: <LocaleSelector />
+        },
+        {
+          key: "api-key",
+          icon: <KeyOutlined />,
+          onClick: () => setShowApiKeyModal(true),
+          label: (
+            <span>
+              <Localized id="top-navbar-get-api-key" />
+              <ApiKeyModal
+                open={showApiKeyModal}
+                onCancel={(e) => {
+                  e.stopPropagation();
+                  setShowApiKeyModal(false);
+                }}
+              />
+            </span>
+          )
+        },
+      ];
+
+  if (user) {
+    items.push({
+      key: "submenu",
+      icon: <UserOutlined />,
+      label: user.username,
+      children: [
+        {
+          key: "logout",
+          label: <Localized id="logout-button" />,
+          onClick: logout
+        }
+      ]
+    })
+  }
+
   return (
-    <Menu theme="dark" mode="horizontal" selectable={false}>
-      <Item key="home">
-        <Link to="/">
-          <Localized id="top-navbar-website-name" />
-        </Link>
-      </Item>
-      <Item>
-        <LocaleSelector />
-      </Item>
-      <Item icon={<KeyOutlined />} onClick={() => setShowApiKeyModal(true)}>
-        <Localized id="top-navbar-get-api-key" />
-        <ApiKeyModal
-          visible={showApiKeyModal}
-          onClose={(e) => {
-            e.stopPropagation();
-            setShowApiKeyModal(false);
-          }}
-        />
-      </Item>
-      {user && (
-        <SubMenu title={user.username} icon={<UserOutlined />}>
-          <Item onClick={logout}>
-            <Localized id="logout-button" />
-          </Item>
-        </SubMenu>
-      )}
-    </Menu>
+    <Menu theme="dark" mode="horizontal" selectable={false} items={items} />
   );
 };
 

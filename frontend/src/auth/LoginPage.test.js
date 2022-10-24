@@ -1,6 +1,6 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
-import { MemoryRouter, Route } from "react-router-dom";
+import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { FluentBundle, FluentResource } from "@fluent/bundle";
 import {
   LocalizationProvider as FluentProvider,
@@ -19,8 +19,9 @@ import AuthContext from "./authContext";
 import fs from "fs";
 
 const bundle = new FluentBundle("en-US");
+const enUS = fs.readFileSync("locale/en-US/react.ftl").toString()
 bundle.addResource(
-  new FluentResource(fs.readFileSync("locale/en-US/react.ftl"))
+  new FluentResource(enUS)
 );
 const l10n = new ReactLocalization([bundle]);
 
@@ -39,12 +40,10 @@ describe("LoginPage", () => {
       <FluentProvider l10n={l10n}>
         <AuthContext.Provider value={{ loadUserData }}>
           <MemoryRouter initialEntries={["/login"]}>
-            <Route exact path="/login">
-              <LoginPage />
-            </Route>
-            <Route exact path="/">
-              <div data-testid="output">{expected}</div>
-            </Route>
+            <Routes>
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/" element={<div data-testid="output">{expected}</div>} />
+            </Routes>
           </MemoryRouter>
         </AuthContext.Provider>
       </FluentProvider>

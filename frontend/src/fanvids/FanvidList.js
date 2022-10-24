@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { List, Skeleton, Alert, Space, Typography, Tag } from "antd";
-import { Link, useLocation, useHistory } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Localized } from "@fluent/react";
 import { callApi } from "../api";
 import { contentNotes, ratings } from "./constants";
@@ -16,7 +16,7 @@ const FanvidList = () => {
   const [fanvids, setFanvids] = useState([]);
   const [errors, setErrors] = useState([]);
   const location = useLocation();
-  const history = useHistory();
+  let navigate = useNavigate();
 
   const searchParams = new URLSearchParams(location.search);
   let currentPage = parseInt(searchParams.get("page"));
@@ -43,7 +43,7 @@ const FanvidList = () => {
   const onChangePage = (page) => {
     const searchParams = new URLSearchParams(location.search);
     searchParams.set("page", page);
-    history.push(`${location.path || ""}?${searchParams.toString()}`);
+    navigate(`${location.path || ""}?${searchParams.toString()}`);
   };
 
   if (!_.isEmpty(errors)) {
