@@ -39,14 +39,44 @@ const App = () => {
                 <Routes>
                   <Route path="login" element={<LoginPage />} />
                   <Route path="register" element={<RegisterPage />} />
-                  <Route path="verify-email/send" element={<SendVerificationEmailPage />} />
-                  <Route path="verify-email/:token" element={<VerifyEmailPage />} />
-                  <Route path="fanvids/add" element={<RequireAuth><FanvidCreatePage /></RequireAuth>} />
-                  <Route path="fanvids/edit/:uuid" element={<RequireAuth><FanvidEditPage /></RequireAuth>} />
-                  <Route path="fanvids/view/:uuid" element={<FanvidViewPage />} />
+                  <Route
+                    path="verify-email/send"
+                    element={<SendVerificationEmailPage />}
+                  />
+                  <Route
+                    path="verify-email/:token"
+                    element={<VerifyEmailPage />}
+                  />
+                  <Route
+                    path="fanvids/add"
+                    element={
+                      <RequireAuth>
+                        <FanvidCreatePage />
+                      </RequireAuth>
+                    }
+                  />
+                  <Route
+                    path="fanvids/edit/:uuid"
+                    element={
+                      <RequireAuth>
+                        <FanvidEditPage />
+                      </RequireAuth>
+                    }
+                  />
+                  <Route
+                    path="fanvids/view/:uuid"
+                    element={<FanvidViewPage />}
+                  />
                   <Route path="404" element={<Http404Page />} />
                   <Route path="500" element={<Http500Page />} />
-                  <Route path="/" element={<RequireAuth><FanvidListPage /></RequireAuth>} />
+                  <Route
+                    path="/"
+                    element={
+                      <RequireAuth>
+                        <FanvidListPage />
+                      </RequireAuth>
+                    }
+                  />
                   <Route path="*" element={<Http404Page />} />
                 </Routes>
               </Content>

@@ -18,10 +18,17 @@ const SideNav = () => {
       mode="horizontal"
       selectable={false}
       selectedKeys={[location.pathname]}
-      items={[{
-        key: "fanvids-add",
-        label: <Link to="/fanvids/add"><PlusOutlined /><Localized id="side-nav-add-fanvid" /></Link>
-      }]}
+      items={[
+        {
+          key: "fanvids-add",
+          label: (
+            <Link to="/fanvids/add">
+              <PlusOutlined />
+              <Localized id="side-nav-add-fanvid" />
+            </Link>
+          ),
+        },
+      ]}
     />
   );
 };

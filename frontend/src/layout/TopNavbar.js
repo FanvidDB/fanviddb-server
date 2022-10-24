@@ -12,32 +12,36 @@ const TopNavbar = () => {
   const [showApiKeyModal, setShowApiKeyModal] = useState(false);
 
   const items = [
-        {
-          key: "home",
-          label: <Link to="/"><Localized id="top-navbar-website-name" /></Link>
-        },
-        {
-          key: "locale",
-          label: <LocaleSelector />
-        },
-        {
-          key: "api-key",
-          icon: <KeyOutlined />,
-          onClick: () => setShowApiKeyModal(true),
-          label: (
-            <span>
-              <Localized id="top-navbar-get-api-key" />
-              <ApiKeyModal
-                open={showApiKeyModal}
-                onCancel={(e) => {
-                  e.stopPropagation();
-                  setShowApiKeyModal(false);
-                }}
-              />
-            </span>
-          )
-        },
-      ];
+    {
+      key: "home",
+      label: (
+        <Link to="/">
+          <Localized id="top-navbar-website-name" />
+        </Link>
+      ),
+    },
+    {
+      key: "locale",
+      label: <LocaleSelector />,
+    },
+    {
+      key: "api-key",
+      icon: <KeyOutlined />,
+      onClick: () => setShowApiKeyModal(true),
+      label: (
+        <span>
+          <Localized id="top-navbar-get-api-key" />
+          <ApiKeyModal
+            open={showApiKeyModal}
+            onCancel={(e) => {
+              e.stopPropagation();
+              setShowApiKeyModal(false);
+            }}
+          />
+        </span>
+      ),
+    },
+  ];
 
   if (user) {
     items.push({
@@ -48,10 +52,10 @@ const TopNavbar = () => {
         {
           key: "logout",
           label: <Localized id="logout-button" />,
-          onClick: logout
-        }
-      ]
-    })
+          onClick: logout,
+        },
+      ],
+    });
   }
 
   return (

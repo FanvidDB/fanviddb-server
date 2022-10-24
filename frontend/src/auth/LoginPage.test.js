@@ -19,10 +19,8 @@ import AuthContext from "./authContext";
 import fs from "fs";
 
 const bundle = new FluentBundle("en-US");
-const enUS = fs.readFileSync("locale/en-US/react.ftl").toString()
-bundle.addResource(
-  new FluentResource(enUS)
-);
+const enUS = fs.readFileSync("locale/en-US/react.ftl").toString();
+bundle.addResource(new FluentResource(enUS));
 const l10n = new ReactLocalization([bundle]);
 
 beforeEach(() => {
@@ -42,7 +40,10 @@ describe("LoginPage", () => {
           <MemoryRouter initialEntries={["/login"]}>
             <Routes>
               <Route path="/login" element={<LoginPage />} />
-              <Route path="/" element={<div data-testid="output">{expected}</div>} />
+              <Route
+                path="/"
+                element={<div data-testid="output">{expected}</div>}
+              />
             </Routes>
           </MemoryRouter>
         </AuthContext.Provider>
