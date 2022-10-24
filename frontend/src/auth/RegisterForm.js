@@ -149,11 +149,12 @@ const RegisterForm = ({ onRegister }) => {
         </div>
       </Form.Item>
 
-      <Form.Item
-        wrapperCol={{ offset: 4, span: 20 }}
-        loading={submitState == "submitting"}
-      >
-        <Button type="primary" htmlType="submit">
+      <Form.Item wrapperCol={{ offset: 4, span: 20 }}>
+        <Button
+          type="primary"
+          htmlType="submit"
+          loading={submitState == "submitting"}
+        >
           <Localized id="register-form-register-button" />
         </Button>
       </Form.Item>
