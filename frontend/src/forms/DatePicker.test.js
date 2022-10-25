@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { render, fireEvent } from "@testing-library/react";
+import { render, fireEvent, waitFor } from "@testing-library/react";
 import { Form, Button } from "antd";
-import { act } from "react-dom/test-utils";
 
 import DatePicker from "./DatePicker";
 
@@ -22,7 +21,7 @@ const TestForm = () => {
 };
 
 // Unable to test manually at the moment.
-describe.skip("DatePicker", () => {
+describe("DatePicker", () => {
   test.each([
     ["2020-01-01", "2020-01-01"],
     ["1910-07-23", "1910-07-23"],
@@ -46,22 +45,18 @@ describe.skip("DatePicker", () => {
       <TestForm />
     );
     const input = getByLabelText("Date");
-    act(() => {
-      fireEvent.mouseDown(input);
-      fireEvent.change(input, { target: { value: pickerValue } });
-    });
+    fireEvent.mouseDown(input);
+    fireEvent.change(input, { target: { value: pickerValue } });
 
     const date = getByText("23");
-    act(() => {
-      fireEvent.click(date);
-    });
+    fireEvent.click(date);
 
     const submitButton = getByRole("button", { name: "Submit" });
-    act(() => {
-      fireEvent.submit(submitButton);
-    });
+    fireEvent.submit(submitButton);
 
     const output = await findByTestId("date");
-    expect(output).toHaveTextContent(expected);
+    await waitFor(() => {
+      expect(output).toHaveTextContent(expected);
+    });
   });
 });
