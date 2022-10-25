@@ -20,10 +20,12 @@ For instructions on how to propose simple changes to file content, see [Contribu
 
 ## Setup
 
-1. [Install Jekyll](https://jekyllrb.com/docs/installation/) and bundler on your computer. We recommend using rbenv for the installation, but it is not required.
-2. Clone the repository: `git clone git@github.com:your-username/fanviddb-server.git`
-3. Navigate to `fanviddb/docs/`
-4. Run `bundle install`
+1. Install Ruby 3 on your computer. We recommend using
+   [rbenv](https://github.com/rbenv/rbenv#readme) for the installation, but it is not required.
+1. Install bundler in your Ruby 3 installation with `gem install bundler`
+1. Clone the repository: `git clone git@github.com:your-username/fanviddb-server.git`
+1. Navigate to `fanviddb/docs/`
+1. Run `bundle install`
 
 ## Running jekyll for local development
 
