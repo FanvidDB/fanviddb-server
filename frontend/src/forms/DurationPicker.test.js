@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { render, fireEvent } from "@testing-library/react";
+import { render, fireEvent, waitFor } from "@testing-library/react";
 import DurationPicker from "./DurationPicker";
 import { Form, Button } from "antd";
 
@@ -20,7 +20,7 @@ const TestForm = () => {
 };
 
 // Unable to test manually at the moment.
-describe.skip("DurationPicker", () => {
+describe("DurationPicker", () => {
   test.each([
     [0, "00:00"],
     [5, "00:05"],
@@ -58,7 +58,9 @@ describe.skip("DurationPicker", () => {
       fireEvent.submit(submitButton);
 
       const output = await findByTestId("length");
-      expect(output).toHaveTextContent(expected);
+      await waitFor(() => {
+        expect(output).toHaveTextContent(expected);
+      });
     }
   );
 });
