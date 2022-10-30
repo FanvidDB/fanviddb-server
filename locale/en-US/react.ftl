@@ -51,6 +51,7 @@ form-error-string-min-length =
        *[other] This field must contain at least { $limit_value } characters.
     }
 form-error-url-host = URL host invalid, top level domain required
+form-error-missing = This field is required.
 
 top-navbar-website-name = { -fanviddb }
 top-navbar-get-api-key = Get API key
@@ -139,6 +140,18 @@ forgot-password-form-email-label = Email
 forgot-password-form-email-error-required = Please enter your email.
 forgot-password-form-submit = Request password reset
 forgot-password-form-error-unknown = Unknown error occurred, please try again in a few minutes
+
+reset-password-page-title-bar = Reset Password | { -fanviddb }
+reset-password-page-title = Reset Password
+# Expected to have a <loginLink>login link</loginLink>.
+reset-password-page-success = Your email address is verified. You can now <loginLink>log in</loginLink>.
+reset-password-form-password-label = New Password
+# Expected to have a link to <forgotPasswordLink>request a new email</forgotPasswordLink>
+reset-password-form-error-bad-token = Password reset link is invalid or expired; please <forgotPasswordLink>request a new one</forgotPasswordLink>.
+reset-password-form-password-error-required = Please enter a password.
+reset-password-form-password-error-stronger-password = Please choose a stronger password.
+reset-password-form-error-unknown = Unknown error occurred, please try again in a few minutes
+reset-password-form-submit = Reset Password
 
 fanvid-create-page-title = Add Fanvid
 fanvid-create-page-title-bar = Add Fanvid | { -fanviddb }

@@ -1,5 +1,8 @@
 email-forgot-password-subject = Reset password request
-email-forgot-password-content = You requested a password reset. Reset token: { $token }
+email-forgot-password-content = A password reset was requested for you on fanviddb.com. If you
+    requested this, you can reset your password using the link below:
+
+    https://fanviddb.com/reset-password/{ $token }
 
 email-after-reset-password-subject = Password reset complete
 email-after-reset-password-content = Password reset for { $username } complete.

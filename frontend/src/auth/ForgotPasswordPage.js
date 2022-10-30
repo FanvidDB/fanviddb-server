@@ -18,7 +18,11 @@ const ForgotPasswordPage = () => {
         <Localized id="forgot-password-page-title" />
       </h1>
 
-      {isRequested ? <Localized id="forgot-password-page-requested" /> : <ForgotPasswordForm onForgotPassword={onForgotPassword} />}
+      {isRequested ? (
+        <Localized id="forgot-password-page-requested" />
+      ) : (
+        <ForgotPasswordForm onForgotPassword={onForgotPassword} />
+      )}
     </>
   );
 };

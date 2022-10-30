@@ -57,21 +57,24 @@ const TopNavbar = () => {
       ],
     });
   } else {
-    items.push({
-      key: "login",
-      label: (
-        <Link to="/login">
-          <Localized id="top-navbar-login" />
-        </Link>
-      )
-    }, {
-      key: "register",
-      label: (
-        <Link to="/register">
-          <Localized id="top-navbar-register" />
-        </Link>
-      )
-    })
+    items.push(
+      {
+        key: "login",
+        label: (
+          <Link to="/login">
+            <Localized id="top-navbar-login" />
+          </Link>
+        ),
+      },
+      {
+        key: "register",
+        label: (
+          <Link to="/register">
+            <Localized id="top-navbar-register" />
+          </Link>
+        ),
+      }
+    );
   }
 
   return (

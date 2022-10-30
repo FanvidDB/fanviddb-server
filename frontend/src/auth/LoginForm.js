@@ -11,6 +11,7 @@ const LoginForm = ({ onLogin }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onFinish = ({ email, password }) => {
+    setIsSubmitting(true);
     callApi(
       "/api/auth/login",
       "POST",

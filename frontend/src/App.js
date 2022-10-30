@@ -9,6 +9,7 @@ import RegisterPage from "./auth/RegisterPage";
 import SendVerificationEmailPage from "./auth/SendVerificationEmailPage";
 import ForgotPasswordPage from "./auth/ForgotPasswordPage";
 import VerifyEmailPage from "./auth/VerifyEmailPage";
+import ResetPasswordPage from "./auth/ResetPasswordPage";
 import LocalizationProvider from "./i18n/LocalizationProvider";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./auth/authContext";
@@ -51,6 +52,10 @@ const App = () => {
                   <Route
                     path="forgot-password"
                     element={<ForgotPasswordPage />}
+                  />
+                  <Route
+                    path="reset-password/:token"
+                    element={<ResetPasswordPage />}
                   />
                   <Route
                     path="fanvids/add"

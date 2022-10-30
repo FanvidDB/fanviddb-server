@@ -11,35 +11,37 @@ const ForgotPasswordForm = ({ onForgotPassword }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onFinish = ({ email }) => {
-    callApi(
-      "/api/auth/forgot-password",
-      "POST",
-      { email: email }
-    ).then(({ status, ok, json }) => {
-      let errors = {};
-      if (status == 422) {
-        errors = getApiErrors(json);
-      }
+    setIsSubmitting(true);
+    callApi("/api/auth/forgot-password", "POST", { email: email }).then(
+      ({ status, ok, json }) => {
+        let errors = {};
+        if (status == 422) {
+          errors = getApiErrors(json);
+        }
 
-      if (_.isEmpty(errors) && !ok) {
-        errors.email = [
-          <Localized key="email-error" id="forgot-password-form-error-unknown" />,
-        ];
-      }
-      setIsSubmitting(false);
-      if (_.isEmpty(errors)) {
-        onForgotPassword();
-      } else {
-        for (const name in errors) {
-          form.setFields([
-            {
-              name: name,
-              errors: errors[name],
-            },
-          ]);
+        if (_.isEmpty(errors) && !ok) {
+          errors.email = [
+            <Localized
+              key="email-error"
+              id="forgot-password-form-error-unknown"
+            />,
+          ];
+        }
+        setIsSubmitting(false);
+        if (_.isEmpty(errors)) {
+          onForgotPassword();
+        } else {
+          for (const name in errors) {
+            form.setFields([
+              {
+                name: name,
+                errors: errors[name],
+              },
+            ]);
+          }
         }
       }
-    });
+    );
   };
   return (
     <Form
@@ -55,7 +57,9 @@ const ForgotPasswordForm = ({ onForgotPassword }) => {
         rules={[
           {
             required: true,
-            message: <Localized id="forgot-password-form-email-error-required" />,
+            message: (
+              <Localized id="forgot-password-form-email-error-required" />
+            ),
           },
         ]}
       >
