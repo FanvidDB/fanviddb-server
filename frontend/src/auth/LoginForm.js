@@ -106,9 +106,9 @@ const LoginForm = ({ onLogin }) => {
         <Button type="primary" htmlType="submit" loading={isSubmitting}>
           <Localized id="login-form-login-button" />
         </Button>
-        <Button type="link" href="/docs">
+        <Link to="/forgot-password" className="ant-btn ant-btn-link">
           <Localized id="login-form-forgot-password-link" />
-        </Button>
+        </Link>
         <Link to="/register" className="ant-btn ant-btn-link">
           <Localized id="login-form-register-link" />
         </Link>
