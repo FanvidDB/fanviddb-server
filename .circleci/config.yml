@@ -70,7 +70,7 @@ jobs:
       - node/install-packages:
           pkg-manager: yarn
       - run:
-          command: yarn test
+          command: yarn test --maxWorkers=2
 
 workflows:
   main:

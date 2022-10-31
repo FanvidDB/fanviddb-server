@@ -1,11 +1,33 @@
 import React, { useState } from "react";
 import { Button, Form, Input } from "antd";
 import { Localized } from "@fluent/react";
-import PasswordStrengthBar from "./PasswordStrengthBar";
+import PasswordInput from "../forms/PasswordInput";
 import zxcvbn from "zxcvbn";
 import _ from "lodash";
 import PropTypes from "prop-types";
 import { callApi } from "../api";
+
+export const passwordValidator = ({ strongerPasswordError }) => {
+  return (_, password) => {
+    // Limit to 100 characters for performance reasons.
+    const passwordStrength = zxcvbn((password || "").substring(0, 100));
+    if (passwordStrength.score >= 4) {
+      return Promise.resolve();
+    }
+    let errors = [];
+    const { warning, suggestions } = passwordStrength.feedback;
+    if (warning) {
+      errors.push(warning);
+    }
+    if (suggestions) {
+      errors = errors.concat(suggestions);
+    }
+    if (errors.length == 0) {
+      errors.push(strongerPasswordError);
+    }
+    return Promise.reject(errors);
+  };
+};
 
 const RegisterForm = ({ onRegister }) => {
   const [form] = Form.useForm();
@@ -112,41 +134,14 @@ const RegisterForm = ({ onRegister }) => {
           },
           {
             validateTrigger: "onSubmit",
-            validator: (_, password) => {
-              // Limit to 100 characters for performance reasons.
-              const passwordStrength = zxcvbn(
-                (password || "").substring(0, 100)
-              );
-              if (passwordStrength.score >= 4) {
-                return Promise.resolve();
-              }
-              let errors = [];
-              const { warning, suggestions } = passwordStrength.feedback;
-              if (warning) {
-                errors.push(warning);
-              }
-              if (suggestions) {
-                errors = errors.concat(suggestions);
-              }
-              if (errors.length == 0) {
-                errors.push(
-                  <Localized id="register-form-password-error-stronger-password" />
-                );
-              }
-              return Promise.reject(errors);
-            },
+            validator: passwordValidator(
+              <Localized id="register-form-password-error-stronger-password" />
+            ),
           },
         ]}
         name="password"
       >
-        <div>
-          <Form.Item noStyle name="password">
-            <Input.Password suffix={"hi"} />
-          </Form.Item>
-          <Form.Item noStyle name="password" valuePropName="password">
-            <PasswordStrengthBar />
-          </Form.Item>
-        </div>
+        <PasswordInput />
       </Form.Item>
 
       <Form.Item wrapperCol={{ offset: 4, span: 20 }}>

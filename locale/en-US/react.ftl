@@ -51,9 +51,13 @@ form-error-string-min-length =
        *[other] This field must contain at least { $limit_value } characters.
     }
 form-error-url-host = URL host invalid, top level domain required
+form-error-missing = This field is required.
+form-error-email = Invalid email address.
 
 top-navbar-website-name = { -fanviddb }
 top-navbar-get-api-key = Get API key
+top-navbar-login = Log in
+top-navbar-register = Register
 api-key-create-error-unknown = Unknown error while creating API key. Please try again.
 
 side-nav-add-fanvid = Add Fanvid
@@ -129,6 +133,26 @@ verify-email-error-token-expired = Verification link expired; please <sendVerifi
 verify-email-error-bad-token = Invalid link; please <sendVerificationEmailLink>request a new one</sendVerificationEmailLink>.
 # Expected to have a <loginLink>login link</loginLink>.
 verify-email-error-already-verified = You are already verified. You can now <loginLink>log in</loginLink>.
+
+forgot-password-page-title-bar = Forgot Password | { -fanviddb }
+forgot-password-page-title = Forgot Password
+forgot-password-page-requested = Password reset requested. Please check your email.
+forgot-password-form-email-label = Email
+forgot-password-form-email-error-required = Please enter your email.
+forgot-password-form-submit = Request password reset
+forgot-password-form-error-unknown = Unknown error occurred, please try again in a few minutes
+
+reset-password-page-title-bar = Reset Password | { -fanviddb }
+reset-password-page-title = Reset Password
+# Expected to have a <loginLink>login link</loginLink>.
+reset-password-page-success = Password reset successful. You can now <loginLink>log in</loginLink>.
+reset-password-form-password-label = New Password
+# Expected to have a link to <forgotPasswordLink>request a new email</forgotPasswordLink>
+reset-password-form-error-bad-token = Password reset link is invalid or expired; please <forgotPasswordLink>request a new one</forgotPasswordLink>.
+reset-password-form-password-error-required = Please enter a password.
+reset-password-form-password-error-stronger-password = Please choose a stronger password.
+reset-password-form-error-unknown = Unknown error occurred, please try again in a few minutes
+reset-password-form-submit = Reset Password
 
 fanvid-create-page-title = Add Fanvid
 fanvid-create-page-title-bar = Add Fanvid | { -fanviddb }
