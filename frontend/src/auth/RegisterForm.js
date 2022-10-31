@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Form, Input } from "antd";
 import { Localized } from "@fluent/react";
-import PasswordStrengthBar from "./PasswordStrengthBar";
+import PasswordInput from "../forms/PasswordInput";
 import zxcvbn from "zxcvbn";
 import _ from "lodash";
 import PropTypes from "prop-types";
@@ -141,14 +141,7 @@ const RegisterForm = ({ onRegister }) => {
         ]}
         name="password"
       >
-        <div>
-          <Form.Item noStyle name="password">
-            <Input.Password />
-          </Form.Item>
-          <Form.Item noStyle name="password" valuePropName="password">
-            <PasswordStrengthBar />
-          </Form.Item>
-        </div>
+        <PasswordInput />
       </Form.Item>
 
       <Form.Item wrapperCol={{ offset: 4, span: 20 }}>

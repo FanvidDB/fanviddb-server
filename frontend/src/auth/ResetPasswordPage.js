@@ -8,7 +8,6 @@ const ResetPasswordPage = () => {
   const [isReset, setIsReset] = useState(false);
   const { l10n } = useLocalization();
   const onResetPassword = () => {
-    console.log("hi this is happening");
     setIsReset(true);
   };
   return (

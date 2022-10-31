@@ -14,31 +14,27 @@ const ForgotPasswordForm = ({ onForgotPassword }) => {
     setIsSubmitting(true);
     callApi("/api/auth/forgot-password", "POST", { email: email }).then(
       ({ status, ok, json }) => {
-        let errors = {};
+        let errors = [];
         if (status == 422) {
           errors = getApiErrors(json);
         }
 
         if (_.isEmpty(errors) && !ok) {
-          errors.email = [
-            <Localized
-              key="email-error"
-              id="forgot-password-form-error-unknown"
-            />,
-          ];
+          errors.push({
+            name: "email",
+            errors: [
+              <Localized
+                key="email-error"
+                id="forgot-password-form-error-unknown"
+              />,
+            ],
+          });
         }
         setIsSubmitting(false);
         if (_.isEmpty(errors)) {
           onForgotPassword();
         } else {
-          for (const name in errors) {
-            form.setFields([
-              {
-                name: name,
-                errors: errors[name],
-              },
-            ]);
-          }
+          form.setFields(errors);
         }
       }
     );

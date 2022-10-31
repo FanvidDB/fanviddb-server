@@ -52,6 +52,7 @@ form-error-string-min-length =
     }
 form-error-url-host = URL host invalid, top level domain required
 form-error-missing = This field is required.
+form-error-email = Invalid email address.
 
 top-navbar-website-name = { -fanviddb }
 top-navbar-get-api-key = Get API key
@@ -144,7 +145,7 @@ forgot-password-form-error-unknown = Unknown error occurred, please try again in
 reset-password-page-title-bar = Reset Password | { -fanviddb }
 reset-password-page-title = Reset Password
 # Expected to have a <loginLink>login link</loginLink>.
-reset-password-page-success = Your email address is verified. You can now <loginLink>log in</loginLink>.
+reset-password-page-success = Password reset successful. You can now <loginLink>log in</loginLink>.
 reset-password-form-password-label = New Password
 # Expected to have a link to <forgotPasswordLink>request a new email</forgotPasswordLink>
 reset-password-form-error-bad-token = Password reset link is invalid or expired; please <forgotPasswordLink>request a new one</forgotPasswordLink>.

@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Button, Form, Input } from "antd";
+import { Button, Form } from "antd";
 import { Localized } from "@fluent/react";
 import _ from "lodash";
 import { callApi } from "../api";
 import { getApiErrors } from "../forms/apiErrors";
+import PasswordInput from "../forms/PasswordInput";
 import PropTypes from "prop-types";
 import { passwordValidator } from "./RegisterForm";
-import PasswordStrengthBar from "./PasswordStrengthBar";
 
 const ResetPasswordForm = ({ onResetPassword }) => {
   const { token } = useParams();
@@ -101,14 +101,7 @@ const ResetPasswordForm = ({ onResetPassword }) => {
         ]}
         name="password"
       >
-        <div>
-          <Form.Item noStyle name="password">
-            <Input.Password />
-          </Form.Item>
-          <Form.Item noStyle name="password" valuePropName="password">
-            <PasswordStrengthBar />
-          </Form.Item>
-        </div>
+        <PasswordInput />
       </Form.Item>
 
       <Form.Item wrapperCol={{ offset: 4, span: 20 }}>

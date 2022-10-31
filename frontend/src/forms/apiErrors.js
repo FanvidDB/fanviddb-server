@@ -30,4 +30,5 @@ const apiErrors = {
   "value_error.any_str.min_length": "form-error-string-min-length",
   "value_error.url.host": "form-error-url-host",
   "value_error.missing": "form-error-missing",
+  "value_error.email": "form-error-email",
 };
