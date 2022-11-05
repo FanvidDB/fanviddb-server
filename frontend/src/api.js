@@ -1,9 +1,9 @@
 export async function callApi(
-  url,
-  method,
-  bodyObject,
-  contentType = "application/json"
-) {
+  url: string,
+  method: string,
+  bodyObject: {},
+  contentType: string = "application/json"
+): { status: string, ok: boolean, json: null | {}, text: null | string } {
   const fetchOpts = { method };
   if (bodyObject) {
     fetchOpts.headers = {
@@ -18,10 +18,19 @@ export async function callApi(
     }
   }
   const response = await fetch(url, fetchOpts);
-  const responseJson = await response.json();
+  let responseText = await response.text();
+  let responseJson = null;
+  try {
+    responseJson = JSON.parse(responseText);
+    responseText = null;
+  } catch {
+    // if it's not parseable, leave the response as text.
+  }
+
   return {
     status: response.status,
     ok: response.ok,
     json: responseJson,
+    text: responseText,
   };
 }
