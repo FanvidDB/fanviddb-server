@@ -1,43 +1,22 @@
 import React, { useState } from "react";
 import { Button, Form, Input } from "antd";
 import { Localized } from "@fluent/react";
-import _ from "lodash";
-import { callApi } from "../api";
-import { getApiErrors } from "../forms/apiErrors";
 import PropTypes from "prop-types";
+import submitForm from "../forms/submitForm";
 
 const ForgotPasswordForm = ({ onForgotPassword }) => {
   const [form] = Form.useForm();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onFinish = ({ email }) => {
-    setIsSubmitting(true);
-    callApi("/api/auth/forgot-password", "POST", { email: email }).then(
-      ({ status, ok, json }) => {
-        let errors = [];
-        if (status == 422) {
-          errors = getApiErrors(json);
-        }
-
-        if (_.isEmpty(errors) && !ok) {
-          errors.push({
-            name: "email",
-            errors: [
-              <Localized
-                key="email-error"
-                id="forgot-password-form-error-unknown"
-              />,
-            ],
-          });
-        }
-        setIsSubmitting(false);
-        if (_.isEmpty(errors)) {
-          onForgotPassword();
-        } else {
-          form.setFields(errors);
-        }
-      }
-    );
+    submitForm({
+      form,
+      setIsSubmitting,
+      defaultErrorField: "email",
+      url: "/api/auth/forgot-password",
+      values: { email },
+      onSuccess: onForgotPassword,
+    });
   };
   return (
     <Form

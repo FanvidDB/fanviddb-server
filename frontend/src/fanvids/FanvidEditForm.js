@@ -2,15 +2,14 @@ import React, { useState } from "react";
 import { Tag, Button, Form, Input, Select, Checkbox, Radio, Space } from "antd";
 import { CheckCircleOutlined } from "@ant-design/icons";
 import { Localized } from "@fluent/react";
-import { callApi } from "../api";
 import FormList from "../forms/FormList";
-import { getApiErrors } from "../forms/apiErrors";
 import DatePicker from "../forms/DatePicker";
 import DurationPicker from "../forms/DurationPicker";
 import UniqueIdentifierInput from "../forms/UniqueIdentifierInput";
 import { contentNotes, ratings, languages } from "./constants.js";
 import _ from "lodash";
 import PropTypes from "prop-types";
+import submitForm from "../forms/submitForm";
 
 const urlRegex = /https?:\/\/.*\..*/;
 
@@ -24,39 +23,33 @@ const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
 
   const onFinish = (values) => {
     setIsSuccess(false);
-    setIsSubmitting(true);
     let url = "/api/fanvids";
     let method = "POST";
     if (fanvid.uuid) {
       url = "/api/fanvids/" + fanvid.uuid;
       method = "PATCH";
     }
-    callApi(url, method, values).then(({ status, ok, json }) => {
-      let errors = [];
-      if (status == 422) {
-        errors = getApiErrors(json, (path) => {
-          if (path[1] == "unique_identifiers") {
-            return path.slice(0, -1);
-          }
-          if (path[1] == "audio" && path[2] == "languages") {
-            return path.slice(0, -1);
-          }
-          return path;
-        });
-      }
-      if (!ok && _.isEmpty(errors)) {
-        errors.title = [
-          <Localized key="title-error" id="fanvid-form-error-unknown" />,
-        ];
-      }
-      setIsSubmitting(false);
-      if (_.isEmpty(errors)) {
+    submitForm({
+      form,
+      setIsSubmitting,
+      defaultErrorField: "title",
+      url,
+      method,
+      values,
+      onSuccess: (json) => {
         onFanvidSaved(json);
         setIsSuccess(true);
         setIsDirty(false);
-      } else {
-        form.setFields(errors);
-      }
+      },
+      modifyPath: (path) => {
+        if (path[1] == "unique_identifiers") {
+          return path.slice(0, -1);
+        }
+        if (path[1] == "audio" && path[2] == "languages") {
+          return path.slice(0, -1);
+        }
+        return path;
+      },
     });
   };
   return (

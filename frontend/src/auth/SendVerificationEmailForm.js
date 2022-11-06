@@ -2,49 +2,21 @@ import React, { useState } from "react";
 import { Button, Form, Input } from "antd";
 import { Localized } from "@fluent/react";
 import PropTypes from "prop-types";
-import { callApi } from "../api";
+import submitForm from "../forms/submitForm";
 
 const SendVerificationEmailForm = ({ initialEmail, onSubmit }) => {
   const [form] = Form.useForm();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onFinish = ({ email }) => {
-    setIsSubmitting(true);
-    callApi("/api/auth/request-verify-token", "POST", { email }).then(
-      ({ ok }) => {
-        if (ok) {
-          onSubmit(email);
-          setIsSubmitting(false);
-        } else {
-          form.setFields([
-            {
-              name: "email",
-              errors: [
-                <Localized
-                  key="email-error"
-                  id="send-verification-email-form-email-error-unknown"
-                />,
-              ],
-            },
-          ]);
-          setIsSubmitting(false);
-        }
-      },
-      () => {
-        form.setFields([
-          {
-            name: "email",
-            errors: [
-              <Localized
-                key="email-error"
-                id="send-verification-email-form-email-error-unknown"
-              />,
-            ],
-          },
-        ]);
-        setIsSubmitting(false);
-      }
-    );
+    submitForm({
+      form,
+      setIsSubmitting,
+      defaultErrorField: "email",
+      url: "/api/auth/request-verify-token",
+      values: { email },
+      onSuccess: onSubmit,
+    });
   };
 
   return (

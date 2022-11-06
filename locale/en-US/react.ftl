@@ -53,6 +53,8 @@ form-error-string-min-length =
 form-error-url-host = URL host invalid, top level domain required
 form-error-missing = This field is required.
 form-error-email = Invalid email address.
+form-error-unknown = Unknown error; please try again in a few minutes.
+form-error-aborted = Request aborted; please try again.
 
 top-navbar-website-name = { -fanviddb }
 top-navbar-get-api-key = Get API key
@@ -96,7 +98,6 @@ login-form-login-button = Log in
 login-form-forgot-password-link = Forgot my password
 login-form-register-link = Register
 login-form-error-invalid-credentials = Invalid email or password.
-login-form-error-unknown = Unknown error; please try again in a few minutes.
 logout-button = Log out
 
 register-page-title = Register

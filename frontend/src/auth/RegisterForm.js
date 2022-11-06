@@ -3,9 +3,8 @@ import { Button, Form, Input } from "antd";
 import { Localized } from "@fluent/react";
 import PasswordInput from "../forms/PasswordInput";
 import zxcvbn from "zxcvbn";
-import _ from "lodash";
 import PropTypes from "prop-types";
-import { callApi } from "../api";
+import submitForm from "../forms/submitForm";
 
 export const passwordValidator = ({ strongerPasswordError }) => {
   return (_, password) => {
@@ -31,66 +30,57 @@ export const passwordValidator = ({ strongerPasswordError }) => {
 
 const RegisterForm = ({ onRegister }) => {
   const [form] = Form.useForm();
-  const [submitState, setSubmitState] = useState();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onFinish = (values: any) => {
-    setSubmitState("submitting");
-    callApi("/api/auth/register", "POST", values)
-      .then(({ status, ok, json }) => {
-        let errors = {};
+    submitForm({
+      form,
+      setIsSubmitting,
+      defaultErrorField: "username",
+      url: "/api/auth/register",
+      values,
+      getErrors: (status: number, json: {}): [] => {
+        let errors = [];
         if (status == 400) {
           if (json.detail == "REGISTER_USERNAME_ALREADY_EXISTS") {
-            errors.username = [
-              <Localized
-                key="username-error"
-                id="register-form-username-error-already-exists"
-              />,
-            ];
-          } else if (json.detail.code == "REGISTER_INVALID_PASSWORD") {
-            errors.password = json.detail.reason;
-            if (errors.password.length == 0) {
-              errors.password = [
+            errors.push({
+              name: "username",
+              errors: [
                 <Localized
-                  key="password-error"
-                  id="register-form-password-error-stronger-password"
+                  key="username-error"
+                  id="register-form-username-error-already-exists"
                 />,
-              ];
-            }
+              ],
+            });
+          } else if (json.detail.code == "REGISTER_INVALID_PASSWORD") {
+            errors.push({
+              name: "password",
+              errors:
+                json.detail.reason.length > 0
+                  ? json.detail.reason
+                  : [
+                      <Localized
+                        key="password-error"
+                        id="register-form-password-error-stronger-password"
+                      />,
+                    ],
+            });
           } else {
-            errors.email = [
-              <Localized
-                key="email-error"
-                id="register-form-email-error-already-exists"
-              />,
-            ];
-          }
-        } else if (!ok) {
-          errors.username = [
-            <Localized
-              key="email-error"
-              id="register-form-username-error-unknown"
-            />,
-          ];
-        }
-
-        if (_.isEmpty(errors)) {
-          onRegister(json);
-        } else {
-          setSubmitState();
-          for (const name in errors) {
-            form.setFields([
-              {
-                name: name,
-                errors: errors[name],
-              },
-            ]);
+            errors.push({
+              name: "email",
+              errors: [
+                <Localized
+                  key="email-error"
+                  id="register-form-email-error-already-exists"
+                />,
+              ],
+            });
           }
         }
-      })
-      .catch((error) => {
-        setSubmitState(undefined);
-        console.error("Error:", error);
-      });
+        return errors;
+      },
+      onSuccess: onRegister,
+    });
   };
   return (
     <Form
@@ -145,11 +135,7 @@ const RegisterForm = ({ onRegister }) => {
       </Form.Item>
 
       <Form.Item wrapperCol={{ offset: 4, span: 20 }}>
-        <Button
-          type="primary"
-          htmlType="submit"
-          loading={submitState == "submitting"}
-        >
+        <Button type="primary" htmlType="submit" loading={isSubmitting}>
           <Localized id="register-form-register-button" />
         </Button>
       </Form.Item>
