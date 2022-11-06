@@ -34,9 +34,20 @@ const FanvidList = () => {
             <Localized key="error-unknown" id="fanvid-list-error-unknown" />,
           ]);
         } else {
-          const json = response.json();
-          setFanvids(json.fanvids);
-          setTotalCount(json.total_count);
+          response
+            .json()
+            .then(({ fanvids, total_count }) => {
+              setFanvids(fanvids);
+              setTotalCount(total_count);
+            })
+            .catch(() => {
+              setErrors([
+                <Localized
+                  key="error-unknown"
+                  id="fanvid-list-error-unknown"
+                />,
+              ]);
+            });
         }
       })
       .catch(() => {
