@@ -3,7 +3,6 @@ import Helmet from "react-helmet";
 import { useParams, Link } from "react-router-dom";
 import { Spin } from "antd";
 import { Localized, useLocalization } from "@fluent/react";
-import { callApi } from "../api";
 import _ from "lodash";
 
 const VerifyEmailPage = () => {
@@ -13,10 +12,15 @@ const VerifyEmailPage = () => {
   const { l10n } = useLocalization();
 
   useEffect(() => {
-    callApi("/api/auth/verify", "POST", { token: token }).then(
-      ({ status, ok, json }) => {
+    fetch("/api/auth/verify", {
+      method: "POST",
+      body: JSON.stringify({ token: token }),
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((response) => {
         let errors = [];
-        if (status == 400) {
+        if (response.status == 400) {
+          const json = response.json();
           // Errors from fastapi-users
           // https://frankie567.github.io/fastapi-users/usage/routes/#post-verify
           if (json.detail == "VERIFY_USER_TOKEN_EXPIRED") {
@@ -62,14 +66,19 @@ const VerifyEmailPage = () => {
 
         if (!_.isEmpty(errors)) {
           setErrors(errors);
-        } else if (!ok) {
+        } else if (!response.ok) {
           setErrors([
             <Localized key="unknown" id="verify-email-error-unknown" />,
           ]);
         }
         setIsLoading(false);
-      }
-    );
+      })
+      .catch(() => {
+        setErrors([
+          <Localized key="unknown" id="verify-email-error-unknown" />,
+        ]);
+        setIsLoading(false);
+      });
   }, []);
 
   return (

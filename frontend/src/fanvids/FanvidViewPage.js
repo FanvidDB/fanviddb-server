@@ -15,7 +15,6 @@ import {
 } from "antd";
 import { Localized, useLocalization } from "@fluent/react";
 import { useParams, Link } from "react-router-dom";
-import { callApi } from "../api";
 import Http404Page from "../pages/Http404Page";
 import Http500Page from "../pages/Http500Page";
 import Helmet from "react-helmet";
@@ -34,16 +33,21 @@ const FanvidViewPage = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    callApi("/api/fanvids/" + uuid, "GET").then(({ status, ok, json }) => {
-      if (status == 404) {
-        setIs404(true);
-      } else if (!ok) {
+    fetch("/api/fanvids/" + uuid, { method: "GET" })
+      .then((response) => {
+        if (response.status == 404) {
+          setIs404(true);
+        } else if (!response.ok) {
+          setIs500(true);
+        } else {
+          setFanvid(response.json());
+        }
+        setIsLoading(false);
+      })
+      .catch(() => {
         setIs500(true);
-      } else {
-        setFanvid(json);
-      }
-      setIsLoading(false);
-    });
+        setIsLoading(false);
+      });
   }, [uuid]);
 
   if (isLoading) {

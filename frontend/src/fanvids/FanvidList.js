@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { List, Skeleton, Alert, Space, Typography, Tag } from "antd";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Localized } from "@fluent/react";
-import { callApi } from "../api";
 import { contentNotes, ratings } from "./constants";
 import _ from "lodash";
 
@@ -24,20 +23,28 @@ const FanvidList = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    callApi(
+    fetch(
       `/api/fanvids?limit=${PAGE_SIZE}&offset=${PAGE_SIZE * (currentPage - 1)}`,
-      "GET"
-    ).then(({ ok, json }) => {
-      setIsLoading(false);
-      if (!ok) {
+      { method: "GET" }
+    )
+      .then((response) => {
+        setIsLoading(false);
+        if (!response.ok) {
+          setErrors([
+            <Localized key="error-unknown" id="fanvid-list-error-unknown" />,
+          ]);
+        } else {
+          const json = response.json();
+          setFanvids(json.fanvids);
+          setTotalCount(json.total_count);
+        }
+      })
+      .catch(() => {
+        setIsLoading(false);
         setErrors([
           <Localized key="error-unknown" id="fanvid-list-error-unknown" />,
         ]);
-      } else {
-        setFanvids(json.fanvids);
-        setTotalCount(json.total_count);
-      }
-    });
+      });
   }, [currentPage]);
 
   const onChangePage = (page) => {
