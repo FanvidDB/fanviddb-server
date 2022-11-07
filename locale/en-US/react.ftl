@@ -53,6 +53,8 @@ form-error-string-min-length =
 form-error-url-host = URL host invalid, top level domain required
 form-error-missing = This field is required.
 form-error-email = Invalid email address.
+form-error-unknown = Unknown error occurred. Please try again in a few minutes.
+form-error-aborted = Request aborted; please try again.
 
 top-navbar-website-name = { -fanviddb }
 top-navbar-get-api-key = Get API key
@@ -96,7 +98,6 @@ login-form-login-button = Log in
 login-form-forgot-password-link = Forgot my password
 login-form-register-link = Register
 login-form-error-invalid-credentials = Invalid email or password.
-login-form-error-unknown = Unknown error; please try again in a few minutes.
 logout-button = Log out
 
 register-page-title = Register
@@ -140,7 +141,6 @@ forgot-password-page-requested = Password reset requested. Please check your ema
 forgot-password-form-email-label = Email
 forgot-password-form-email-error-required = Please enter your email.
 forgot-password-form-submit = Request password reset
-forgot-password-form-error-unknown = Unknown error occurred, please try again in a few minutes
 
 reset-password-page-title-bar = Reset Password | { -fanviddb }
 reset-password-page-title = Reset Password
@@ -151,7 +151,6 @@ reset-password-form-password-label = New Password
 reset-password-form-error-bad-token = Password reset link is invalid or expired; please <forgotPasswordLink>request a new one</forgotPasswordLink>.
 reset-password-form-password-error-required = Please enter a password.
 reset-password-form-password-error-stronger-password = Please choose a stronger password.
-reset-password-form-error-unknown = Unknown error occurred, please try again in a few minutes
 reset-password-form-submit = Reset Password
 
 fanvid-create-page-title = Add Fanvid
@@ -159,7 +158,6 @@ fanvid-create-page-title-bar = Add Fanvid | { -fanviddb }
 fanvid-edit-page-title = Edit { $title }
 fanvid-edit-page-title-bar = Edit { $title } | { -fanviddb }
 fanvid-edit-page-title-bar-loading = Edit fanvid | { -fanviddb }
-fanvid-form-error-unknown = Unknown error occurred, please try again in a few minutes
 fanvid-form-save-button = Save
 fanvid-form-save-success = Saved
 fanvid-form-save-no-changes = No changes

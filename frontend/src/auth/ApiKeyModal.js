@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Modal, Typography, Skeleton } from "antd";
 import { Localized } from "@fluent/react";
-import { callApi } from "../api";
 
 const { Paragraph, Text } = Typography;
 
@@ -15,18 +14,28 @@ const ApiKeyModal = ({ open, onCancel }) => {
       return;
     }
     setIsLoading(true);
-    callApi("/api/api_keys", "POST").then(({ ok, json }) => {
-      if (!ok) {
+    fetch("/api/api_keys", { method: "POST" })
+      .then((response) => {
+        if (!response.ok) {
+          setErrors([
+            <Localized key="error-unknown" id="api-key-create-error-unknown" />,
+          ]);
+          setApiKey(null);
+          setIsLoading(false);
+        } else {
+          response.json().then((json) => {
+            setErrors([]);
+            setApiKey(json.api_key);
+            setIsLoading(false);
+          });
+        }
+      })
+      .catch(() => {
         setErrors([
           <Localized key="error-unknown" id="api-key-create-error-unknown" />,
         ]);
-        setApiKey(null);
-      } else {
-        setErrors([]);
-        setApiKey(json.api_key);
-      }
-      setIsLoading(false);
-    });
+        setIsLoading(false);
+      });
   }, [open]);
   return (
     <Modal open={open} footer={null} closable={true} onCancel={onCancel}>

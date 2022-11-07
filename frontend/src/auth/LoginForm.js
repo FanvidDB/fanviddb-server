@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, Form, Input } from "antd";
 import { Localized } from "@fluent/react";
-import _ from "lodash";
-import { callApi } from "../api";
+import submitForm from "../forms/submitForm";
 import PropTypes from "prop-types";
 
 const LoginForm = ({ onLogin }) => {
@@ -11,62 +10,60 @@ const LoginForm = ({ onLogin }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onFinish = ({ email, password }) => {
-    setIsSubmitting(true);
-    callApi(
-      "/api/auth/login",
-      "POST",
-      { username: email, password },
-      "application/x-www-form-urlencoded"
-    ).then(({ status, ok, json }) => {
-      let errors = {};
-      if (status == 400) {
-        if (json.detail == "LOGIN_BAD_CREDENTIALS") {
-          errors.email = [
-            <Localized
-              key="email-error"
-              id="login-form-error-invalid-credentials"
-            />,
-          ];
-        } else if (json.detail == "LOGIN_USER_NOT_VERIFIED") {
-          errors.email = [
-            <Localized
-              key="email-error"
-              id="login-form-email-error-not-verified"
-              elems={{
-                sendVerificationEmailLink: (
-                  <Link
-                    to={{
-                      pathname: "/verify-email/send",
-                      search: `?email=${encodeURIComponent(email)}`,
-                    }}
-                  />
-                ),
-              }}
-            >
-              <span></span>
-            </Localized>,
-          ];
+    submitForm({
+      setIsSubmitting,
+      url: "/api/auth/login",
+      values: { username: email, password },
+      contentType: "application/x-www-form-urlencoded",
+      getErrors: (status: number, json: {}): [] => {
+        let errors = [];
+        if (status == 400) {
+          if (json.detail == "LOGIN_BAD_CREDENTIALS") {
+            errors.push({
+              name: "email",
+              errors: [
+                <Localized
+                  key="email-error"
+                  id="login-form-error-invalid-credentials"
+                />,
+              ],
+            });
+          } else if (json.detail == "LOGIN_USER_NOT_VERIFIED") {
+            errors.push({
+              name: "email",
+              errors: [
+                <Localized
+                  key="email-error"
+                  id="login-form-email-error-not-verified"
+                  elems={{
+                    sendVerificationEmailLink: (
+                      <Link
+                        to={{
+                          pathname: "/verify-email/send",
+                          search: `?email=${encodeURIComponent(email)}`,
+                        }}
+                      />
+                    ),
+                  }}
+                >
+                  <span></span>
+                </Localized>,
+              ],
+            });
+          }
         }
-      }
-
-      if (_.isEmpty(errors) && !ok) {
-        errors.email = [
-          <Localized key="email-error" id="login-form-error-unknown" />,
-        ];
-      }
-      setIsSubmitting(false);
-      if (_.isEmpty(errors)) {
-        onLogin();
-      } else {
-        for (const name in errors) {
-          form.setFields([
-            {
-              name: name,
-              errors: errors[name],
-            },
-          ]);
-        }
-      }
+        return errors;
+      },
+      onSuccess: onLogin,
+      abortError: {
+        name: "email",
+        errors: [<Localized key="aborted-error" id="form-error-aborted" />],
+      },
+      unknownError: {
+        name: "email",
+        errors: [<Localized key="unknown-error" id="form-error-unknown" />],
+      },
+      setErrors: form.setFields,
     });
   };
   return (
