@@ -25,7 +25,7 @@ const FanvidEditPage = () => {
         } else if (!response.ok) {
           setIs500(true);
         } else {
-          setFanvid(response.json());
+          response.json().then((json) => setFanvid(json));
         }
         setIsLoading(false);
       })

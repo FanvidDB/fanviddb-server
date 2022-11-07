@@ -10,12 +10,19 @@ const ForgotPasswordForm = ({ onForgotPassword }) => {
 
   const onFinish = ({ email }) => {
     submitForm({
-      form,
       setIsSubmitting,
-      defaultErrorField: "email",
       url: "/api/auth/forgot-password",
       values: { email },
       onSuccess: onForgotPassword,
+      abortError: {
+        name: "email",
+        errors: [<Localized key="aborted-error" id="form-error-aborted" />],
+      },
+      unknownError: {
+        name: "email",
+        errors: [<Localized key="unknown-error" id="form-error-unknown" />],
+      },
+      setErrors: form.setFields,
     });
   };
   return (

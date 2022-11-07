@@ -34,9 +34,7 @@ const RegisterForm = ({ onRegister }) => {
 
   const onFinish = (values: any) => {
     submitForm({
-      form,
       setIsSubmitting,
-      defaultErrorField: "username",
       url: "/api/auth/register",
       values,
       getErrors: (status: number, json: {}): [] => {
@@ -80,6 +78,15 @@ const RegisterForm = ({ onRegister }) => {
         return errors;
       },
       onSuccess: onRegister,
+      abortError: {
+        name: "username",
+        errors: [<Localized key="aborted-error" id="form-error-aborted" />],
+      },
+      unknownError: {
+        name: "username",
+        errors: [<Localized key="unknown-error" id="form-error-unknown" />],
+      },
+      setErrors: form.setFields,
     });
   };
   return (

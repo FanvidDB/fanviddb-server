@@ -1,34 +1,33 @@
-import React from "react";
-import { FormInstance } from "antd";
-import { Localized } from "@fluent/react";
 import { getApiErrors } from "./apiErrors";
 import _ from "lodash";
-
-const noop = () => {};
 
 export default async function submitForm({
   url,
   method = "POST",
   values,
   contentType = "application/json",
-  form,
   setIsSubmitting,
-  onSuccess = noop,
-  getErrors = () => [],
-  defaultErrorField,
+  onSuccess = () => {},
   modifyPath = (val) => val,
+  getErrors = () => [],
+  abortError,
+  unknownError,
+  setErrors,
 }: {
   url: string,
   method?: string,
   values: {},
   contentType?: string,
-  form: FormInstance,
   setIsSubmitting: () => any,
   onSuccess?: () => any,
+  modifyPath?: () => any,
   getErrors: (status: number, json: {}) => [],
-  defaultErrorField: string,
+  abortError: { name: string, errors: [] },
+  unknownError: { name: string, errors: [] },
+  setErrors: ([{ name: string, errors: [] }]) => any,
 }): { status: string, ok: boolean, json: null | {}, text: null | string } {
   setIsSubmitting(true);
+  setErrors([]);
   const fetchOpts = {
     method,
     headers: {
@@ -40,7 +39,7 @@ export default async function submitForm({
   } else if (contentType == "application/x-www-form-urlencoded") {
     fetchOpts.body = new URLSearchParams(values);
   } else {
-    fetchOpts.body = values;
+    throw new Error(`Unhandled Content-Type: ${contentType}`);
   }
 
   let response;
@@ -49,12 +48,7 @@ export default async function submitForm({
   } catch {
     // Aborted response
     setIsSubmitting(false);
-    form.setFields([
-      {
-        name: defaultErrorField,
-        errors: [<Localized key="aborted-error" id="form-error-aborted" />],
-      },
-    ]);
+    setErrors([abortError]);
     return;
   }
 
@@ -63,12 +57,7 @@ export default async function submitForm({
   if (response.status == 500) {
     console.error("Error:", text);
     setIsSubmitting(false);
-    form.setFields([
-      {
-        name: defaultErrorField,
-        errors: [<Localized key="unknown-error" id="form-error-unknown" />],
-      },
-    ]);
+    setErrors([unknownError]);
     return;
   }
 
@@ -79,12 +68,7 @@ export default async function submitForm({
   } catch {
     console.error("Couldn't parse response json:", text);
     setIsSubmitting(false);
-    form.setFields([
-      {
-        name: defaultErrorField,
-        errors: [<Localized key="unknown-error" id="form-error-unknown" />],
-      },
-    ]);
+    setErrors([unknownError]);
     return;
   }
 
@@ -104,11 +88,9 @@ export default async function submitForm({
 
   // We know there's an error but couldn't figure it out for some reason.
   if (_.isEmpty(errors) && !response.ok) {
-    errors.push({
-      name: defaultErrorField,
-      errors: [<Localized key="unknown-error" id="form-error-unknown" />],
-    });
+    errors.push(unknownError);
   }
 
-  form.setFields(errors);
+  setErrors(errors);
+  setIsSubmitting(false);
 }

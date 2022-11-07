@@ -2,28 +2,18 @@ import React from "react";
 import { render, fireEvent } from "@testing-library/react";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { LocalizationProvider as FluentProvider } from "@fluent/react";
-
-jest.mock("../api", () => {
-  return {
-    callApi: jest.fn(),
-  };
-});
-
-import { callApi } from "../api";
 import LoginPage from "./LoginPage";
 import AuthContext from "./authContext";
 import { l10n } from "../i18n/test";
 
 beforeEach(() => {
-  callApi.mockClear();
+  fetch.resetMocks();
 });
 
 describe("LoginPage", () => {
   test("redirects to home after login", async () => {
     const expected = "Home";
-    callApi.mockImplementationOnce(() => {
-      return Promise.resolve({ ok: true, status: 200, json: null });
-    });
+    fetch.mockResponseOnce(JSON.stringify(null), { status: 200 });
     const loadUserData = jest.fn();
     const { getByLabelText, getByRole, findByTestId } = render(
       <FluentProvider l10n={l10n}>

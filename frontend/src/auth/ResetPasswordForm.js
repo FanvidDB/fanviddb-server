@@ -14,9 +14,7 @@ const ResetPasswordForm = ({ onResetPassword }) => {
 
   const onFinish = ({ password }) => {
     submitForm({
-      form,
       setIsSubmitting,
-      defaultErrorField: "password",
       url: "/api/auth/reset-password",
       values: { password, token },
       getErrors: (status, json) => {
@@ -56,6 +54,15 @@ const ResetPasswordForm = ({ onResetPassword }) => {
         return errors;
       },
       onSuccess: onResetPassword,
+      abortError: {
+        name: "password",
+        errors: [<Localized key="aborted-error" id="form-error-aborted" />],
+      },
+      unknownError: {
+        name: "password",
+        errors: [<Localized key="unknown-error" id="form-error-unknown" />],
+      },
+      setErrors: form.setFields,
     });
   };
   return (

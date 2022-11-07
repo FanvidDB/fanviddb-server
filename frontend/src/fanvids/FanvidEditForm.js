@@ -30,9 +30,7 @@ const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
       method = "PATCH";
     }
     submitForm({
-      form,
       setIsSubmitting,
-      defaultErrorField: "title",
       url,
       method,
       values,
@@ -50,6 +48,15 @@ const FanvidEditForm = ({ onFanvidSaved, fanvid }) => {
         }
         return path;
       },
+      abortError: {
+        name: "title",
+        errors: [<Localized key="aborted-error" id="form-error-aborted" />],
+      },
+      unknownError: {
+        name: "title",
+        errors: [<Localized key="unknown-error" id="form-error-unknown" />],
+      },
+      setErrors: form.setFields,
     });
   };
   return (

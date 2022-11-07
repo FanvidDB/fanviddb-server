@@ -11,9 +11,7 @@ const LoginForm = ({ onLogin }) => {
 
   const onFinish = ({ email, password }) => {
     submitForm({
-      form,
       setIsSubmitting,
-      defaultErrorField: "email",
       url: "/api/auth/login",
       values: { username: email, password },
       contentType: "application/x-www-form-urlencoded",
@@ -57,6 +55,15 @@ const LoginForm = ({ onLogin }) => {
         return errors;
       },
       onSuccess: onLogin,
+      abortError: {
+        name: "email",
+        errors: [<Localized key="aborted-error" id="form-error-aborted" />],
+      },
+      unknownError: {
+        name: "email",
+        errors: [<Localized key="unknown-error" id="form-error-unknown" />],
+      },
+      setErrors: form.setFields,
     });
   };
   return (

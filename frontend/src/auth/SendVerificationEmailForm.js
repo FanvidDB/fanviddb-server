@@ -10,12 +10,19 @@ const SendVerificationEmailForm = ({ initialEmail, onSubmit }) => {
 
   const onFinish = ({ email }) => {
     submitForm({
-      form,
       setIsSubmitting,
-      defaultErrorField: "email",
       url: "/api/auth/request-verify-token",
       values: { email },
       onSuccess: onSubmit,
+      abortError: {
+        name: "email",
+        errors: [<Localized key="aborted-error" id="form-error-aborted" />],
+      },
+      unknownError: {
+        name: "email",
+        errors: [<Localized key="unknown-error" id="form-error-unknown" />],
+      },
+      setErrors: form.setFields,
     });
   };
 

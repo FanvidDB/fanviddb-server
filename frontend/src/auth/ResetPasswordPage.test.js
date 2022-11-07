@@ -3,19 +3,11 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { LocalizationProvider as FluentProvider } from "@fluent/react";
-
-jest.mock("../api", () => {
-  return {
-    callApi: jest.fn(),
-  };
-});
-
-import { callApi } from "../api";
 import ResetPasswordPage from "./ResetPasswordPage";
 import { l10n } from "../i18n/test";
 
 beforeEach(() => {
-  callApi.mockClear();
+  fetch.resetMocks();
 });
 
 const testPassword =
@@ -23,9 +15,7 @@ const testPassword =
 
 describe("ResetPasswordPage", () => {
   test("handles successful form submission", async () => {
-    callApi.mockImplementationOnce(() => {
-      return Promise.resolve({ ok: true, status: 200, json: null });
-    });
+    fetch.mockResponseOnce(JSON.stringify(null), { status: 200 });
     const user = userEvent.setup();
     render(
       <FluentProvider l10n={l10n}>
@@ -57,21 +47,18 @@ describe("ResetPasswordPage", () => {
   });
 
   test("handles api validation errors", async () => {
-    callApi.mockImplementationOnce(() => {
-      return Promise.resolve({
-        ok: true,
-        status: 422,
-        json: {
-          detail: [
-            {
-              loc: ["body", "password"],
-              msg: "field required",
-              type: "value_error.missing",
-            },
-          ],
-        },
-      });
-    });
+    fetch.mockResponseOnce(
+      JSON.stringify({
+        detail: [
+          {
+            loc: ["body", "password"],
+            msg: "field required",
+            type: "value_error.missing",
+          },
+        ],
+      }),
+      { status: 422 }
+    );
     const user = userEvent.setup();
     render(
       <FluentProvider l10n={l10n}>
@@ -101,15 +88,12 @@ describe("ResetPasswordPage", () => {
   });
 
   test("handles bad token error", async () => {
-    callApi.mockImplementationOnce(() => {
-      return Promise.resolve({
-        ok: true,
-        status: 400,
-        json: {
-          detail: "RESET_PASSWORD_BAD_TOKEN",
-        },
-      });
-    });
+    fetch.mockResponseOnce(
+      JSON.stringify({
+        detail: "RESET_PASSWORD_BAD_TOKEN",
+      }),
+      { status: 400 }
+    );
     const user = userEvent.setup();
     render(
       <FluentProvider l10n={l10n}>
@@ -139,18 +123,15 @@ describe("ResetPasswordPage", () => {
   });
 
   test("handles invalid password error", async () => {
-    callApi.mockImplementationOnce(() => {
-      return Promise.resolve({
-        ok: true,
-        status: 400,
-        json: {
-          detail: {
-            code: "RESET_PASSWORD_INVALID_PASSWORD",
-            reason: [],
-          },
+    fetch.mockResponseOnce(
+      JSON.stringify({
+        detail: {
+          code: "RESET_PASSWORD_INVALID_PASSWORD",
+          reason: [],
         },
-      });
-    });
+      }),
+      { status: 400 }
+    );
     const user = userEvent.setup();
     render(
       <FluentProvider l10n={l10n}>
@@ -180,13 +161,7 @@ describe("ResetPasswordPage", () => {
   });
 
   test("handles unknown error", async () => {
-    callApi.mockImplementationOnce(() => {
-      return Promise.resolve({
-        ok: false,
-        status: 500,
-        json: null,
-      });
-    });
+    fetch.mockResponseOnce(JSON.stringify(null), { status: 500 });
     const user = userEvent.setup();
     render(
       <FluentProvider l10n={l10n}>
