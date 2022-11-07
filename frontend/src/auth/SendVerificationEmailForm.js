@@ -13,7 +13,7 @@ const SendVerificationEmailForm = ({ initialEmail, onSubmit }) => {
       setIsSubmitting,
       url: "/api/auth/request-verify-token",
       values: { email },
-      onSuccess: onSubmit,
+      onSuccess: () => onSubmit(email),
       abortError: {
         name: "email",
         errors: [<Localized key="aborted-error" id="form-error-aborted" />],

@@ -169,8 +169,7 @@ describe("submitForm", () => {
   });
 
   it("allows custom error handling", async () => {
-    fetch.mockResponseOnce(JSON.stringify({}), { status: 400 });
-    const customError = { name: "whatever", errors: ["this is a problem"] };
+    fetch.mockResponseOnce(JSON.stringify({ foo: "bar" }), { status: 400 });
     const onSuccess = jest.fn();
     const setIsSubmitting = jest.fn();
     const setErrors = jest.fn();
@@ -181,7 +180,9 @@ describe("submitForm", () => {
       values: {},
       setIsSubmitting,
       onSuccess,
-      getErrors: () => [customError],
+      getErrors: (status: number, json: {}) => [
+        { name: `whatever${status}`, errors: [json.foo] },
+      ],
       abortError,
       unknownError,
       setErrors,
@@ -197,7 +198,10 @@ describe("submitForm", () => {
     });
     expect(setErrors.mock.calls.length).toEqual(1);
     expect(setErrors.mock.calls[0][0].length).toEqual(1);
-    expect(setErrors.mock.calls[0][0][0]).toEqual(customError);
+    expect(setErrors.mock.calls[0][0][0]).toEqual({
+      name: "whatever400",
+      errors: ["bar"],
+    });
     expect(setIsSubmitting.mock.calls.length).toEqual(2);
     expect(setIsSubmitting.mock.calls[0][0]).toEqual(true);
     expect(setIsSubmitting.mock.calls[1][0]).toEqual(false);

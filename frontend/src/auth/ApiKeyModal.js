@@ -21,11 +21,14 @@ const ApiKeyModal = ({ open, onCancel }) => {
             <Localized key="error-unknown" id="api-key-create-error-unknown" />,
           ]);
           setApiKey(null);
+          setIsLoading(false);
         } else {
-          setErrors([]);
-          setApiKey(response.json().api_key);
+          response.json().then((json) => {
+            setErrors([]);
+            setApiKey(json.api_key);
+            setIsLoading(false);
+          });
         }
-        setIsLoading(false);
       })
       .catch(() => {
         setErrors([

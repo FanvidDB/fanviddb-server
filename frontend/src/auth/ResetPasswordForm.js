@@ -17,7 +17,7 @@ const ResetPasswordForm = ({ onResetPassword }) => {
       setIsSubmitting,
       url: "/api/auth/reset-password",
       values: { password, token },
-      getErrors: (status, json) => {
+      getErrors: (status: number, json: {}) => {
         let errors = [];
         if (status == 400) {
           if (json.detail == "RESET_PASSWORD_BAD_TOKEN") {

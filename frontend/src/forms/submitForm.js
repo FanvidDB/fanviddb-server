@@ -25,9 +25,8 @@ export default async function submitForm({
   abortError: { name: string, errors: [] },
   unknownError: { name: string, errors: [] },
   setErrors: ([{ name: string, errors: [] }]) => any,
-}): { status: string, ok: boolean, json: null | {}, text: null | string } {
+}) {
   setIsSubmitting(true);
-  setErrors([]);
   const fetchOpts = {
     method,
     headers: {
@@ -80,7 +79,7 @@ export default async function submitForm({
 
   let errors = [];
 
-  errors.push(...getErrors(json));
+  errors.push(...getErrors(response.status, json));
 
   if (response.status == 422) {
     errors.push(...getApiErrors(json, modifyPath));

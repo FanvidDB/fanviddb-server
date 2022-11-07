@@ -10,7 +10,7 @@ const SendVerificationEmailPage = () => {
   const location = useLocation();
   const [submittedEmail, setSubmittedEmail] = useState();
 
-  const onSubmit = ({ email }) => {
+  const onSubmit = (email) => {
     setSubmittedEmail(email);
   };
 

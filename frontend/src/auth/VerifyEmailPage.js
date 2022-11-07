@@ -18,60 +18,61 @@ const VerifyEmailPage = () => {
       headers: { "Content-Type": "application/json" },
     })
       .then((response) => {
-        let errors = [];
         if (response.status == 400) {
-          const json = response.json();
-          // Errors from fastapi-users
-          // https://frankie567.github.io/fastapi-users/usage/routes/#post-verify
-          if (json.detail == "VERIFY_USER_TOKEN_EXPIRED") {
-            errors.push(
-              <Localized
-                key="token-expired"
-                id="verify-email-error-token-expired"
-                elems={{
-                  sendVerificationEmailLink: (
-                    <Link to="/verify-email/send"></Link>
-                  ),
-                }}
-              >
-                <span></span>
-              </Localized>
-            );
-          } else if (json.detail == "VERIFY_USER_BAD_TOKEN") {
-            errors.push(
-              <Localized
-                key="bad-token"
-                id="verify-email-error-bad-token"
-                elems={{
-                  sendVerificationEmailLink: (
-                    <Link to="/verify-email/send"></Link>
-                  ),
-                }}
-              >
-                <span></span>
-              </Localized>
-            );
-          } else if (json.detail == "VERIFY_USER_ALREADY_VERIFIED") {
-            errors.push(
-              <Localized
-                key="already-verified"
-                id="verify-email-error-already-verified"
-                elems={{ loginLink: <Link to="/login"></Link> }}
-              >
-                <span></span>
-              </Localized>
-            );
-          }
-        }
-
-        if (!_.isEmpty(errors)) {
-          setErrors(errors);
+          response.json().then((json) => {
+            let errors = [];
+            // Errors from fastapi-users
+            // https://frankie567.github.io/fastapi-users/usage/routes/#post-verify
+            if (json.detail == "VERIFY_USER_TOKEN_EXPIRED") {
+              errors.push(
+                <Localized
+                  key="token-expired"
+                  id="verify-email-error-token-expired"
+                  elems={{
+                    sendVerificationEmailLink: (
+                      <Link to="/verify-email/send"></Link>
+                    ),
+                  }}
+                >
+                  <span></span>
+                </Localized>
+              );
+            } else if (json.detail == "VERIFY_USER_BAD_TOKEN") {
+              errors.push(
+                <Localized
+                  key="bad-token"
+                  id="verify-email-error-bad-token"
+                  elems={{
+                    sendVerificationEmailLink: (
+                      <Link to="/verify-email/send"></Link>
+                    ),
+                  }}
+                >
+                  <span></span>
+                </Localized>
+              );
+            } else if (json.detail == "VERIFY_USER_ALREADY_VERIFIED") {
+              errors.push(
+                <Localized
+                  key="already-verified"
+                  id="verify-email-error-already-verified"
+                  elems={{ loginLink: <Link to="/login"></Link> }}
+                >
+                  <span></span>
+                </Localized>
+              );
+            }
+            if (!_.isEmpty(errors)) {
+              setErrors(errors);
+              setIsLoading(false);
+            }
+          });
         } else if (!response.ok) {
           setErrors([
             <Localized key="unknown" id="verify-email-error-unknown" />,
           ]);
+          setIsLoading(false);
         }
-        setIsLoading(false);
       })
       .catch(() => {
         setErrors([

@@ -22,12 +22,16 @@ const FanvidEditPage = () => {
       .then((response) => {
         if (response.status == 404) {
           setIs404(true);
+          setIsLoading(false);
         } else if (!response.ok) {
           setIs500(true);
+          setIsLoading(false);
         } else {
-          response.json().then((json) => setFanvid(json));
+          response.json().then((json) => {
+            setFanvid(json);
+            setIsLoading(false);
+          });
         }
-        setIsLoading(false);
       })
       .catch(() => {
         setIs500(true);

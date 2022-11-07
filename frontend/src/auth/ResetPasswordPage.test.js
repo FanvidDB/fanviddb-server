@@ -188,7 +188,7 @@ describe("ResetPasswordPage", () => {
     });
     expect(submitButton).not.toBeDisabled();
     await screen.findByText(
-      "Unknown error occurred, please try again in a few minutes"
+      "Unknown error occurred. Please try again in a few minutes."
     );
   });
 });

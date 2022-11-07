@@ -12,14 +12,21 @@ export const AuthProvider = ({ children }) => {
     fetch("/api/users/me", { method: "GET" })
       .then((response) => {
         // 401 means not logged in, so no action to take.
-        if (response.status != 401) {
-          if (!response.ok) {
-            console.log("Error fetching user information", response.text());
-          } else {
-            setUser(response.json());
-          }
+        if (response.status == 401) {
+          setIsLoading(false);
+          return;
         }
-        setIsLoading(false);
+
+        if (!response.ok) {
+          console.log("Error fetching user information", response.text());
+          setIsLoading(false);
+          return;
+        }
+
+        response.json().then((json) => {
+          setUser(json);
+          setIsLoading(false);
+        });
       })
       .catch(() => {
         console.log("Request aborted while fetching user information");
@@ -30,7 +37,8 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     const response = await fetch("/api/auth/logout", { method: "POST" });
     if (!response.ok) {
-      console.log("Error logging out", response.text());
+      const text = await response.text();
+      console.log("Error logging out", text);
     } else {
       setUser(undefined);
     }

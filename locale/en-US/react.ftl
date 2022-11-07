@@ -53,7 +53,7 @@ form-error-string-min-length =
 form-error-url-host = URL host invalid, top level domain required
 form-error-missing = This field is required.
 form-error-email = Invalid email address.
-form-error-unknown = Unknown error; please try again in a few minutes.
+form-error-unknown = Unknown error occurred. Please try again in a few minutes.
 form-error-aborted = Request aborted; please try again.
 
 top-navbar-website-name = { -fanviddb }
