@@ -17,7 +17,7 @@ factory-boy==3.2.1
 Faker==6.6.1
 fastapi-users-db-sqlalchemy==4.0.3
 fastapi-users==10.0.7
-fastapi==0.95.1
+fastapi==0.95.2
 flake8==4.0.1
 fluent.runtime==0.3.1
 fluent.syntax==0.18.1
