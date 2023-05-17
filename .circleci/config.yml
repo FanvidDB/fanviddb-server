@@ -31,7 +31,6 @@ jobs:
       - checkout
       - python/install-packages:
           pkg-manager: pip
-          args: --no-deps
 
       - run:
           name: install dockerize
