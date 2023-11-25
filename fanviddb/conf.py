@@ -28,4 +28,4 @@ AUTH_SECRET_KEY = config("AUTH_SECRET_KEY")
 EMAIL_TOKEN_SECRET_KEY = config("EMAIL_TOKEN_SECRET_KEY")
 
 DEFAULT_FROM_EMAIL = "noreply@fanviddb.com"
-SENDGRID_API_KEY = config("SENDGRID_API_KEY", default=None)
+POSTMARK_API_KEY = config("POSTMARK_API_KEY", default=None)

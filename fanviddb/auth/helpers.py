@@ -66,6 +66,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
             content=fluent.format_value(
                 "email-forgot-password-content", {"token": token}
             ),
+            tag="forgot-password",
         )
 
     async def on_after_reset_password(
@@ -80,6 +81,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
             content=fluent.format_value(
                 "email-after-reset-password-content", {"username": user.username}
             ),
+            tag="after-reset-password",
         )
 
     async def on_after_request_verify(
@@ -95,6 +97,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
                 "email-verification-content",
                 {"username": user.username, "token": token},
             ),
+            tag="verification",
         )
 
     async def on_after_verify(
@@ -109,6 +112,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
             content=fluent.format_value(
                 "email-after-verification-content", {"username": user.username}
             ),
+            tag="after-verification",
         )
 
     async def validate_password(
