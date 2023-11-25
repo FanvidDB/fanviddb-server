@@ -8,7 +8,7 @@ jobs:
   backend-lint:
     executor:
       name: python/default
-      tag: 3.7.12
+      tag: 3.11.6
     steps:
       - checkout
       - python/install-packages:
@@ -17,7 +17,7 @@ jobs:
       - run: make backend-lint
   backend-test:
     docker:
-      - image: cimg/python:3.7.12
+      - image: cimg/python:3.11.6
         environment:
           AUTH_SECRET_KEY: secret
           IS_CIRCLECI: "true"
