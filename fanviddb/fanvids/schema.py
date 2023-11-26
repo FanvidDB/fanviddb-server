@@ -1,6 +1,6 @@
 import datetime
 import uuid
-from enum import Enum
+from enum import StrEnum
 from typing import List
 from typing import Optional
 
@@ -12,19 +12,19 @@ from pydantic import constr
 LanguageCode = constr(regex=r"[a-z]{2}-[A-Z]{2}")
 
 
-class StateEnum(str, Enum):
+class StateEnum(StrEnum):
     active = "active"
     deleted = "deleted"
 
 
-class RatingEnum(str, Enum):
+class RatingEnum(StrEnum):
     gen = "gen"
     teen = "teen"
     mature = "mature"
     explicit = "explicit"
 
 
-class ContentNotesEnum(str, Enum):
+class ContentNotesEnum(StrEnum):
     graphic_violence = "graphic-violence"
     major_character_death = "major-character-death"
     no_warnings_apply = "no-warnings-apply"
@@ -51,7 +51,7 @@ class Audio(BaseModel):
     languages: List[LanguageCode]  # type: ignore
 
 
-class UniqueIdentifierKind(str, Enum):
+class UniqueIdentifierKind(StrEnum):
     filename = "filename"
     youtube = "youtube"
     vimeo = "vimeo"
