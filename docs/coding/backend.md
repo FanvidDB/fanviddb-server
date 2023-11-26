@@ -28,9 +28,9 @@ The backend uses [FastAPI](fastapi.tiangolo.com/), an async [Python](https://www
    echo 'eval "$(pyenv init -)"' >> ~/.zshrc
    ```
 5. Restart your terminal
-6. Install Python 3.7
+6. Install Python 3.11
    ```
-   pyenv install 3.7.12
+   pyenv install 3.11.4
    ```
 
 ### Fork & clone the repository
@@ -40,7 +40,7 @@ Create a fork of [github.com/FanvidDB/fanviddb-server](https://github.com/Fanvid
 ```bash
 git clone git@github.com:your-username/fanviddb-server.git
 cd fanviddb-server
-pyenv local 3.7.12
+pyenv local 3.11.4
 python -m venv .venv
 source .venv/bin/activate
 pip install -U pip wheel
