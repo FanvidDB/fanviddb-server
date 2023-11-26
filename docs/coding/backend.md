@@ -40,7 +40,7 @@ Create a fork of [github.com/FanvidDB/fanviddb-server](https://github.com/Fanvid
 ```bash
 git clone git@github.com:your-username/fanviddb-server.git
 cd fanviddb-server
-pyenv local 3.7.12
+pyenv local 3.11.4
 python -m venv .venv
 source .venv/bin/activate
 pip install -U pip wheel
